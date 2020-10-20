@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:spotifyflutterapp/screens/auth.dart';
-import 'package:spotifyflutterapp/screens/home.dart';
+import 'package:spotifyflutterapp/ui/auth/auth_page.dart';
+import 'package:spotifyflutterapp/ui/home/home_page.dart';
 
 void main() {
   runApp(MyApp());
