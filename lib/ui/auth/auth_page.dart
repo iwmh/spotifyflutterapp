@@ -13,7 +13,7 @@ class AuthPage extends StatelessWidget {
           child: Container(
             color: Colors.grey,
             child: Text(
-              "login",
+              "Login",
               style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             padding: EdgeInsets.all(20),
