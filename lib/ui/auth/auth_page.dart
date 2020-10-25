@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spotifyflutterapp/util/util.dart';
 
 class AuthPage extends StatelessWidget {
   @override
@@ -28,6 +29,9 @@ class AuthPage extends StatelessWidget {
 }
 
 Future<void> _logIn() async {
+  // get secrets
+  var secrets = await getSecretsFromAssets();
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
   return await prefs.setBool('loggedIn', true);
 }
