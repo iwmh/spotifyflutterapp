@@ -34,6 +34,9 @@ dependencies:
   # for json serialization
   json_serializable: ^3.5.0
 
+  # to open auth page on the browser
+  url_launcher: ^5.7.8
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
