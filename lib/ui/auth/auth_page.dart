@@ -21,7 +21,7 @@ class AuthPage extends StatelessWidget {
             padding: EdgeInsets.all(20),
           ),
           onTap: () {
-            _lauhchUrl();
+            _launchUrl();
           },
         ),
       ),
@@ -29,7 +29,7 @@ class AuthPage extends StatelessWidget {
   }
 }
 
-_lauhchUrl() async {
+_launchUrl() async {
 
   var secrets = await getSecretsFromAssets();
 
@@ -37,7 +37,7 @@ _lauhchUrl() async {
     'client_id': secrets.clientId,
     'response_type': 'code',
     'scope': 'user-modify-playback-state user-library-modify playlist-read-private playlist-modify-public playlist-modify-private user-read-playback-state user-read-currently-playing',
-    'redirect_uri': ''
+    'redirect_uri': secrets.redirectUrl
   };
 
   var uri = Uri.https('accounts.spotify.com', '/authorize', queryParameters).toString();
