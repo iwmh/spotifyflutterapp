@@ -1,4 +1,4 @@
-package com.iwmh.spotifyflutterapp
+package com.iwmh.spotifysortapp
 
 import io.flutter.embedding.android.FlutterActivity
 
