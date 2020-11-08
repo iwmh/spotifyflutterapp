@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spotifyflutterapp/data/repositories/secure_storage_repository.dart';
 import 'package:spotifyflutterapp/ui/auth/auth_page.dart';
 import 'package:spotifyflutterapp/ui/home/home_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MultiProvider(
+    providers: [
+      Provider<SecureStorage>(
+        create: (_) => SecureStorage(),
+      ),
+    ],
+    child: MyApp(),),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -12,35 +21,40 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '2 pages',
       theme: ThemeData(primarySwatch: Colors.lightGreen),
-      home: _fBuilder(),
+      home: FutureBuilder(
+        future: decideInitialPage(context),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.active:
+            case ConnectionState.waiting:
+              return CircularProgressIndicator();
+            case ConnectionState.done:
+              if (snapshot.data == null) {
+                return AuthPage();
+              } else {
+                return HomePage();
+              }
+          }
+          return Container();
+        },
+      ),
+      routes: <String, WidgetBuilder>{
+        '/home': (BuildContext context) => HomePage(),
+        '/auth': (BuildContext context) => AuthPage(),
+        // TODO
+        // The code below is not working as expected.
+        // Require additional implementation of handling intent.
+        '/callback': (BuildContext context) => HomePage(),
+      },
     );
   }
 }
 
-_fBuilder() {
-  return FutureBuilder(
-    future: _loggedIn(),
-    builder: (context, snapshot) {
-      switch (snapshot.connectionState) {
-        case ConnectionState.none:
-        case ConnectionState.active:
-        case ConnectionState.waiting:
-          return CircularProgressIndicator();
-        case ConnectionState.done:
-          if (snapshot.data == null || !snapshot.data) {
-            return AuthPage();
-          } else {
-            return HomePage();
-          }
-      }
-      return Container();
-    },
-  );
-}
+Future<String> decideInitialPage(BuildContext context) async {
 
-Future<bool> _loggedIn() async {
+  // check login status in shared preferences
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getBool('loggedIn');
+  return prefs.getString('loggedIn');
 }
