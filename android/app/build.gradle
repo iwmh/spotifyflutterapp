@@ -43,6 +43,10 @@ android {
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        // set custom scheme for redirect
+        manifestPlaceholders = [
+                'appAuthRedirectScheme': 'app'
+        ]
     }
 
     buildTypes {

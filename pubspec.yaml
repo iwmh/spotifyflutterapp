@@ -43,6 +43,12 @@ dependencies:
   # secure storage for storing token-related data
   flutter_secure_storage: ^3.3.5
 
+  # for handling deep link of callback url
+  uni_links: ^0.4.0
+
+  # AppAuth for Flutter
+  flutter_appauth: ^0.9.2+6
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
