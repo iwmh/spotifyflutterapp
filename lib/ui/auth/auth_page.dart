@@ -1,15 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:spotifyflutterapp/data/repositories/base_secure_storage_repository.dart';
-import 'package:spotifyflutterapp/data/repositories/secure_storage_repository.dart';
-import 'package:spotifyflutterapp/util/constants.dart';
 import 'package:spotifyflutterapp/util/util.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AuthPage extends StatelessWidget {
   @override
@@ -79,7 +71,6 @@ _auth(BuildContext context) async {
         refreshToken: tokenResponse.refreshToken
     ),
   );
-
 
   print("");
 
