@@ -4,15 +4,17 @@ import 'package:spotifyflutterapp/data/repositories/base_secure_storage_reposito
 import 'package:spotifyflutterapp/data/repositories/secure_storage_repository.dart';
 import 'package:spotifyflutterapp/util/util.dart';
 
-class ApiAuthService {
+class ApiService {
 
+  // repo for auth-related functionality
   final ApiAuthRepository _apiAuthRepository;
+  // repo for securely store/read token data.
   final BaseSecureStorage _secureStorage;
 
-  ApiAuthService(this._apiAuthRepository, this._secureStorage);
+  ApiService(this._apiAuthRepository, this._secureStorage);
 
   // Public factory method
-  static Future<ApiAuthService> createApiAuthService() async {
+  static Future<ApiService> createApiAuthService() async {
     // get secrets from assets folder
     var secrets = await getSecretsFromAssets();
 
@@ -23,12 +25,13 @@ class ApiAuthService {
     ApiAuthRepository apiAuthRepository = new ApiAuthRepository(secrets.clientId, secrets.redirectUrl);
     BaseSecureStorage secureStorage = new SecureStorage(storage);
 
-    return ApiAuthService(apiAuthRepository, secureStorage);
+    return ApiService(apiAuthRepository, secureStorage);
   }
+
 
   exchangeAuthorizationCode() async {
     final authCodeResult = await _apiAuthRepository.exchangeAuthorizationCode();
-    if(authCodeResult != null){
+    if(authCodeResult != null && authCodeResult.authorizationCode != null){
       final accessTokenResult = await _apiAuthRepository.exchangeToken(authCodeResult.authorizationCode, authCodeResult.codeVerifier);
       print('');
     }

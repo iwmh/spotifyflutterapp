@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:spotifyflutterapp/services/api_auth_service.dart';
+import 'package:spotifyflutterapp/services/api_service.dart';
 import 'package:spotifyflutterapp/ui/auth/auth_page.dart';
 import 'package:spotifyflutterapp/ui/home/home_page.dart';
 
@@ -9,8 +9,8 @@ void main() {
   runApp(MultiProvider(
     providers: [
       // DI of the service relating to token exchange.
-      FutureProvider<ApiAuthService>(
-        create: (_) async => ApiAuthService.createApiAuthService(),
+      FutureProvider<ApiService>(
+        create: (_) async => ApiService.createApiAuthService(),
         lazy: false,
       )
     ],

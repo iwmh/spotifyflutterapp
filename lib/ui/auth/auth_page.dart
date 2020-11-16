@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:spotifyflutterapp/services/api_auth_service.dart';
+import 'package:spotifyflutterapp/services/api_service.dart';
 
 class AuthPage extends StatelessWidget {
   @override
@@ -30,7 +30,7 @@ class AuthPage extends StatelessWidget {
 }
 
 _auth(BuildContext context) async {
-  var authService = Provider.of<ApiAuthService>(context, listen: false);
+  var authService = Provider.of<ApiService>(context, listen: false);
 
   await authService.exchangeAuthorizationCode();
 
