@@ -19,6 +19,7 @@ class ApiAuthService {
     // secure storage
     var storage = new FlutterSecureStorage();
 
+    // init repo
     ApiAuthRepository apiAuthRepository = new ApiAuthRepository(secrets.clientId, secrets.redirectUrl);
     BaseSecureStorage secureStorage = new SecureStorage(storage);
 
