@@ -6,9 +6,7 @@ class SecureStorage implements BaseSecureStorage {
   // storage instance
   FlutterSecureStorage _storage;
 
-  SecureStorage(){
-    _storage = new FlutterSecureStorage();
-  }
+  SecureStorage(this._storage);
 
   @override
   Future<String> readDataFromStorage(String key) async{

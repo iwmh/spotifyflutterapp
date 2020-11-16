@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:spotifyflutterapp/util/util.dart';
+import 'package:spotifyflutterapp/services/api_auth_service.dart';
 
 class AuthPage extends StatelessWidget {
   @override
@@ -30,49 +30,9 @@ class AuthPage extends StatelessWidget {
 }
 
 _auth(BuildContext context) async {
+  var authService = Provider.of<ApiAuthService>(context, listen: false);
 
-  // get secrets from assets folder
-  var secrets = await getSecretsFromAssets();
-
-  /**
-   * code and token exchange with AppAuth
-   */
-  FlutterAppAuth appAuth = FlutterAppAuth();
-  final AuthorizationResponse result = await appAuth.authorize(
-    AuthorizationRequest(
-      secrets.clientId,
-      secrets.redirectUrl,
-      serviceConfiguration: AuthorizationServiceConfiguration(
-        'https://accounts.spotify.com/authorize',
-        'https://accounts.spotify.com/api/token'),
-      scopes: ['user-modify-playback-state', 'user-library-modify', 'playlist-read-private', 'playlist-modify-public', 'playlist-modify-private', 'user-read-playback-state', 'user-read-currently-playing']
-    )
-  );
-
-  final TokenResponse tokenResponse = await appAuth.token(
-    TokenRequest(
-        secrets.clientId,
-        secrets.redirectUrl,
-        serviceConfiguration: AuthorizationServiceConfiguration(
-            'https://accounts.spotify.com/authorize',
-            'https://accounts.spotify.com/api/token'),
-        authorizationCode: result.authorizationCode,
-        codeVerifier: result.codeVerifier
-      ),
-    );
-
-  final TokenResponse refreshTokenResponse = await appAuth.token(
-    TokenRequest(
-        secrets.clientId,
-        secrets.redirectUrl,
-        serviceConfiguration: AuthorizationServiceConfiguration(
-            'https://accounts.spotify.com/authorize',
-            'https://accounts.spotify.com/api/token'),
-        refreshToken: tokenResponse.refreshToken
-    ),
-  );
-
-  print("");
+  await authService.exchangeAuthorizationCode();
 
 }
 

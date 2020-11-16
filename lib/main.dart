@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:spotifyflutterapp/data/repositories/secure_storage_repository.dart';
+import 'package:spotifyflutterapp/services/api_auth_service.dart';
 import 'package:spotifyflutterapp/ui/auth/auth_page.dart';
 import 'package:spotifyflutterapp/ui/home/home_page.dart';
 
 void main() {
   runApp(MultiProvider(
     providers: [
-      Provider<SecureStorage>(
-        create: (_) => SecureStorage(),
-      ),
+      FutureProvider<ApiAuthService>(
+        create: (_) async => ApiAuthService.createApiAuthService(),
+        lazy: false,
+      )
     ],
     child: MyApp(),),
   );
