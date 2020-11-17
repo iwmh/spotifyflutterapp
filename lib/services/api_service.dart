@@ -46,9 +46,9 @@ class ApiService {
         ///   refresh token
         ///   access token expiration datetime
         /// 2) put access token and expiration datetime in-memory.
-        _secureStorage.storeDateToStorage(Constants.key_accessToken, accessTokenResult.accessToken);
-        _secureStorage.storeDateToStorage(Constants.key_refreshToken, accessTokenResult.refreshToken);
-        _secureStorage.storeDateToStorage(Constants.key_accessTokenExpirationDateTime, accessTokenResult.accessTokenExpirationDateTime.toString());
+        _secureStorage.storeDataToStorage(Constants.key_accessToken, accessTokenResult.accessToken);
+        _secureStorage.storeDataToStorage(Constants.key_refreshToken, accessTokenResult.refreshToken);
+        _secureStorage.storeDataToStorage(Constants.key_accessTokenExpirationDateTime, accessTokenResult.accessTokenExpirationDateTime.toString());
         _accessToken = accessTokenResult.accessToken;
         _accessTokenExpirationDateTime = accessTokenResult.accessTokenExpirationDateTime;
       }

@@ -14,7 +14,7 @@ class SecureStorage implements BaseSecureStorage {
   }
 
   @override
-  Future<void> storeDateToStorage(String key, String value) async{
+  Future<void> storeDataToStorage(String key, String value) async{
     await _storage.write(key: key, value: value);
   }
 
