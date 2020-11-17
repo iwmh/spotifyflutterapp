@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:crypto/crypto.dart';
 import 'package:flutter/services.dart';
 import 'package:spotifyflutterapp/data/models/secrets.dart';
 

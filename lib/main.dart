@@ -20,10 +20,6 @@ void main() async {
       Provider.value(
         value: apiAuthService,
       ),
-      // FutureProvider<ApiService>(
-      //   create: (_) async => await ApiService.createApiAuthService(),
-      //   lazy: false,
-      // )
     ],
     child: MyApp(),),
   );
