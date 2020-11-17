@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
 import 'package:spotifyflutterapp/ui/auth/auth_page.dart';
 import 'package:spotifyflutterapp/ui/home/home_page.dart';
 
-void main() {
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // init service
+  final apiAuthService = await ApiService.createApiAuthService();
+
+  // for testing
+  apiAuthService.deleteAllDataInStorage();
+
   runApp(MultiProvider(
     providers: [
       // DI of the service relating to token exchange.
-      FutureProvider<ApiService>(
-        create: (_) async => ApiService.createApiAuthService(),
-        lazy: false,
-      )
+      Provider.value(
+        value: apiAuthService,
+      ),
+      // FutureProvider<ApiService>(
+      //   create: (_) async => await ApiService.createApiAuthService(),
+      //   lazy: false,
+      // )
     ],
     child: MyApp(),),
   );
@@ -25,7 +36,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.lightGreen),
       home: FutureBuilder(
-        future: decideInitialPage(context),
+        future: Provider.of<ApiService>(context, listen: false).isLoggedIn(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -33,10 +44,11 @@ class MyApp extends StatelessWidget {
             case ConnectionState.waiting:
               return CircularProgressIndicator();
             case ConnectionState.done:
-              if (snapshot.data == null) {
-                return AuthPage();
-              } else {
+              if (snapshot.data) {
+                // if user is logged in
                 return HomePage();
+              } else {
+                return AuthPage();
               }
           }
           return Container();
@@ -52,11 +64,4 @@ class MyApp extends StatelessWidget {
       },
     );
   }
-}
-
-Future<String> decideInitialPage(BuildContext context) async {
-
-  // check login status in shared preferences
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getString('loggedIn');
 }

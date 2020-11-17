@@ -32,12 +32,6 @@ class AuthPage extends StatelessWidget {
 _auth(BuildContext context) async {
   var authService = Provider.of<ApiService>(context, listen: false);
 
-  await authService.exchangeAuthorizationCode();
-
+  await authService.exchangeAuthorizationCodeAndAccessToken();
 }
 
-// store value to SharedPreferences
-Future<void> storeString(String key, String value) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  return await prefs.setString(key, value);
-}

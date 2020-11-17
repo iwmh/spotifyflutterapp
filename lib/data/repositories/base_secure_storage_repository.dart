@@ -6,5 +6,7 @@ abstract class BaseSecureStorage {
   // methods
   Future<void> storeDateToStorage(String key, String value) async{}
   Future<String> readDataFromStorage(String key) async{}
+  Future<void> deleteAllDataInStorage() async{}
+
 
 }

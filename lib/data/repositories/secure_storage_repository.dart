@@ -17,5 +17,9 @@ class SecureStorage implements BaseSecureStorage {
   Future<void> storeDateToStorage(String key, String value) async{
     await _storage.write(key: key, value: value);
   }
+
+  Future<void> deleteAllDataInStorage() async {
+    await _storage.deleteAll();
+  }
   
 }

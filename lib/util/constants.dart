@@ -1,3 +1,5 @@
 class Constants {
-  static const PKCE_STATE = "PKCE_STATE";
+  static const key_accessToken = "SSA_accessToken";
+  static const key_refreshToken = "SSA_refreshToken";
+  static const key_accessTokenExpirationDateTime = "SSA_accessTokenExpirationDateTime";
 }
