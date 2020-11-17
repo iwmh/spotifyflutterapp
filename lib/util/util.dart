@@ -13,23 +13,3 @@ Future<Secrets> getSecretsFromAssets() async {
   Map secretMap = jsonDecode(secretsStr);
   return Secrets.fromJson(secretMap);
 }
-
-// create code_challenge
-String createCodeChallengeFromCodeVerifier(String code_verifier) {
-  // sha256 hash the code_verifier
-  var bytes = utf8.encode(code_verifier);
-  var digest = sha256.convert(bytes);
-
-  // base64 encode
-  var code_challenge = base64.encode(digest.bytes.toList());
-
-  // Remove any trailing '='s
-  code_challenge = code_challenge.split('=')[0];
-  // 62nd char of encoding
-  code_challenge = code_challenge.replaceAll('+', '-');
-  // 63rd char of encoding
-  code_challenge = code_challenge.replaceAll('/', '_');
-
-  return code_challenge;
-
-}
