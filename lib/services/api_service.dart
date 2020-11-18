@@ -55,6 +55,20 @@ class ApiService {
     }
   }
 
+  /// refresh accesss token
+  refreshAccessToken() async {
+    // get refresh token from storage
+    final refreshToken = await _secureStorage.readDataFromStorage(Constants.key_refreshToken);
+    final accessTokenResult = await _apiAuthRepository.refreshToken(refreshToken);
+    if(accessTokenResult != null && accessTokenResult.accessToken != null){
+      _secureStorage.storeDataToStorage(Constants.key_accessToken, accessTokenResult.accessToken);
+      _secureStorage.storeDataToStorage(Constants.key_refreshToken, accessTokenResult.refreshToken);
+      _secureStorage.storeDataToStorage(Constants.key_accessTokenExpirationDateTime, accessTokenResult.accessTokenExpirationDateTime.toString());
+      _accessToken = accessTokenResult.accessToken;
+      _accessTokenExpirationDateTime = accessTokenResult.accessTokenExpirationDateTime;
+    }
+  }
+
   Future<bool> isLoggedIn() async {
     var accessToken = await _secureStorage.readDataFromStorage(Constants.key_accessToken);
     var refreshToken = await _secureStorage.readDataFromStorage(Constants.key_refreshToken);
