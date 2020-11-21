@@ -9,16 +9,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // init service
-  final apiAuthService = await ApiService.createApiAuthService();
+  final apiService = await ApiService.createApiAuthService();
 
   // for testing
-  apiAuthService.deleteAllDataInStorage();
+  apiService.deleteAllDataInStorage();
 
   runApp(MultiProvider(
     providers: [
       // DI of the service relating to token exchange.
       Provider.value(
-        value: apiAuthService,
+        value: apiService,
       ),
     ],
     child: MyApp(),),
