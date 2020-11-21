@@ -50,14 +50,6 @@ class MyApp extends StatelessWidget {
           return Container();
         },
       ),
-      routes: <String, WidgetBuilder>{
-        '/home': (BuildContext context) => HomePage(),
-        '/auth': (BuildContext context) => AuthPage(),
-        // TODO
-        // The code below is not working as expected.
-        // Require additional implementation of handling intent.
-        '/callback': (BuildContext context) => HomePage(),
-      },
     );
   }
 }
