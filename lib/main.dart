@@ -11,11 +11,12 @@ void main() async {
 
   // init service
   final apiService = await ApiService.createApiAuthService();
-  apiService.init();
+  apiService.appState = new AppStateModel();
+  await apiService.init();
 
   // TODO: remove when not testing
   // for testing
-  apiService.deleteAllDataInStorage();
+  // await apiService.deleteAllDataInStorage();
 
   runApp(MultiProvider(
     providers: [
@@ -23,31 +24,20 @@ void main() async {
       Provider(create: (_) => AppStateModel()),
       // ChangeNotifierProxyProvider because ApiService depends on AppStateModel.
       ChangeNotifierProxyProvider<AppStateModel, ApiService>(
-          create: (_) => apiService,
-          update: (_, appState, apiService) {
+        create: (_) => apiService,
+        update: (_, appState, apiService) {
+          if(appState.accessToken != null) {
             apiService.appState = appState;
-            return apiService;
           }
+          return apiService;
+        },
       ),
     ],
     child: MyApp(),),
   );
 }
 
-class MyApp extends StatefulWidget {
-  // This widget is the root of your application.
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

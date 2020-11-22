@@ -1,8 +1,8 @@
 class AppStateModel {
   // in-memory expiration date
-  DateTime accessTokenExpirationDateTime = DateTime.now();
+  DateTime accessTokenExpirationDateTime;
   // im-memory access token
-  String accessToken = '';
+  String accessToken;
   // Once logged in
-  bool loggedInBefore = false;
+  bool loggedInBefore;
 }

@@ -40,7 +40,7 @@ class ApiService extends ChangeNotifier{
   }
 
   // some things to do when initialized
-  void init() async {
+  Future<void> init() async {
     // read token info from storage and set them to the app-level state.
     var accessToken = await _secureStorage.readDataFromStorage(Constants.key_accessToken);
     var accessTokenExpirationDateTime = await _secureStorage.readDataFromStorage(Constants.key_accessTokenExpirationDateTime);
