@@ -11,7 +11,9 @@ void main() async {
 
   // init service
   final apiService = await ApiService.createApiAuthService();
+  // set the new state
   apiService.appState = new AppStateModel();
+  // initialize with the state
   await apiService.init();
 
   // TODO: remove when not testing
@@ -26,6 +28,7 @@ void main() async {
       ChangeNotifierProxyProvider<AppStateModel, ApiService>(
         create: (_) => apiService,
         update: (_, appState, apiService) {
+          // prevent clearing the state.
           if(appState.accessToken != null) {
             apiService.appState = appState;
           }
