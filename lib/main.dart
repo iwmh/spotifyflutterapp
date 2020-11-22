@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
             MaterialPage(key: ValueKey('AuthPage'), child: AuthPage())
         ],
         onPopPage: (route, result){
-          return true;
+          return route.didPop(result);
         },
       ),
     );
