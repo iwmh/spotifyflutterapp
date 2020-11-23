@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spotifyflutterapp/data/models/playlist.dart';
+import 'package:spotifyflutterapp/services/api_service.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -13,13 +16,13 @@ class HomePage extends StatelessWidget {
           child: Container(
             color: Colors.grey,
             child: Text(
-              "logout",
+              "get playlists",
               style: TextStyle(color: Colors.white, fontSize: 20),
             ),
             padding: EdgeInsets.all(20),
           ),
           onTap: () {
-            _logOut();
+            _getPlaylist(context);
           },
         ),
       ),
@@ -27,7 +30,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-Future<void> _logOut() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  return await prefs.remove('loggedIn');
+Future<List<Playlist>> _getPlaylist(BuildContext context) async {
+  var apiService = Provider.of<ApiService>(context, listen: false);
+  apiService.getPlaylists();
 }

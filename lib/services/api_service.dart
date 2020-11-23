@@ -1,11 +1,17 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:spotifyflutterapp/data/models/paging.dart';
+import 'package:spotifyflutterapp/data/models/playlist.dart';
 import 'package:spotifyflutterapp/data/repositories/api_auth_repository.dart';
 import 'package:spotifyflutterapp/data/repositories/base_secure_storage_repository.dart';
 import 'package:spotifyflutterapp/data/repositories/secure_storage_repository.dart';
 import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
 import 'package:spotifyflutterapp/util/constants.dart';
 import 'package:spotifyflutterapp/util/util.dart';
+import 'package:http/http.dart' as http;
 
 class ApiService extends ChangeNotifier {
   // repo for auth-related functionality
@@ -123,7 +129,28 @@ class ApiService extends ChangeNotifier {
     }
   }
 
+  // delete storage data.
+  // TODO: remove this method when releasing.
   deleteAllDataInStorage() async {
     await _secureStorage.deleteAllDataInStorage();
+  }
+
+  // get current user's list of playlist
+  Future<List<Playlist>> getPlaylists() async {
+    if (_appState.accessTokenExpirationDateTime.isAfter(DateTime.now())) {
+      await refreshAccessToken();
+    }
+
+    var authHeader = {
+      HttpHeaders.authorizationHeader: 'Bearer ' + _appState.accessToken
+    };
+    var response =
+        await http.get(Constants.current_users_playlists, headers: authHeader);
+
+    Map pagingMap = jsonDecode(response.body);
+    Paging paging = Paging<Playlist>.fromJson(
+        pagingMap, (items) => Playlist.fromJson(items));
+    var playlists = paging.items;
+    print('');
   }
 }

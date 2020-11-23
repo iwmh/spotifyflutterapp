@@ -33,7 +33,4 @@ _auth(BuildContext context) async {
   var authService = Provider.of<ApiService>(context, listen: false);
 
   await authService.exchangeAuthorizationCodeAndAccessToken();
-
-  // testing
-  await authService.refreshAccessToken();
 }
