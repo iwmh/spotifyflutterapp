@@ -6,7 +6,6 @@ import 'package:spotifyflutterapp/ui/auth/auth_page.dart';
 import 'package:spotifyflutterapp/ui/home/home_page.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
   // init service
@@ -20,23 +19,25 @@ void main() async {
   // for testing
   // await apiService.deleteAllDataInStorage();
 
-  runApp(MultiProvider(
-    providers: [
-      // Just a Provider.
-      Provider(create: (_) => AppStateModel()),
-      // ChangeNotifierProxyProvider because ApiService depends on AppStateModel.
-      ChangeNotifierProxyProvider<AppStateModel, ApiService>(
-        create: (_) => apiService,
-        update: (_, appState, apiService) {
-          // prevent clearing the state.
-          if(appState.accessToken != null) {
-            apiService.appState = appState;
-          }
-          return apiService;
-        },
-      ),
-    ],
-    child: MyApp(),),
+  runApp(
+    MultiProvider(
+      providers: [
+        // Just a Provider.
+        Provider(create: (_) => AppStateModel()),
+        // ChangeNotifierProxyProvider because ApiService depends on AppStateModel.
+        ChangeNotifierProxyProvider<AppStateModel, ApiService>(
+          create: (_) => apiService,
+          update: (_, appState, apiService) {
+            // prevent clearing the state.
+            if (appState.accessToken != null) {
+              apiService.appState = appState;
+            }
+            return apiService;
+          },
+        ),
+      ],
+      child: MyApp(),
+    ),
   );
 }
 
@@ -48,12 +49,12 @@ class MyApp extends StatelessWidget {
       home: Navigator(
         pages: [
           // Home page
-          if(Provider.of<ApiService>(context).hasLoggedInBefore())
+          if (Provider.of<ApiService>(context).hasLoggedInBefore())
             MaterialPage(key: ValueKey('HomePage'), child: HomePage())
           else
             MaterialPage(key: ValueKey('AuthPage'), child: AuthPage())
         ],
-        onPopPage: (route, result){
+        onPopPage: (route, result) {
           return route.didPop(result);
         },
       ),

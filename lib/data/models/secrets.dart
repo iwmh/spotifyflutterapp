@@ -3,8 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'secrets.g.dart';
 
 @JsonSerializable()
-
-class Secrets{
+class Secrets {
   @JsonKey(name: 'client_id')
   final String clientId;
 
@@ -17,5 +16,4 @@ class Secrets{
       _$SecretsFromJson(json);
 
   Map<String, dynamic> toJson() => _$SecretsToJson(this);
-
 }

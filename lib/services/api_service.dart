@@ -7,8 +7,7 @@ import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
 import 'package:spotifyflutterapp/util/constants.dart';
 import 'package:spotifyflutterapp/util/util.dart';
 
-class ApiService extends ChangeNotifier{
-
+class ApiService extends ChangeNotifier {
   // repo for auth-related functionality
   final ApiAuthRepository _apiAuthRepository;
   // repo for securely store/read token data.
@@ -20,7 +19,7 @@ class ApiService extends ChangeNotifier{
   ApiService(this._apiAuthRepository, this._secureStorage);
 
   // setter for appState
-  set appState(AppStateModel appState){
+  set appState(AppStateModel appState) {
     _appState = appState;
   }
 
@@ -33,7 +32,8 @@ class ApiService extends ChangeNotifier{
     var storage = new FlutterSecureStorage();
 
     // init repo
-    ApiAuthRepository apiAuthRepository = new ApiAuthRepository(secrets.clientId, secrets.redirectUrl);
+    ApiAuthRepository apiAuthRepository =
+        new ApiAuthRepository(secrets.clientId, secrets.redirectUrl);
     BaseSecureStorage secureStorage = new SecureStorage(storage);
 
     return ApiService(apiAuthRepository, secureStorage);
@@ -42,18 +42,21 @@ class ApiService extends ChangeNotifier{
   // some things to do when initialized
   Future<void> init() async {
     // read token info from storage and set them to the app-level state.
-    var accessToken = await _secureStorage.readDataFromStorage(Constants.key_accessToken);
-    var accessTokenExpirationDateTime = await _secureStorage.readDataFromStorage(Constants.key_accessTokenExpirationDateTime);
+    var accessToken =
+        await _secureStorage.readDataFromStorage(Constants.key_accessToken);
+    var accessTokenExpirationDateTime = await _secureStorage
+        .readDataFromStorage(Constants.key_accessTokenExpirationDateTime);
     _appState.accessToken = accessToken == null ? '' : accessToken;
-    if(accessTokenExpirationDateTime != null){
-      _appState.accessTokenExpirationDateTime = DateTime.parse(accessTokenExpirationDateTime);
+    if (accessTokenExpirationDateTime != null) {
+      _appState.accessTokenExpirationDateTime =
+          DateTime.parse(accessTokenExpirationDateTime);
     }
 
     // if either if them is missing, we regard the user as
     // having not been logged in before.
-    if(accessToken == null || accessTokenExpirationDateTime == null){
+    if (accessToken == null || accessTokenExpirationDateTime == null) {
       _appState.loggedInBefore = false;
-    } else if (accessToken.isEmpty || accessTokenExpirationDateTime.isEmpty){
+    } else if (accessToken.isEmpty || accessTokenExpirationDateTime.isEmpty) {
       _appState.loggedInBefore = false;
     } else {
       _appState.loggedInBefore = true;
@@ -63,28 +66,34 @@ class ApiService extends ChangeNotifier{
   // If the user has logged in before.
   // you are going to set this value when the user authorize again
   // because the stored token is missing.
-  bool hasLoggedInBefore(){
+  bool hasLoggedInBefore() {
     return _appState.loggedInBefore;
   }
-  
+
   /// Exchange authorization code and exchange it with access token.
   exchangeAuthorizationCodeAndAccessToken() async {
     // receive a result with authorization code
     final authCodeResult = await _apiAuthRepository.exchangeAuthorizationCode();
-    if(authCodeResult != null && authCodeResult.authorizationCode != null){
-      // receive a result with access token 
-      final accessTokenResult = await _apiAuthRepository.exchangeToken(authCodeResult.authorizationCode, authCodeResult.codeVerifier);
-      if(accessTokenResult != null && accessTokenResult.accessToken != null){
+    if (authCodeResult != null && authCodeResult.authorizationCode != null) {
+      // receive a result with access token
+      final accessTokenResult = await _apiAuthRepository.exchangeToken(
+          authCodeResult.authorizationCode, authCodeResult.codeVerifier);
+      if (accessTokenResult != null && accessTokenResult.accessToken != null) {
         /// 1) store all the info about the result.
         ///   access token
         ///   refresh token
         ///   access token expiration datetime
         /// 2) put access token and expiration datetime in-memory.
-        _secureStorage.storeDataToStorage(Constants.key_accessToken, accessTokenResult.accessToken);
-        _secureStorage.storeDataToStorage(Constants.key_refreshToken, accessTokenResult.refreshToken);
-        _secureStorage.storeDataToStorage(Constants.key_accessTokenExpirationDateTime, accessTokenResult.accessTokenExpirationDateTime.toString());
+        _secureStorage.storeDataToStorage(
+            Constants.key_accessToken, accessTokenResult.accessToken);
+        _secureStorage.storeDataToStorage(
+            Constants.key_refreshToken, accessTokenResult.refreshToken);
+        _secureStorage.storeDataToStorage(
+            Constants.key_accessTokenExpirationDateTime,
+            accessTokenResult.accessTokenExpirationDateTime.toString());
         _appState.accessToken = accessTokenResult.accessToken;
-        _appState.accessTokenExpirationDateTime = accessTokenResult.accessTokenExpirationDateTime;
+        _appState.accessTokenExpirationDateTime =
+            accessTokenResult.accessTokenExpirationDateTime;
 
         _appState.loggedInBefore = true;
 
@@ -96,21 +105,25 @@ class ApiService extends ChangeNotifier{
   /// refresh accesss token
   refreshAccessToken() async {
     // get refresh token from storage
-    final refreshToken = await _secureStorage.readDataFromStorage(Constants.key_refreshToken);
-    final accessTokenResult = await _apiAuthRepository.refreshToken(refreshToken);
-    if(accessTokenResult != null && accessTokenResult.accessToken != null){
-      _secureStorage.storeDataToStorage(Constants.key_accessToken, accessTokenResult.accessToken);
-      _secureStorage.storeDataToStorage(Constants.key_refreshToken, accessTokenResult.refreshToken);
-      _secureStorage.storeDataToStorage(Constants.key_accessTokenExpirationDateTime, accessTokenResult.accessTokenExpirationDateTime.toString());
+    final refreshToken =
+        await _secureStorage.readDataFromStorage(Constants.key_refreshToken);
+    final accessTokenResult =
+        await _apiAuthRepository.refreshToken(refreshToken);
+    if (accessTokenResult != null && accessTokenResult.accessToken != null) {
+      _secureStorage.storeDataToStorage(
+          Constants.key_accessToken, accessTokenResult.accessToken);
+      _secureStorage.storeDataToStorage(
+          Constants.key_refreshToken, accessTokenResult.refreshToken);
+      _secureStorage.storeDataToStorage(
+          Constants.key_accessTokenExpirationDateTime,
+          accessTokenResult.accessTokenExpirationDateTime.toString());
       _appState.accessToken = accessTokenResult.accessToken;
-      _appState.accessTokenExpirationDateTime = accessTokenResult.accessTokenExpirationDateTime;
+      _appState.accessTokenExpirationDateTime =
+          accessTokenResult.accessTokenExpirationDateTime;
     }
   }
 
   deleteAllDataInStorage() async {
     await _secureStorage.deleteAllDataInStorage();
   }
-
-
-
 }

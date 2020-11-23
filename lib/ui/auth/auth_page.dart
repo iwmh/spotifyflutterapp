@@ -37,4 +37,3 @@ _auth(BuildContext context) async {
   // testing
   await authService.refreshAccessToken();
 }
-
