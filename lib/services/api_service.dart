@@ -137,7 +137,7 @@ class ApiService extends ChangeNotifier {
 
   // get current user's list of playlist
   Future<List<Playlist>> getPlaylists() async {
-    if (_appState.accessTokenExpirationDateTime.isAfter(DateTime.now())) {
+    if (DateTime.now().isAfter(_appState.accessTokenExpirationDateTime)) {
       await refreshAccessToken();
     }
 
