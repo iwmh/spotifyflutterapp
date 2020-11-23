@@ -19,7 +19,7 @@ void main() async {
 
   // TODO: remove when not testing
   // for testing
-  await apiService.deleteAllDataInStorage();
+  // await apiService.deleteAllDataInStorage();
 
   runApp(
     MultiProvider(
@@ -47,8 +47,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // if not logged in, show AuthPage.
       home: Provider.of<ApiService>(context).hasLoggedInBefore()
-          ? cupeWid()
+          ? cupertinoTabWidet()
           : AuthPage(),
     );
 
@@ -70,7 +71,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-Widget cupeWid() {
+Widget cupertinoTabWidet() {
   return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         items: <BottomNavigationBarItem>[
