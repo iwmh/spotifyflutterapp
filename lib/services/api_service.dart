@@ -11,7 +11,6 @@ import 'package:spotifyflutterapp/data/repositories/secure_storage_repository.da
 import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
 import 'package:spotifyflutterapp/util/constants.dart';
 import 'package:spotifyflutterapp/util/util.dart';
-import 'package:http/http.dart' as http;
 
 class ApiService extends ChangeNotifier {
   // repo for auth-related functionality
@@ -27,6 +26,18 @@ class ApiService extends ChangeNotifier {
   // setter for appState
   set appState(AppStateModel appState) {
     _appState = appState;
+  }
+
+  // create authHeader.
+  Map<String, String> _authHeader() {
+    return {HttpHeaders.authorizationHeader: 'Bearer ' + _appState.accessToken};
+  }
+
+  // check token expiration and refresh token if token expired.
+  _checkTokenValidity() async {
+    if (DateTime.now().isAfter(_appState.accessTokenExpirationDateTime)) {
+      await refreshAccessToken();
+    }
   }
 
   // Public factory method
@@ -124,16 +135,16 @@ class ApiService extends ChangeNotifier {
 
   // get current user's list of playlist
   Future<List<Playlist>> getPlaylists() async {
-    if (DateTime.now().isAfter(_appState.accessTokenExpirationDateTime)) {
-      await refreshAccessToken();
-    }
-
-    var authHeader = {HttpHeaders.authorizationHeader: 'Bearer ' + _appState.accessToken};
-    var response = await http.get(Constants.current_users_playlists, headers: authHeader);
-
-    Map pagingMap = jsonDecode(response.body);
-    Paging paging = Paging<Playlist>.fromJson(pagingMap, (items) => Playlist.fromJson(items));
-    var playlists = paging.items;
-    print('');
+    // check token
+    _checkTokenValidity();
+    // call api.
+    _apiAuthRepository.requestToGetPlaylists(_authHeader()).then((response) {
+      Map pagingMap = jsonDecode(response.body);
+      Paging paging = Paging<Playlist>.fromJson(pagingMap, (items) => Playlist.fromJson(items));
+      return paging.items;
+    }).catchError((err) {
+      // network related error.
+      return err;
+    });
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:http/http.dart' as http;
+import 'package:spotifyflutterapp/util/constants.dart';
 
 class ApiAuthRepository {
   FlutterAppAuth _appAuth;
@@ -49,5 +51,10 @@ class ApiAuthRepository {
               'https://accounts.spotify.com/authorize', 'https://accounts.spotify.com/api/token'),
           refreshToken: refreshToken),
     );
+  }
+
+  // request to get current user's list of playlist
+  Future<http.Response> requestToGetPlaylists(Map<String, String> authHeader) async {
+    return await http.get(Constants.current_users_playlists, headers: authHeader);
   }
 }
