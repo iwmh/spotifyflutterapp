@@ -5,7 +5,7 @@ import 'package:spotifyflutterapp/util/constants.dart';
 
 class FileStorage implements BaseSecureStorage {
   String option;
-  FileStorage(this.option);
+  FileStorage([this.option = '']);
 
   @override
   Future<String> readDataFromStorage(String key) async {
