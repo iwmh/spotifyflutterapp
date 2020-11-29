@@ -16,8 +16,7 @@ AccessToken _$AccessTokenFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$AccessTokenToJson(AccessToken instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$AccessTokenToJson(AccessToken instance) => <String, dynamic>{
       'access_token': instance.accessToken,
       'token_type': instance.tokenType,
       'scope': instance.scope,

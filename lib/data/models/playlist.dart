@@ -47,23 +47,10 @@ class Playlist {
   @JsonKey(name: 'uri')
   String uri;
 
-  Playlist(
-      this.collaborative,
-      this.description,
-      this.externalUrls,
-      this.href,
-      this.id,
-      this.images,
-      this.name,
-      this.owner,
-      this.public,
-      this.snapshotId,
-      this.tracks,
-      this.type,
-      this.uri);
+  Playlist(this.collaborative, this.description, this.externalUrls, this.href, this.id, this.images, this.name,
+      this.owner, this.public, this.snapshotId, this.tracks, this.type, this.uri);
 
-  factory Playlist.fromJson(Map<String, dynamic> json) =>
-      _$PlaylistFromJson(json);
+  factory Playlist.fromJson(Map<String, dynamic> json) => _$PlaylistFromJson(json);
 
   Map<String, dynamic> toJson() => _$PlaylistToJson(this);
 }

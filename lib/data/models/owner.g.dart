@@ -9,9 +9,7 @@ part of 'owner.dart';
 Owner _$OwnerFromJson(Map<String, dynamic> json) {
   return Owner(
     json['displayName'] as String,
-    json['externalUrls'] == null
-        ? null
-        : ExternalUrls.fromJson(json['externalUrls'] as Map<String, dynamic>),
+    json['externalUrls'] == null ? null : ExternalUrls.fromJson(json['externalUrls'] as Map<String, dynamic>),
     json['href'] as String,
     json['id'] as String,
     json['type'] as String,

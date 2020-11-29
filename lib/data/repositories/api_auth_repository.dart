@@ -14,11 +14,9 @@ class ApiAuthRepository {
 
   // Receive the response which has an authorizationCode
   Future<AuthorizationResponse> exchangeAuthorizationCode() async {
-    return await _appAuth.authorize(AuthorizationRequest(
-        _clientId, _redirectUrl,
+    return await _appAuth.authorize(AuthorizationRequest(_clientId, _redirectUrl,
         serviceConfiguration: AuthorizationServiceConfiguration(
-            'https://accounts.spotify.com/authorize',
-            'https://accounts.spotify.com/api/token'),
+            'https://accounts.spotify.com/authorize', 'https://accounts.spotify.com/api/token'),
         scopes: [
           'user-modify-playback-state',
           'user-library-modify',
@@ -32,13 +30,11 @@ class ApiAuthRepository {
 
   // Receive the response which has a pair of accessToken and refreshToken
   // in exchange of authorizationCode and codeVerifier
-  Future<TokenResponse> exchangeToken(
-      String authorizationCode, String codeVerifier) async {
+  Future<TokenResponse> exchangeToken(String authorizationCode, String codeVerifier) async {
     return await _appAuth.token(
       TokenRequest(_clientId, _redirectUrl,
           serviceConfiguration: AuthorizationServiceConfiguration(
-              'https://accounts.spotify.com/authorize',
-              'https://accounts.spotify.com/api/token'),
+              'https://accounts.spotify.com/authorize', 'https://accounts.spotify.com/api/token'),
           authorizationCode: authorizationCode,
           codeVerifier: codeVerifier),
     );
@@ -50,8 +46,7 @@ class ApiAuthRepository {
     return await _appAuth.token(
       TokenRequest(_clientId, _redirectUrl,
           serviceConfiguration: AuthorizationServiceConfiguration(
-              'https://accounts.spotify.com/authorize',
-              'https://accounts.spotify.com/api/token'),
+              'https://accounts.spotify.com/authorize', 'https://accounts.spotify.com/api/token'),
           refreshToken: refreshToken),
     );
   }

@@ -48,9 +48,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       // if not logged in, show AuthPage.
-      home: Provider.of<ApiService>(context).hasLoggedInBefore()
-          ? cupertinoTabWidet()
-          : AuthPage(),
+      home: Provider.of<ApiService>(context).hasLoggedInBefore() ? cupertinoTabWidet() : AuthPage(),
     );
 
     // return MaterialApp(

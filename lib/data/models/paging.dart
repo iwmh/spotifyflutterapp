@@ -25,8 +25,7 @@ class Paging<T> {
   @JsonKey(name: 'total')
   final int total;
 
-  Paging(this.href, this.items, this.limit, this.next, this.offset,
-      this.previous, this.total);
+  Paging(this.href, this.items, this.limit, this.next, this.offset, this.previous, this.total);
 
   factory Paging.fromJson(
     Map<String, dynamic> json,
@@ -34,6 +33,5 @@ class Paging<T> {
   ) =>
       _$PagingFromJson(json, fromJsonT);
 
-  Map<String, dynamic> toJson(Object Function(T value) toJsonT) =>
-      _$PagingToJson(this, toJsonT);
+  Map<String, dynamic> toJson(Object Function(T value) toJsonT) => _$PagingToJson(this, toJsonT);
 }

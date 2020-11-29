@@ -19,11 +19,9 @@ class AccessToken {
   @JsonKey(name: 'refresh_token')
   final String refreshToken;
 
-  AccessToken(this.accessToken, this.tokenType, this.scope, this.expiresIn,
-      this.refreshToken);
+  AccessToken(this.accessToken, this.tokenType, this.scope, this.expiresIn, this.refreshToken);
 
-  factory AccessToken.fromJson(Map<String, dynamic> json) =>
-      _$AccessTokenFromJson(json);
+  factory AccessToken.fromJson(Map<String, dynamic> json) => _$AccessTokenFromJson(json);
 
   Map<String, dynamic> toJson() => _$AccessTokenToJson(this);
 }

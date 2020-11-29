@@ -12,7 +12,6 @@ ExternalUrls _$ExternalUrlsFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$ExternalUrlsToJson(ExternalUrls instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$ExternalUrlsToJson(ExternalUrls instance) => <String, dynamic>{
       'spotify': instance.spotidy,
     };

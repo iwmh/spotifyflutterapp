@@ -9,8 +9,7 @@ class ExternalUrls {
 
   ExternalUrls(this.spotidy);
 
-  factory ExternalUrls.fromJson(Map<String, dynamic> json) =>
-      _$ExternalUrlsFromJson(json);
+  factory ExternalUrls.fromJson(Map<String, dynamic> json) => _$ExternalUrlsFromJson(json);
 
   Map<String, dynamic> toJson() => _$ExternalUrlsToJson(this);
 }

@@ -12,8 +12,7 @@ class Secrets {
 
   Secrets(this.clientId, this.redirectUrl);
 
-  factory Secrets.fromJson(Map<String, dynamic> json) =>
-      _$SecretsFromJson(json);
+  factory Secrets.fromJson(Map<String, dynamic> json) => _$SecretsFromJson(json);
 
   Map<String, dynamic> toJson() => _$SecretsToJson(this);
 }

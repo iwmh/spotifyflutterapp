@@ -23,8 +23,7 @@ class Owner {
   @JsonKey(name: 'uri')
   final String uri;
 
-  Owner(this.displayName, this.externalUrls, this.href, this.id, this.type,
-      this.uri);
+  Owner(this.displayName, this.externalUrls, this.href, this.id, this.type, this.uri);
 
   factory Owner.fromJson(Map<String, dynamic> json) => _$OwnerFromJson(json);
 
