@@ -130,6 +130,8 @@ class ApiService extends ChangeNotifier {
   // delete storage data.
   // TODO: remove this method when releasing.
   deleteAllDataInStorage() async {
+    _appState.accessToken = '';
+    _appState.loggedInBefore = false;
     await _secureStorage.deleteAllDataInStorage();
   }
 

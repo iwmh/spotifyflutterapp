@@ -25,9 +25,10 @@ void main() async {
     MultiProvider(
       providers: [
         // Just a Provider.
-        Provider(create: (_) => AppStateModel()),
+        ChangeNotifierProvider(create: (_) => AppStateModel()),
         // ChangeNotifierProxyProvider because ApiService depends on AppStateModel.
         ChangeNotifierProxyProvider<AppStateModel, ApiService>(
+          lazy: false,
           create: (_) => apiService,
           update: (_, appState, apiService) {
             // prevent clearing the state.
