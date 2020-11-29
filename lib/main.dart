@@ -51,22 +51,6 @@ class MyApp extends StatelessWidget {
       // if not logged in, show AuthPage.
       home: Provider.of<ApiService>(context).hasLoggedInBefore() ? cupertinoTabWidet() : AuthPage(),
     );
-
-    // return MaterialApp(
-    //   theme: ThemeData(primarySwatch: Colors.lightGreen),
-    //   home: Navigator(
-    //     pages: [
-    //       // Home page
-    //       if (Provider.of<ApiService>(context).hasLoggedInBefore())
-    //         MaterialPage(key: ValueKey('HomePage'), child: HomePage())
-    //       else
-    //         MaterialPage(key: ValueKey('AuthPage'), child: AuthPage())
-    //     ],
-    //     onPopPage: (route, result) {
-    //       return route.didPop(result);
-    //     },
-    //   ),
-    // );
   }
 }
 
