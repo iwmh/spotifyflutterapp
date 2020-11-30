@@ -10,11 +10,10 @@ import 'package:spotifyflutterapp/ui/settings/settings.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // init service
+  // create service
   final apiService = await ApiService.createApiAuthService();
-  // set the new state
-  apiService.appState = new AppStateModel();
   // initialize with the state
+  // (read token info from storage and set them to state.)
   await apiService.init();
 
   // TODO: remove when not testing
@@ -25,11 +24,22 @@ void main() async {
     MultiProvider(
       providers: [
         // Just a Provider.
-        ChangeNotifierProvider(create: (_) => AppStateModel()),
+        ChangeNotifierProvider(
+          create: (_) => AppStateModel(),
+        ),
         // ChangeNotifierProxyProvider because ApiService depends on AppStateModel.
-        ChangeNotifierProxyProvider<AppStateModel, ApiService>(
-          lazy: false,
-          create: (_) => apiService,
+        ProxyProvider<AppStateModel, ApiService>(
+          create: (context) {
+            final appState = Provider.of<AppStateModel>(context, listen: false);
+
+            // set state values when you init() to the descendent state.
+            appState.accessToken = apiService.accessToken;
+            appState.accessTokenExpirationDateTime = apiService.accessTokenExpirationDateTime;
+            appState.loggedInBefore = apiService.loggedInBefore;
+
+            apiService.appState = appState;
+            return apiService;
+          },
           update: (_, appState, apiService) {
             // prevent clearing the state.
             if (appState.accessToken != null) {
@@ -39,7 +49,11 @@ void main() async {
           },
         ),
       ],
-      child: MyApp(),
+      child: Consumer<AppStateModel>(
+        builder: (context, value, child) {
+          return MyApp();
+        },
+      ),
     ),
   );
 }

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:spotifyflutterapp/data/models/paging.dart';
 import 'package:spotifyflutterapp/data/models/playlist.dart';
@@ -12,13 +11,18 @@ import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
 import 'package:spotifyflutterapp/util/constants.dart';
 import 'package:spotifyflutterapp/util/util.dart';
 
-class ApiService extends ChangeNotifier {
+class ApiService {
   // repo for auth-related functionality
   final ApiAuthRepository _apiAuthRepository;
   // repo for securely store/read token data.
   final BaseSecureStorage _secureStorage;
   // application-level state
-  AppStateModel _appState;
+  AppStateModel _appState = AppStateModel();
+
+  // getter of _appState values.
+  get accessToken => _appState.accessToken;
+  get accessTokenExpirationDateTime => _appState.accessTokenExpirationDateTime;
+  get loggedInBefore => _appState.loggedInBefore;
 
   // constructor
   ApiService(this._apiAuthRepository, this._secureStorage);
@@ -106,8 +110,6 @@ class ApiService extends ChangeNotifier {
         _appState.accessTokenExpirationDateTime = accessTokenResult.accessTokenExpirationDateTime;
 
         _appState.loggedInBefore = true;
-
-        notifyListeners();
       }
     }
   }

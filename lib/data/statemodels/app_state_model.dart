@@ -6,5 +6,14 @@ class AppStateModel extends ChangeNotifier {
   // im-memory access token
   String accessToken;
   // Once logged in
-  bool loggedInBefore;
+  bool _loggedInBefore = false;
+
+  get loggedInBefore {
+    return _loggedInBefore;
+  }
+
+  set loggedInBefore(bool newState) {
+    _loggedInBefore = newState;
+    notifyListeners();
+  }
 }
