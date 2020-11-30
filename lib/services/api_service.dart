@@ -139,16 +139,18 @@ class ApiService {
 
   // get current user's list of playlist
   Future<List<Playlist>> getPlaylists() async {
+    List<Playlist> ret;
     // check token
-    _checkTokenValidity();
+    await _checkTokenValidity();
     // call api.
-    _apiAuthRepository.requestToGetPlaylists(_authHeader()).then((response) {
+    await _apiAuthRepository.requestToGetPlaylists(_authHeader()).then((response) {
       Map pagingMap = jsonDecode(response.body);
       Paging paging = Paging<Playlist>.fromJson(pagingMap, (items) => Playlist.fromJson(items));
-      return paging.items;
+      ret = paging.items;
     }).catchError((err) {
       // network related error.
       return err;
     });
+    return ret;
   }
 }

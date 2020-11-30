@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
+import 'package:spotifyflutterapp/data/statemodels/home_state_model.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
 import 'package:spotifyflutterapp/ui/auth/auth_page.dart';
 import 'package:spotifyflutterapp/ui/home/home_page.dart';
@@ -23,9 +24,13 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        // Just a Provider.
+        // application level state
         ChangeNotifierProvider(
           create: (_) => AppStateModel(),
+        ),
+        // home page state
+        ChangeNotifierProvider(
+          create: (_) => HomeStateModel(),
         ),
         // ChangeNotifierProxyProvider because ApiService depends on AppStateModel.
         ProxyProvider<AppStateModel, ApiService>(
@@ -80,7 +85,11 @@ Widget cupertinoTabWidet() {
         switch (index) {
           case 0:
             return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(child: HomePage());
+              return Consumer<HomeStateModel>(
+                builder: (context, value, child) {
+                  return CupertinoPageScaffold(child: HomePage());
+                },
+              );
             });
           case 1:
             return CupertinoTabView(builder: (context) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotifyflutterapp/data/models/playlist.dart';
+import 'package:spotifyflutterapp/data/widgets/playlist_card.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
 
 class HomePage extends StatelessWidget {
@@ -11,26 +11,40 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('home page!'),
       ),
-      body: Center(
-        child: GestureDetector(
-          child: Container(
-            color: Colors.grey,
-            child: Text(
-              "get playlists",
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-            padding: EdgeInsets.all(20),
-          ),
-          onTap: () {
-            _getPlaylist(context);
-          },
-        ),
+      body: FutureBuilder(
+        future: _getPlaylist(context),
+        builder: (context, snapshot) {
+          Widget child = Container();
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.active:
+            case ConnectionState.waiting:
+              child = CircularProgressIndicator();
+              break;
+            case ConnectionState.done:
+              if (snapshot.hasData) {
+                List<Playlist> playlists = snapshot.data;
+                child = ListView.builder(
+                    itemCount: playlists.length,
+                    itemBuilder: (context, index) {
+                      return PlaylistCard(
+                        id: playlists[index].id,
+                        imageUrl: playlists[index].images[0].url,
+                        name: playlists[index].name,
+                        owner: playlists[index].owner.id,
+                      );
+                    });
+                break;
+              }
+          }
+          return child;
+        },
       ),
     );
   }
 }
 
-Future<List<Playlist>> _getPlaylist(BuildContext context) async {
+Future<List<Playlist>> _getPlaylist(BuildContext context) {
   var apiService = Provider.of<ApiService>(context, listen: false);
-  apiService.getPlaylists();
+  return apiService.getPlaylists();
 }
