@@ -4,12 +4,12 @@ import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:spotifyflutterapp/data/models/paging.dart';
 import 'package:spotifyflutterapp/data/models/playlist.dart';
+import 'package:spotifyflutterapp/data/models/secrets.dart';
 import 'package:spotifyflutterapp/data/repositories/api_auth_repository.dart';
 import 'package:spotifyflutterapp/data/repositories/base_secure_storage_repository.dart';
 import 'package:spotifyflutterapp/data/repositories/secure_storage_repository.dart';
 import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
 import 'package:spotifyflutterapp/util/constants.dart';
-import 'package:spotifyflutterapp/util/util.dart';
 
 class ApiService {
   // repo for auth-related functionality
@@ -45,10 +45,7 @@ class ApiService {
   }
 
   // Public factory method
-  static Future<ApiService> createApiAuthService() async {
-    // get secrets from assets folder
-    var secrets = await getSecretsFromAssets();
-
+  static Future<ApiService> createApiAuthService(Secrets secrets) async {
     // secure storage
     var storage = new FlutterSecureStorage();
 

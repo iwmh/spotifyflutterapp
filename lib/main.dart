@@ -7,12 +7,15 @@ import 'package:spotifyflutterapp/services/api_service.dart';
 import 'package:spotifyflutterapp/ui/auth/auth_page.dart';
 import 'package:spotifyflutterapp/ui/home/home_page.dart';
 import 'package:spotifyflutterapp/ui/settings/settings.dart';
+import 'package:spotifyflutterapp/util/util.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // get secrets from assets folder
+  var secrets = await getSecretsFromAssets();
   // create service
-  final apiService = await ApiService.createApiAuthService();
+  final apiService = await ApiService.createApiAuthService(secrets);
   // initialize with the state
   // (read token info from storage and set them to state.)
   await apiService.init();
