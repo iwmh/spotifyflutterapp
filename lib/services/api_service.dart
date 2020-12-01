@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:spotifyflutterapp/data/models/paging.dart';
 import 'package:spotifyflutterapp/data/models/playlist.dart';
 import 'package:spotifyflutterapp/data/models/secrets.dart';
 import 'package:spotifyflutterapp/data/repositories/api_auth_repository.dart';
+import 'package:spotifyflutterapp/data/repositories/api_client.dart';
 import 'package:spotifyflutterapp/data/repositories/base_secure_storage_repository.dart';
 import 'package:spotifyflutterapp/data/repositories/secure_storage_repository.dart';
 import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
@@ -47,10 +49,16 @@ class ApiService {
   // Public factory method
   static Future<ApiService> createApiAuthService(Secrets secrets) async {
     // secure storage
-    var storage = new FlutterSecureStorage();
+    final storage = new FlutterSecureStorage();
+
+    // appAuth
+    final appAuth = new FlutterAppAuth();
+
+    // client for api
+    final apiClient = new ApiClient(appAuth);
 
     // init repo
-    ApiAuthRepository apiAuthRepository = new ApiAuthRepository(secrets.clientId, secrets.redirectUrl);
+    ApiAuthRepository apiAuthRepository = new ApiAuthRepository(apiClient, secrets.clientId, secrets.redirectUrl);
     BaseSecureStorage secureStorage = new SecureStorage(storage);
 
     return ApiService(apiAuthRepository, secureStorage);
