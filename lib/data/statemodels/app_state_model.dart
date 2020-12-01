@@ -16,4 +16,8 @@ class AppStateModel extends ChangeNotifier {
     _loggedInBefore = newState;
     notifyListeners();
   }
+
+  set loggedInBeforeWithoutNotifying(bool newState) {
+    _loggedInBefore = newState;
+  }
 }

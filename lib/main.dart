@@ -43,7 +43,8 @@ void main() async {
             // set state values when you init() to the descendent state.
             appState.accessToken = apiService.accessToken;
             appState.accessTokenExpirationDateTime = apiService.accessTokenExpirationDateTime;
-            appState.loggedInBefore = apiService.loggedInBefore;
+            // not to notify for it's while building.
+            appState.loggedInBeforeWithoutNotifying = apiService.loggedInBefore;
 
             apiService.appState = appState;
             return apiService;
