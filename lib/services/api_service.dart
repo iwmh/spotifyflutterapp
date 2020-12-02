@@ -46,24 +46,6 @@ class ApiService {
     }
   }
 
-  // Public factory method
-  static Future<ApiService> createApiAuthService(Secrets secrets) async {
-    // secure storage
-    final storage = new FlutterSecureStorage();
-
-    // appAuth
-    final appAuth = new FlutterAppAuth();
-
-    // client for api
-    final apiClient = new ApiClient(appAuth);
-
-    // init repo
-    ApiAuthRepository apiAuthRepository = new ApiAuthRepository(apiClient, secrets.clientId, secrets.redirectUrl);
-    BaseSecureStorageRepository secureStorageRepository = new SecureStorageRepository(storage);
-
-    return ApiService(apiAuthRepository, secureStorageRepository);
-  }
-
   // some things to do when initialized
   Future<void> init() async {
     // read token info from storage and set them to the app-level state.

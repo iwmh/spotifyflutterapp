@@ -1,6 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
+import 'package:spotifyflutterapp/data/repositories/api_auth_repository.dart';
+import 'package:spotifyflutterapp/data/repositories/api_client.dart';
+import 'package:spotifyflutterapp/data/repositories/base_secure_storage_repository.dart';
+import 'package:spotifyflutterapp/data/repositories/secure_storage_repository.dart';
 import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
 import 'package:spotifyflutterapp/data/statemodels/home_state_model.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
@@ -12,10 +18,27 @@ import 'package:spotifyflutterapp/util/util.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // ~ preparing the dependencies ~
+
   // get secrets from assets folder
   var secrets = await getSecretsFromAssets();
+
+  // secure storage
+  final storage = new FlutterSecureStorage();
+
+  // appAuth
+  final appAuth = new FlutterAppAuth();
+
+  // client for api
+  final apiClient = new ApiClient(appAuth);
+
+  // inittialize repositories
+  ApiAuthRepository apiAuthRepository = new ApiAuthRepository(apiClient, secrets.clientId, secrets.redirectUrl);
+  BaseSecureStorageRepository secureStorageRepository = new SecureStorageRepository(storage);
+
   // create service
-  final apiService = await ApiService.createApiAuthService(secrets);
+  final apiService = new ApiService(apiAuthRepository, secureStorageRepository);
+
   // initialize with the state
   // (read token info from storage and set them to state.)
   await apiService.init();
