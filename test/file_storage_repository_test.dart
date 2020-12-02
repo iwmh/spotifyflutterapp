@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:spotifyflutterapp/data/repositories/file_storage_repository.dart';
+import 'repositories/file_storage_repository.dart';
 import 'package:spotifyflutterapp/util/constants.dart';
 
 void main() {
@@ -10,9 +10,9 @@ void main() {
   setUp(() {
     var option;
     if (Directory.current.path.endsWith('t')) {
-      option = '../';
+      option = '../test/';
     } else {
-      option = '';
+      option = 'test/';
     }
     _storage = new FileStorage(option);
   });
