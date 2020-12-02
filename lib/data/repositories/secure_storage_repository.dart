@@ -1,11 +1,11 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:spotifyflutterapp/data/repositories/base_secure_storage_repository.dart';
 
-class SecureStorage implements BaseSecureStorage {
+class SecureStorageRepository implements BaseSecureStorageRepository {
   // storage instance
   FlutterSecureStorage _storage;
 
-  SecureStorage(this._storage);
+  SecureStorageRepository(this._storage);
 
   @override
   Future<String> readDataFromStorage(String key) async {

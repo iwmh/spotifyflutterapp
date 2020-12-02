@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:spotifyflutterapp/data/repositories/base_secure_storage_repository.dart';
 import 'package:spotifyflutterapp/util/constants.dart';
 
-class FileStorage implements BaseSecureStorage {
+class FileStorage implements BaseSecureStorageRepository {
   String option;
   FileStorage([this.option = '']);
 

@@ -1,6 +1,6 @@
-abstract class BaseSecureStorage {
+abstract class BaseSecureStorageRepository {
   // constructor
-  BaseSecureStorage();
+  BaseSecureStorageRepository();
 
   // methods
   Future<void> storeDataToStorage(String key, String value) async {}

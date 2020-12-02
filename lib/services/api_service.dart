@@ -17,7 +17,7 @@ class ApiService {
   // repo for auth-related functionality
   final ApiAuthRepository _apiAuthRepository;
   // repo for securely store/read token data.
-  final BaseSecureStorage _secureStorage;
+  final BaseSecureStorageRepository _secureStorage;
   // application-level state
   AppStateModel _appState = AppStateModel();
 
@@ -59,7 +59,7 @@ class ApiService {
 
     // init repo
     ApiAuthRepository apiAuthRepository = new ApiAuthRepository(apiClient, secrets.clientId, secrets.redirectUrl);
-    BaseSecureStorage secureStorage = new SecureStorage(storage);
+    BaseSecureStorageRepository secureStorage = new SecureStorageRepository(storage);
 
     return ApiService(apiAuthRepository, secureStorage);
   }
