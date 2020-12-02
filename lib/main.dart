@@ -23,9 +23,6 @@ void main() async {
   // get secrets from assets folder
   var secrets = await getSecretsFromAssets();
 
-  // secure storage
-  final storage = new FlutterSecureStorage();
-
   // appAuth
   final appAuth = new FlutterAppAuth();
 
@@ -34,7 +31,7 @@ void main() async {
 
   // inittialize repositories
   ApiAuthRepository apiAuthRepository = new ApiAuthRepository(apiClient, secrets.clientId, secrets.redirectUrl);
-  BaseSecureStorageRepository secureStorageRepository = new SecureStorageRepository(storage);
+  BaseSecureStorageRepository secureStorageRepository = new SecureStorageRepository();
 
   // create service
   final apiService = new ApiService(apiAuthRepository, secureStorageRepository);
