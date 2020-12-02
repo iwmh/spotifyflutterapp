@@ -59,9 +59,9 @@ class ApiService {
 
     // init repo
     ApiAuthRepository apiAuthRepository = new ApiAuthRepository(apiClient, secrets.clientId, secrets.redirectUrl);
-    BaseSecureStorageRepository secureStorage = new SecureStorageRepository(storage);
+    BaseSecureStorageRepository secureStorageRepository = new SecureStorageRepository(storage);
 
-    return ApiService(apiAuthRepository, secureStorage);
+    return ApiService(apiAuthRepository, secureStorageRepository);
   }
 
   // some things to do when initialized
