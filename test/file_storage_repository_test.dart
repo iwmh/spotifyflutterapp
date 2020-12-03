@@ -36,4 +36,10 @@ void main() {
     var value = await _storage.readDataFromStorage(Constants.key_refreshToken);
     expect(value, data);
   });
+
+  tearDown(() async {
+    await _storage.storeDataToStorage(Constants.key_accessToken, '');
+    await _storage.storeDataToStorage(Constants.key_accessTokenExpirationDateTime, '');
+    await _storage.storeDataToStorage(Constants.key_refreshToken, '');
+  });
 }
