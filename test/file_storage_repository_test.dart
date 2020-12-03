@@ -10,9 +10,9 @@ void main() {
   setUp(() {
     var option;
     if (Directory.current.path.endsWith('t')) {
-      option = '../test/';
+      option = '..\\test\\';
     } else {
-      option = 'test/';
+      option = 'test\\';
     }
     _storage = new FileStorage(option);
   });
