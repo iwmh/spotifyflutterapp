@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -7,7 +6,6 @@ import 'package:spotifyflutterapp/data/models/secrets.dart';
 import 'package:spotifyflutterapp/data/repositories/api_auth_repository.dart';
 import 'package:spotifyflutterapp/data/repositories/api_client.dart';
 import 'package:spotifyflutterapp/data/repositories/base_secure_storage_repository.dart';
-import 'package:spotifyflutterapp/data/repositories/secure_storage_repository.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
 import 'package:spotifyflutterapp/util/constants.dart';
 
@@ -38,11 +36,25 @@ void main() {
     apiService = new ApiService(apiAuthRepository, secureStorageRepository);
   });
   // access token not being stored.
-  test('no token related info stored, therefore not loggedInBefore.', () async {
+  test('init with no token related info stored, therefore not loggedInBefore.', () async {
     await apiService.init();
     expect(apiService.accessToken, null);
     expect(apiService.accessTokenExpirationDateTime, null);
     expect(apiService.loggedInBefore, false);
+  });
+
+  test('init with token related info stored, therefore loggedInBefore.', () async {
+    final _storage = new FileStorage(option);
+    final accessToken = 'sakjlfaIkjf978kj';
+    final accessTokenExpirationDateTime = DateTime.parse('1992-05-02 20:18:00');
+    await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
+    await _storage.storeDataToStorage(
+        Constants.key_accessTokenExpirationDateTime, accessTokenExpirationDateTime.toString());
+
+    await apiService.init();
+    expect(apiService.accessToken, accessToken);
+    expect(apiService.accessTokenExpirationDateTime, accessTokenExpirationDateTime);
+    expect(apiService.loggedInBefore, true);
   });
 
   tearDown(() async {
