@@ -52,7 +52,7 @@ class ApiService {
     var accessToken = await _secureStorage.readDataFromStorage(Constants.key_accessToken);
     var accessTokenExpirationDateTime =
         await _secureStorage.readDataFromStorage(Constants.key_accessTokenExpirationDateTime);
-    _appState.accessToken = accessToken == null ? '' : accessToken;
+    _appState.accessToken = accessToken;
     if (accessTokenExpirationDateTime != null) {
       _appState.accessTokenExpirationDateTime = DateTime.parse(accessTokenExpirationDateTime);
     }

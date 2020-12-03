@@ -13,15 +13,15 @@ class FileStorage implements BaseSecureStorageRepository {
       case Constants.key_accessToken:
         final file = new File(option + Constants.access_token_file);
         final ret = await file.readAsString();
-        return ret == '' ? null : ret;
+        return ret == "" ? null : ret;
       case Constants.key_accessTokenExpirationDateTime:
         final file = new File(option + Constants.accessTokenExpirationDateTime_file);
         final ret = await file.readAsString();
-        return ret == '' ? null : ret;
+        return ret == "" ? null : ret;
       case Constants.key_refreshToken:
         final file = new File(option + Constants.refresh_token_file);
         final ret = await file.readAsString();
-        return ret == '' ? null : ret;
+        return ret == "" ? null : ret;
       default:
     }
   }

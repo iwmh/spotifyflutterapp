@@ -52,6 +52,9 @@ dependencies:
   # http client
   http: ^0.12.2
 
+  # mockito for testing
+  mockito: ^4.1.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
