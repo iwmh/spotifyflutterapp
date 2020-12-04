@@ -14,8 +14,6 @@ jobs:
     # Docker images for other release channels - like dev and beta - are also
     # available. See https://hub.docker.com/r/google/dart/ for the available
     # images.
-    container:
-      image:  google/dart:latest
 
     steps:
       - uses: actions/checkout@v2
