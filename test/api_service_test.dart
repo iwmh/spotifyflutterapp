@@ -20,9 +20,9 @@ void main() {
   setUp(() {
     var secrets = new Secrets('', '');
     if (Directory.current.path.endsWith('t')) {
-      option = '..\\test\\';
+      option = '../test/';
     } else {
-      option = 'test\\';
+      option = 'test/';
     }
 
     // api client for testing
