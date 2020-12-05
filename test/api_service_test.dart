@@ -131,6 +131,21 @@ void main() async {
     expect(apiService.loggedInBefore, true);
   });
 
+  test('exchange authorizationCode with accessToken, then refreshToken', () async {
+    await apiService.init();
+
+    // exchange authCode
+    await apiService.exchangeAuthorizationCodeAndAccessToken();
+
+    // refresh token
+    await apiService.refreshAccessToken();
+
+    expect(apiService.accessToken, MockApiClient.refreshedAccessToken);
+    //expect(apiService.accessToken, MockApiClient.exchangedAccessToken);
+    expect(await apiService.refreshToken, MockApiClient.refreshedRefreshToken);
+    expect(apiService.loggedInBefore, true);
+  });
+
   tearDown(() async {
     final _storage = new FileStorage(option);
 
