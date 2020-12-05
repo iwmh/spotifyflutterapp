@@ -57,6 +57,30 @@ void main() {
     expect(apiService.loggedInBefore, true);
   });
 
+  test('init with access token stored, but expirationdatetime missing, wherefore not loggedInBefore.', () async {
+    final _storage = new FileStorage(option);
+    final accessToken = 'sakjlfaIkjf978kj';
+    await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
+
+    await apiService.init();
+    expect(apiService.accessToken, accessToken);
+    expect(apiService.loggedInBefore, false);
+  });
+
+  test('init with expirationdatetime stored, but accessToken missing, wherefore not loggedInBefore.', () async {
+    final _storage = new FileStorage(option);
+    final accessToken = 'sakjlfaIkjf978kj';
+    final accessTokenExpirationDateTime = DateTime.parse('1992-05-02 20:18:00');
+    await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
+    await _storage.storeDataToStorage(
+        Constants.key_accessTokenExpirationDateTime, accessTokenExpirationDateTime.toString());
+
+    await apiService.init();
+    expect(apiService.accessToken, accessToken);
+    expect(apiService.accessTokenExpirationDateTime, accessTokenExpirationDateTime);
+    expect(apiService.loggedInBefore, true);
+  });
+
   tearDown(() async {
     final _storage = new FileStorage(option);
 
