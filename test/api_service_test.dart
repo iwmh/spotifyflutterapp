@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -143,6 +144,40 @@ void main() async {
     expect(apiService.accessToken, MockApiClient.refreshedAccessToken);
     //expect(apiService.accessToken, MockApiClient.exchangedAccessToken);
     expect(await apiService.refreshToken, MockApiClient.refreshedRefreshToken);
+    expect(apiService.loggedInBefore, true);
+  });
+
+  // test('access token expired, therefore reshresh token.', () async {
+  //   final _storage = new FileStorage(option);
+  //   final accessToken = 'sakjlfaIkjf978kj';
+  //   final accessTokenExpirationDateTime = new DateTime.now().add(Duration(seconds: -10));
+  //   await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
+  //   await _storage.storeDataToStorage(
+  //       Constants.key_accessTokenExpirationDateTime, accessTokenExpirationDateTime.toString());
+
+  //   await apiService.init();
+
+  //   await apiService.checkTokenValidity();
+
+  //   expect(apiService.accessToken, MockApiClient.refreshedAccessToken);
+  //   expect(await apiService.refreshToken, MockApiClient.refreshedRefreshToken);
+  //   expect(apiService.loggedInBefore, true);
+  // });
+
+  test('access token NOT expired, therefore NOT reshresh token.', () async {
+    final _storage = new FileStorage(option);
+    final accessToken = 'sakjlfaIkjf978kj';
+    final accessTokenExpirationDateTime = new DateTime.now().add(Duration(minutes: 1));
+    await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
+    await _storage.storeDataToStorage(
+        Constants.key_accessTokenExpirationDateTime, accessTokenExpirationDateTime.toString());
+
+    await apiService.init();
+
+    await apiService.checkTokenValidity();
+
+    expect(apiService.accessToken, accessToken);
+    expect(apiService.accessTokenExpirationDateTime, accessTokenExpirationDateTime);
     expect(apiService.loggedInBefore, true);
   });
 

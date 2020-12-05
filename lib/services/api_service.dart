@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:spotifyflutterapp/data/models/paging.dart';
 import 'package:spotifyflutterapp/data/models/playlist.dart';
 import 'package:spotifyflutterapp/data/repositories/api_auth_repository.dart';
@@ -38,8 +37,7 @@ class ApiService {
   }
 
   // check token expiration and refresh token if token expired.
-  @visibleForTesting
-  _checkTokenValidity() async {
+  checkTokenValidity() async {
     if (DateTime.now().isAfter(_appState.accessTokenExpirationDateTime)) {
       await refreshAccessToken();
     }
@@ -127,7 +125,7 @@ class ApiService {
   Future<List<Playlist>> getPlaylists() async {
     List<Playlist> ret;
     // check token
-    await _checkTokenValidity();
+    await checkTokenValidity();
     // call api.
     await _apiAuthRepository.requestToGetPlaylists(_authHeader()).then((response) {
       Map pagingMap = jsonDecode(response.body);
