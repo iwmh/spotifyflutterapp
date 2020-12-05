@@ -4,6 +4,7 @@ import 'package:fake_async/fake_async.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:spotifyflutterapp/data/models/playlist.dart';
 import 'package:spotifyflutterapp/data/models/secrets.dart';
 import 'package:spotifyflutterapp/data/repositories/api_auth_repository.dart';
 import 'package:spotifyflutterapp/data/repositories/api_client.dart';
@@ -12,6 +13,7 @@ import 'package:spotifyflutterapp/services/api_service.dart';
 import 'package:spotifyflutterapp/util/constants.dart';
 import 'package:http/http.dart' as http;
 
+import 'data.dart';
 import 'repositories/file_storage_repository.dart';
 
 class MockApiClient extends Mock implements ApiClient {
@@ -42,7 +44,7 @@ class MockApiClient extends Mock implements ApiClient {
 
   // request to get current user's list of playlist
   Future<http.Response> requestToGetPlaylists(Map<String, String> authHeader) async {
-    return await http.get(Constants.current_users_playlists, headers: authHeader);
+    return http.Response(Data.playlistsData, 200);
   }
 }
 
@@ -182,6 +184,27 @@ void main() async {
     expect(await apiService.refreshToken, refreshToken);
     expect(apiService.accessTokenExpirationDateTime, accessTokenExpirationDateTime);
     expect(apiService.loggedInBefore, true);
+  });
+
+  test('get playlists successfully, after refreshing token.', () async {
+    final _storage = new FileStorage(option);
+    final accessToken = 'sakjlfaIkjf978kj';
+    final refreshToken = 'v,msdfkjlnrkjljk';
+    final accessTokenExpirationDateTime = new DateTime.now().add(Duration(seconds: -10));
+    await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
+    await _storage.storeDataToStorage(Constants.key_refreshToken, refreshToken);
+    await _storage.storeDataToStorage(
+        Constants.key_accessTokenExpirationDateTime, accessTokenExpirationDateTime.toString());
+
+    await apiService.init();
+
+    var playlists = await apiService.getPlaylists();
+
+    expect(apiService.accessToken, MockApiClient.refreshedAccessToken);
+    expect(await apiService.refreshToken, MockApiClient.refreshedRefreshToken);
+    expect(apiService.loggedInBefore, true);
+
+    expect(playlists, isInstanceOf<List<Playlist>>());
   });
 
   tearDown(() async {
