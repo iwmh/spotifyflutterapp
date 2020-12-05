@@ -1,15 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_appauth/flutter_appauth.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:spotifyflutterapp/data/models/paging.dart';
 import 'package:spotifyflutterapp/data/models/playlist.dart';
-import 'package:spotifyflutterapp/data/models/secrets.dart';
 import 'package:spotifyflutterapp/data/repositories/api_auth_repository.dart';
-import 'package:spotifyflutterapp/data/repositories/api_client.dart';
 import 'package:spotifyflutterapp/data/repositories/base_secure_storage_repository.dart';
-import 'package:spotifyflutterapp/data/repositories/secure_storage_repository.dart';
 import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
 import 'package:spotifyflutterapp/util/constants.dart';
 
