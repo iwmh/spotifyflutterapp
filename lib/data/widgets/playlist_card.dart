@@ -33,9 +33,12 @@ class PlaylistCard extends StatelessWidget {
                 child: Column(children: [
                   Text(
                     name,
-                    style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.25),
+                    style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.25, fontWeightDelta: 1),
                   ),
-                  Text('owner: ' + owner),
+                  Text(
+                    'owner: ' + owner,
+                    style: DefaultTextStyle.of(context).style.apply(color: Colors.grey[700]),
+                  ),
                 ], crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center),
               )
             ],
