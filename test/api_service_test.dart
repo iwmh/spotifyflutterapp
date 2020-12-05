@@ -147,27 +147,10 @@ void main() async {
     expect(apiService.loggedInBefore, true);
   });
 
-  // test('access token expired, therefore reshresh token.', () async {
-  //   final _storage = new FileStorage(option);
-  //   final accessToken = 'sakjlfaIkjf978kj';
-  //   final accessTokenExpirationDateTime = new DateTime.now().add(Duration(seconds: -10));
-  //   await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
-  //   await _storage.storeDataToStorage(
-  //       Constants.key_accessTokenExpirationDateTime, accessTokenExpirationDateTime.toString());
-
-  //   await apiService.init();
-
-  //   await apiService.checkTokenValidity();
-
-  //   expect(apiService.accessToken, MockApiClient.refreshedAccessToken);
-  //   expect(await apiService.refreshToken, MockApiClient.refreshedRefreshToken);
-  //   expect(apiService.loggedInBefore, true);
-  // });
-
-  test('access token NOT expired, therefore NOT reshresh token.', () async {
+  test('access token expired, therefore reshresh token.', () async {
     final _storage = new FileStorage(option);
     final accessToken = 'sakjlfaIkjf978kj';
-    final accessTokenExpirationDateTime = new DateTime.now().add(Duration(minutes: 1));
+    final accessTokenExpirationDateTime = new DateTime.now().add(Duration(seconds: -10));
     await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
     await _storage.storeDataToStorage(
         Constants.key_accessTokenExpirationDateTime, accessTokenExpirationDateTime.toString());
@@ -176,7 +159,27 @@ void main() async {
 
     await apiService.checkTokenValidity();
 
+    expect(apiService.accessToken, MockApiClient.refreshedAccessToken);
+    expect(await apiService.refreshToken, MockApiClient.refreshedRefreshToken);
+    expect(apiService.loggedInBefore, true);
+  });
+
+  test('access token NOT expired, therefore NOT reshresh token.', () async {
+    final _storage = new FileStorage(option);
+    final accessToken = 'sakjlfaIkjf978kj';
+    final refreshToken = 'v,msdfkjlnrkjljk';
+    final accessTokenExpirationDateTime = new DateTime.now().add(Duration(hours: 1));
+    await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
+    await _storage.storeDataToStorage(Constants.key_refreshToken, refreshToken);
+    await _storage.storeDataToStorage(
+        Constants.key_accessTokenExpirationDateTime, accessTokenExpirationDateTime.toString());
+
+    await apiService.init();
+
+    await apiService.checkTokenValidity();
+
     expect(apiService.accessToken, accessToken);
+    expect(await apiService.refreshToken, refreshToken);
     expect(apiService.accessTokenExpirationDateTime, accessTokenExpirationDateTime);
     expect(apiService.loggedInBefore, true);
   });
