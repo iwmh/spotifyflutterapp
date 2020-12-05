@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:spotifyflutterapp/data/models/paging.dart';
 import 'package:spotifyflutterapp/data/models/playlist.dart';
 import 'package:spotifyflutterapp/data/repositories/api_auth_repository.dart';
@@ -21,6 +22,8 @@ class ApiService {
   get accessTokenExpirationDateTime => _appState.accessTokenExpirationDateTime;
   get loggedInBefore => _appState.loggedInBefore;
 
+  get refreshToken async => await _secureStorage.readDataFromStorage(Constants.key_refreshToken);
+
   // constructor
   ApiService(this._apiAuthRepository, this._secureStorage);
 
@@ -35,6 +38,7 @@ class ApiService {
   }
 
   // check token expiration and refresh token if token expired.
+  @visibleForTesting
   _checkTokenValidity() async {
     if (DateTime.now().isAfter(_appState.accessTokenExpirationDateTime)) {
       await refreshAccessToken();
@@ -84,9 +88,9 @@ class ApiService {
         ///   refresh token
         ///   access token expiration datetime
         /// 2) put access token and expiration datetime in-memory.
-        _secureStorage.storeDataToStorage(Constants.key_accessToken, accessTokenResult.accessToken);
-        _secureStorage.storeDataToStorage(Constants.key_refreshToken, accessTokenResult.refreshToken);
-        _secureStorage.storeDataToStorage(
+        await _secureStorage.storeDataToStorage(Constants.key_accessToken, accessTokenResult.accessToken);
+        await _secureStorage.storeDataToStorage(Constants.key_refreshToken, accessTokenResult.refreshToken);
+        await _secureStorage.storeDataToStorage(
             Constants.key_accessTokenExpirationDateTime, accessTokenResult.accessTokenExpirationDateTime.toString());
         _appState.accessToken = accessTokenResult.accessToken;
         _appState.accessTokenExpirationDateTime = accessTokenResult.accessTokenExpirationDateTime;
@@ -102,9 +106,9 @@ class ApiService {
     final refreshToken = await _secureStorage.readDataFromStorage(Constants.key_refreshToken);
     final accessTokenResult = await _apiAuthRepository.refreshToken(refreshToken);
     if (accessTokenResult != null && accessTokenResult.accessToken != null) {
-      _secureStorage.storeDataToStorage(Constants.key_accessToken, accessTokenResult.accessToken);
-      _secureStorage.storeDataToStorage(Constants.key_refreshToken, accessTokenResult.refreshToken);
-      _secureStorage.storeDataToStorage(
+      await _secureStorage.storeDataToStorage(Constants.key_accessToken, accessTokenResult.accessToken);
+      await _secureStorage.storeDataToStorage(Constants.key_refreshToken, accessTokenResult.refreshToken);
+      await _secureStorage.storeDataToStorage(
           Constants.key_accessTokenExpirationDateTime, accessTokenResult.accessTokenExpirationDateTime.toString());
       _appState.accessToken = accessTokenResult.accessToken;
       _appState.accessTokenExpirationDateTime = accessTokenResult.accessTokenExpirationDateTime;

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:spotifyflutterapp/data/models/secrets.dart';
@@ -8,16 +9,47 @@ import 'package:spotifyflutterapp/data/repositories/api_client.dart';
 import 'package:spotifyflutterapp/data/repositories/base_secure_storage_repository.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
 import 'package:spotifyflutterapp/util/constants.dart';
+import 'package:http/http.dart' as http;
 
 import 'repositories/file_storage_repository.dart';
 
-class MockApiClient extends Mock implements ApiClient {}
+class MockApiClient extends Mock implements ApiClient {
+  static String exchangedAccessToken = "ExchangedAccessToken";
+  static String exchangedRefreshToken = "ExchangedRefreshToken";
+  static String refreshedAccessToken = "RefreshedAccessToken";
+  static String refreshedRefreshToken = "RefreshedRefreshToken";
 
-void main() {
+  // Receive the response which has an authorizationCode
+  Future<AuthorizationResponse> exchangeAuthorizationCode(String clientId, String redirectUrl) async {
+    return AuthorizationResponse("AuthorizationCode", "CodeVerifier", Map<String, String>());
+  }
+
+  // Receive the response which has a pair of accessToken and refreshToken
+  // in exchange of authorizationCode and codeVerifier
+  Future<TokenResponse> exchangeToken(
+      String authorizationCode, String codeVerifier, String clientId, String redirectUrl) async {
+    return TokenResponse(exchangedAccessToken, exchangedRefreshToken, DateTime.now().add(new Duration(hours: 1)), "",
+        "", Map<String, String>());
+  }
+
+  // Receive the response which has a pair of accessToken and refreshToken
+  // in exchange of refresh token
+  Future<TokenResponse> refreshToken(String refreshToken, String clientId, String redirectUrl) async {
+    return TokenResponse(refreshedAccessToken, refreshedRefreshToken, DateTime.now().add(new Duration(hours: 1)), "",
+        "", Map<String, String>());
+  }
+
+  // request to get current user's list of playlist
+  Future<http.Response> requestToGetPlaylists(Map<String, String> authHeader) async {
+    return await http.get(Constants.current_users_playlists, headers: authHeader);
+  }
+}
+
+void main() async {
   ApiService apiService;
   var option;
   // set up service for unit testing.
-  setUp(() {
+  setUp(() async {
     var secrets = new Secrets('', '');
     if (Directory.current.path.endsWith('t')) {
       option = '../test/';
@@ -34,6 +66,12 @@ void main() {
 
     // create service
     apiService = new ApiService(apiAuthRepository, secureStorageRepository);
+
+    final _storage = new FileStorage(option);
+
+    await _storage.storeDataToStorage(Constants.key_accessToken, '');
+    await _storage.storeDataToStorage(Constants.key_accessTokenExpirationDateTime, '');
+    await _storage.storeDataToStorage(Constants.key_refreshToken, '');
   });
   // access token not being stored.
   test('init with no token related info stored, therefore not loggedInBefore.', () async {
@@ -78,6 +116,18 @@ void main() {
     await apiService.init();
     expect(apiService.accessToken, accessToken);
     expect(apiService.accessTokenExpirationDateTime, accessTokenExpirationDateTime);
+    expect(apiService.loggedInBefore, true);
+  });
+
+  test('exchange authorizationCode with accessToken.', () async {
+    await apiService.init();
+
+    // exchange authCode
+    await apiService.exchangeAuthorizationCodeAndAccessToken();
+
+    expect(apiService.accessToken, MockApiClient.exchangedAccessToken);
+    //expect(apiService.accessToken, MockApiClient.exchangedAccessToken);
+    expect(await apiService.refreshToken, MockApiClient.exchangedRefreshToken);
     expect(apiService.loggedInBefore, true);
   });
 
