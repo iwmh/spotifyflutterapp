@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:spotifyflutterapp/data/repositories/api_auth_repository.dart';
 import 'package:spotifyflutterapp/data/repositories/api_client.dart';
@@ -12,6 +11,7 @@ import 'package:spotifyflutterapp/data/statemodels/home_state_model.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
 import 'package:spotifyflutterapp/ui/auth/auth_page.dart';
 import 'package:spotifyflutterapp/ui/home/home_page.dart';
+import 'package:spotifyflutterapp/ui/tracks/tracks_page.dart';
 import 'package:spotifyflutterapp/ui/settings/settings.dart';
 import 'package:spotifyflutterapp/util/util.dart';
 
@@ -94,11 +94,18 @@ class MyApp extends StatelessWidget {
       // if not logged in, show AuthPage.
       home: Navigator(
         pages: [
-          if (Provider.of<ApiService>(context).hasLoggedInBefore())
+          // home page.
+          if (Provider.of<ApiService>(context, listen: false).hasLoggedInBefore())
             cupertinoTabPage()
           else
             MaterialPage(
               child: AuthPage(),
+            ),
+
+          // when a playlist is selected
+          if (Provider.of<AppStateModel>(context, listen: false).selectedPlaylistId != '')
+            MaterialPage(
+              child: TracksPage(),
             )
         ],
         onPopPage: (route, result) {

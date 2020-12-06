@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
 
 class PlaylistCard extends StatelessWidget {
   final String id;
@@ -13,7 +15,10 @@ class PlaylistCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {},
+      onTap: () async {
+        var appState = Provider.of<AppStateModel>(context, listen: false);
+        appState.selectedPlaylistId = id;
+      },
       onLongPress: () => {},
       child: Container(
           height: MediaQuery.of(context).size.height * 0.1,

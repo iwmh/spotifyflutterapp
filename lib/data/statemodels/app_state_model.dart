@@ -5,9 +5,9 @@ class AppStateModel extends ChangeNotifier {
   DateTime accessTokenExpirationDateTime;
   // im-memory access token
   String accessToken;
-  // Once logged in
-  bool _loggedInBefore = false;
 
+  // Once logged in.
+  bool _loggedInBefore = false;
   get loggedInBefore {
     return _loggedInBefore;
   }
@@ -17,7 +17,19 @@ class AppStateModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // used just at the startup....
   set loggedInBeforeWithoutNotifying(bool newState) {
     _loggedInBefore = newState;
+  }
+
+  // a playlists is selected
+  String _selectedPlaylistId = '';
+  get selectedPlaylistId {
+    return _selectedPlaylistId;
+  }
+
+  set selectedPlaylistId(String newValue) {
+    _selectedPlaylistId = newValue;
+    notifyListeners();
   }
 }
