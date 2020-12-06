@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class AppStateModel extends ChangeNotifier {
   // in-memory expiration date
@@ -32,4 +33,29 @@ class AppStateModel extends ChangeNotifier {
     _selectedPlaylistId = newValue;
     notifyListeners();
   }
+
+  int _currentIndex = 0;
+  get currentIndex {
+    return _currentIndex;
+  }
+
+  set currentIndex(int newIndex) {
+    if (_currentIndex != newIndex) {
+      _currentIndex = newIndex;
+      notifyListeners();
+    }
+  }
+
+  static const List<Destination> allDestinations = <Destination>[
+    Destination(0, 'Home', Icons.home, Colors.cyan),
+    Destination(1, 'Settings', Icons.settings, Colors.cyan),
+  ];
+}
+
+class Destination {
+  const Destination(this.index, this.title, this.icon, this.color);
+  final int index;
+  final String title;
+  final IconData icon;
+  final MaterialColor color;
 }

@@ -92,28 +92,44 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       // if not logged in, show AuthPage.
-      home: Navigator(
-        pages: [
-          // home page.
-          if (Provider.of<ApiService>(context, listen: false).hasLoggedInBefore())
-            cupertinoTabPage()
-          else
-            MaterialPage(
-              child: AuthPage(),
-            ),
+      home: Scaffold(
+        body: Navigator(
+          pages: [
+            // home page.
+            if (Provider.of<ApiService>(context, listen: false).hasLoggedInBefore())
+              MaterialPage(child: HomePage())
+            else
+              MaterialPage(
+                child: AuthPage(),
+              ),
 
-          // when a playlist is selected
-          if (Provider.of<AppStateModel>(context, listen: false).selectedPlaylistId != '')
-            MaterialPage(
-              child: TracksPage(),
-            )
-        ],
-        onPopPage: (route, result) {
-          if (!route.didPop(result)) {
-            return false;
-          }
-          return true;
-        },
+            // when a playlist is selected
+            if (Provider.of<AppStateModel>(context, listen: false).selectedPlaylistId != '')
+              MaterialPage(
+                child: TracksPage(),
+              )
+          ],
+          onPopPage: (route, result) {
+            if (!route.didPop(result)) {
+              return false;
+            }
+            return true;
+          },
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: Provider.of<AppStateModel>(context, listen: false).currentIndex,
+          onTap: (int index) {
+            var appState = Provider.of<AppStateModel>(context, listen: false);
+            appState.currentIndex = index;
+          },
+          items: AppStateModel.allDestinations.map((Destination destination) {
+            return BottomNavigationBarItem(
+              icon: Icon(destination.icon),
+              backgroundColor: destination.color,
+              label: destination.title,
+            );
+          }).toList(),
+        ),
       ),
     );
   }
