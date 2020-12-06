@@ -92,37 +92,54 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       // if not logged in, show AuthPage.
-      home: Provider.of<ApiService>(context).hasLoggedInBefore() ? cupertinoTabWidet() : AuthPage(),
+      home: Navigator(
+        pages: [
+          if (Provider.of<ApiService>(context).hasLoggedInBefore())
+            cupertinoTabPage()
+          else
+            MaterialPage(
+              child: AuthPage(),
+            )
+        ],
+        onPopPage: (route, result) {
+          if (!route.didPop(result)) {
+            return false;
+          }
+          return true;
+        },
+      ),
     );
   }
 }
 
-Widget cupertinoTabWidet() {
-  return CupertinoTabScaffold(
-      tabBar: CupertinoTabBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'settings')
-        ],
-      ),
-      tabBuilder: (context, index) {
-        switch (index) {
-          case 0:
-            return CupertinoTabView(builder: (context) {
-              return Consumer<HomeStateModel>(
-                builder: (context, value, child) {
-                  return CupertinoPageScaffold(child: HomePage());
-                },
-              );
-            });
-          case 1:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(child: SettingsPage());
-            });
-          default:
-            return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(child: HomePage());
-            });
-        }
-      });
+cupertinoTabPage() {
+  return MaterialPage(
+    child: CupertinoTabScaffold(
+        tabBar: CupertinoTabBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
+            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'settings')
+          ],
+        ),
+        tabBuilder: (context, index) {
+          switch (index) {
+            case 0:
+              return CupertinoTabView(builder: (context) {
+                return Consumer<HomeStateModel>(
+                  builder: (context, value, child) {
+                    return CupertinoPageScaffold(child: HomePage());
+                  },
+                );
+              });
+            case 1:
+              return CupertinoTabView(builder: (context) {
+                return CupertinoPageScaffold(child: SettingsPage());
+              });
+            default:
+              return CupertinoTabView(builder: (context) {
+                return CupertinoPageScaffold(child: HomePage());
+              });
+          }
+        }),
+  );
 }
