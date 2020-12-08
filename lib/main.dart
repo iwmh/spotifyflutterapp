@@ -97,15 +97,20 @@ class MyApp extends StatelessWidget {
           pages: [
             // home page.
             if (Provider.of<ApiService>(context, listen: false).hasLoggedInBefore())
-              MaterialPage(child: HomePage())
+              MaterialPage(
+                key: ValueKey('HomePage'),
+                child: HomePage(),
+              )
             else
               MaterialPage(
+                key: ValueKey('AuthPage'),
                 child: AuthPage(),
               ),
 
             // when a playlist is selected
             if (Provider.of<AppStateModel>(context, listen: false).selectedPlaylistId != '')
               MaterialPage(
+                key: ValueKey('TracksPage'),
                 child: TracksPage(),
               )
           ],
