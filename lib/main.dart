@@ -9,10 +9,6 @@ import 'package:spotifyflutterapp/data/repositories/secure_storage_repository.da
 import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
 import 'package:spotifyflutterapp/data/statemodels/home_state_model.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
-import 'package:spotifyflutterapp/ui/auth/auth_page.dart';
-import 'package:spotifyflutterapp/ui/home/home_page.dart';
-import 'package:spotifyflutterapp/ui/tracks/tracks_page.dart';
-import 'package:spotifyflutterapp/ui/settings/settings.dart';
 import 'package:spotifyflutterapp/util/util.dart';
 
 void main() async {
@@ -90,84 +86,9 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // if not logged in, show AuthPage.
-      home: Scaffold(
-        body: Navigator(
-          pages: [
-            // home page.
-            if (Provider.of<ApiService>(context, listen: false).hasLoggedInBefore())
-              MaterialPage(
-                key: ValueKey('HomePage'),
-                child: HomePage(),
-              )
-            else
-              MaterialPage(
-                key: ValueKey('AuthPage'),
-                child: AuthPage(),
-              ),
-
-            // when a playlist is selected
-            if (Provider.of<AppStateModel>(context, listen: false).selectedPlaylistId != '')
-              MaterialPage(
-                key: ValueKey('TracksPage'),
-                child: TracksPage(),
-              )
-          ],
-          onPopPage: (route, result) {
-            if (!route.didPop(result)) {
-              return false;
-            }
-            return true;
-          },
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: Provider.of<AppStateModel>(context, listen: false).currentIndex,
-          onTap: (int index) {
-            var appState = Provider.of<AppStateModel>(context, listen: false);
-            appState.currentIndex = index;
-          },
-          items: AppStateModel.allDestinations.map((Destination destination) {
-            return BottomNavigationBarItem(
-              icon: Icon(destination.icon),
-              backgroundColor: destination.color,
-              label: destination.title,
-            );
-          }).toList(),
-        ),
-      ),
+    return MaterialApp.router(
+      routeInformationParser: AppRouteInformationParser(),
+      routerDelegate: AppRouterDelegate(context),
     );
   }
-}
-
-cupertinoTabPage() {
-  return MaterialPage(
-    child: CupertinoTabScaffold(
-        tabBar: CupertinoTabBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
-            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'settings')
-          ],
-        ),
-        tabBuilder: (context, index) {
-          switch (index) {
-            case 0:
-              return CupertinoTabView(builder: (context) {
-                return Consumer<HomeStateModel>(
-                  builder: (context, value, child) {
-                    return CupertinoPageScaffold(child: HomePage());
-                  },
-                );
-              });
-            case 1:
-              return CupertinoTabView(builder: (context) {
-                return CupertinoPageScaffold(child: SettingsPage());
-              });
-            default:
-              return CupertinoTabView(builder: (context) {
-                return CupertinoPageScaffold(child: HomePage());
-              });
-          }
-        }),
-  );
 }
