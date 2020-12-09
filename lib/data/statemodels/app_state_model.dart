@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
 import 'package:spotifyflutterapp/ui/auth/auth_page.dart';
 import 'package:spotifyflutterapp/ui/home/home_page.dart';
-import 'package:spotifyflutterapp/ui/tracks/tracks_page.dart';
+import 'package:spotifyflutterapp/ui/playlist/playlist_page.dart';
+import 'package:spotifyflutterapp/ui/settings/settings.dart';
 
 class AppStateModel extends ChangeNotifier {
   // in-memory expiration date
@@ -51,118 +53,63 @@ class AppStateModel extends ChangeNotifier {
     }
   }
 
-  static const List<Destination> allDestinations = <Destination>[
-    Destination(0, 'Home', Icons.home, Colors.cyan),
-    Destination(1, 'Settings', Icons.settings, Colors.cyan),
+  static List<Destination> allDestinations = <Destination>[
+    HomeDestination(0, 'Home', Icons.home, Colors.cyan),
+    SettingsDestination(1, 'Settings', Icons.settings, Colors.cyan),
   ];
 }
 
-class Destination {
+abstract class Destination {
   const Destination(this.index, this.title, this.icon, this.color);
   final int index;
   final String title;
   final IconData icon;
   final MaterialColor color;
+
+  Page getPage() {}
+}
+
+class HomeDestination extends Destination {
+  HomeDestination(int index, String title, IconData icon, MaterialColor color) : super(index, title, icon, color);
+
+  Page getPage() {
+    return HomePage();
+  }
+}
+
+class SettingsDestination extends Destination {
+  SettingsDestination(int index, String title, IconData icon, MaterialColor color) : super(index, title, icon, color);
+
+  Page getPage() {
+    return SettingsPage();
+  }
 }
 
 class AppRoutePath {
+  final bool hasLoggedInBefore;
   final String playlistId;
 
-  AppRoutePath.home() : playlistId = null;
+  AppRoutePath.auth()
+      : hasLoggedInBefore = false,
+        playlistId = null;
 
-  AppRoutePath.playlist(this.playlistId);
+  AppRoutePath.home()
+      : hasLoggedInBefore = true,
+        playlistId = null;
+
+  AppRoutePath.playlist(this.playlistId) : hasLoggedInBefore = true;
+
+  AppRoutePath.settings()
+      : hasLoggedInBefore = true,
+        playlistId = null;
+
+  bool get isAuthPage => !hasLoggedInBefore && playlistId == null;
 
   bool get isHomePage => playlistId == null;
 
+  bool get isSettingsPage => playlistId == null;
+
   bool get isPlaylistPage => playlistId != null;
-}
-
-class AppRouterDelegate extends RouterDelegate<AppRoutePath>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRoutePath> {
-  final GlobalKey<NavigatorState> navigatorKey;
-  final BuildContext _context;
-
-  AppRouterDelegate(this._context) : navigatorKey = GlobalKey<NavigatorState>();
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      // if not logged in, show AuthPage.
-      home: Scaffold(
-        body: Navigator(
-          pages: [
-            // home page.
-            if (Provider.of<ApiService>(context, listen: false).hasLoggedInBefore())
-              MaterialPage(
-                key: ValueKey('HomePage'),
-                child: HomePage(),
-              )
-            else
-              MaterialPage(
-                key: ValueKey('AuthPage'),
-                child: AuthPage(),
-              ),
-
-            // when a playlist is selected
-            if (Provider.of<AppStateModel>(context, listen: false).selectedPlaylistId != '' &&
-                Provider.of<AppStateModel>(context, listen: false).selectedPlaylistId != null)
-              MaterialPage(
-                key: ValueKey('TracksPage'),
-                child: TracksPage(),
-              )
-          ],
-          onPopPage: (route, result) {
-            if (!route.didPop(result)) {
-              return false;
-            }
-            var state = Provider.of<AppStateModel>(context, listen: false);
-            state.selectedPlaylistId = null;
-            return true;
-          },
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: Provider.of<AppStateModel>(context, listen: false).currentIndex,
-          onTap: (int index) {
-            var appState = Provider.of<AppStateModel>(context, listen: false);
-            appState.currentIndex = index;
-          },
-          items: AppStateModel.allDestinations.map((Destination destination) {
-            return BottomNavigationBarItem(
-              icon: Icon(destination.icon),
-              backgroundColor: destination.color,
-              label: destination.title,
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Future<void> setNewRoutePath(AppRoutePath path) {
-    if (path.isPlaylistPage) {
-      Consumer<AppStateModel>(
-        builder: (_, state, child) {
-          state.selectedPlaylistId = path.playlistId;
-        },
-      );
-    } else {
-      Consumer<AppStateModel>(
-        builder: (_, state, child) {
-          state.selectedPlaylistId = null;
-        },
-      );
-    }
-  }
-
-  AppRoutePath get currentConfiguration {
-    var state = Provider.of<AppStateModel>(_context, listen: false);
-    if (state.selectedPlaylistId != '' && state.selectedPlaylistId != null) {
-      return AppRoutePath.playlist(state.selectedPlaylistId);
-    } else {
-      return AppRoutePath.home();
-    }
-  }
 }
 
 class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
@@ -175,21 +122,117 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
       return AppRoutePath.home();
     }
 
+    // handler '/auth'
+    if (uri.pathSegments.length == 1) {
+      var remaining = uri.pathSegments[0];
+      if (remaining == 'auth') {
+        return AppRoutePath.auth();
+      }
+    }
+
     // handler '/playlist/:id'
     if (uri.pathSegments.length == 2) {
       var remaining = uri.pathSegments[1];
       return AppRoutePath.playlist(remaining);
     }
+    throw '404 ?';
   }
 
   @override
-  RouteInformation restoreRouteInformation(AppRoutePath path) {
-    if (path.isHomePage) {
+  RouteInformation restoreRouteInformation(AppRoutePath configuration) {
+    if (configuration.isHomePage) {
       return RouteInformation(location: '/');
     }
-    if (path.isPlaylistPage) {
-      return RouteInformation(location: '/playlist/${path.playlistId}');
+    if (configuration.isAuthPage) {
+      return RouteInformation(location: '/auth');
+    }
+    if (configuration.isPlaylistPage) {
+      return RouteInformation(location: '/playlist/${configuration.playlistId}');
     }
     return null;
+  }
+}
+
+class AppRouterDelegate extends RouterDelegate<AppRoutePath>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRoutePath> {
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  AppRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
+
+  List<Page> _pages = [];
+  List<Page> get pages => _pages;
+  set pages(List<Page> pages) {
+    _pages = pages;
+    notifyListeners();
+  }
+
+  String _playlistId;
+  String get playlistId => _playlistId;
+  set playlistId(String playlistId) {
+    _playlistId = playlistId;
+    notifyListeners();
+  }
+
+  @override
+  Future<void> setNewRoutePath(AppRoutePath configuration) {
+    if (configuration.hasLoggedInBefore) {
+      _pages = <Page>[HomePage()];
+    } else {
+      _pages = <Page>[AuthPage()];
+    }
+
+    if (configuration.isPlaylistPage) {
+      _pages.add(PlaylistPage());
+    }
+    return SynchronousFuture<void>(null);
+  }
+
+  AppRoutePath get currentConfiguration {
+    if (_pages.last is AuthPage) return AppRoutePath.auth();
+    if (_pages.last is HomePage) return AppRoutePath.home();
+    if (_pages.last is PlaylistPage) return AppRoutePath.playlist(playlistId);
+    if (_pages.last is SettingsPage) return AppRoutePath.settings();
+    throw 'unknown route?';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      // if not logged in, show AuthPage.
+      home: Scaffold(
+        body: Navigator(
+          onGenerateRoute: (settings) {
+            if (settings.name == '/') {
+              return HomePage().createRoute(context);
+            }
+          },
+          pages: _pages,
+          onPopPage: (route, result) {
+            if (!route.didPop(result)) {
+              return false;
+            }
+            var state = Provider.of<AppStateModel>(context, listen: false);
+            state.selectedPlaylistId = null;
+            return true;
+          },
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: Provider.of<AppStateModel>(context, listen: false).currentIndex,
+          onTap: (int index) {
+            var page = AppStateModel.allDestinations[index].getPage();
+            pages = List<Page>.from(pages..add(page));
+            // var appState = Provider.of<AppStateModel>(context, listen: false);
+            // appState.currentIndex = index;
+          },
+          items: AppStateModel.allDestinations.map((Destination destination) {
+            return BottomNavigationBarItem(
+              icon: Icon(destination.icon),
+              backgroundColor: destination.color,
+              label: destination.title,
+            );
+          }).toList(),
+        ),
+      ),
+    );
   }
 }

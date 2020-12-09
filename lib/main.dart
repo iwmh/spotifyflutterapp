@@ -88,7 +88,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routeInformationParser: AppRouteInformationParser(),
-      routerDelegate: AppRouterDelegate(context),
+      routerDelegate: AppRouterDelegate(),
     );
   }
 }
