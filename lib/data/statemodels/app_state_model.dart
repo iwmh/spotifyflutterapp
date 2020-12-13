@@ -88,10 +88,6 @@ class AppRoutePath {
   final bool hasLoggedInBefore;
   final String playlistId;
 
-  AppRoutePath.auth()
-      : hasLoggedInBefore = false,
-        playlistId = null;
-
   AppRoutePath.home()
       : hasLoggedInBefore = true,
         playlistId = null;
@@ -101,8 +97,6 @@ class AppRoutePath {
   AppRoutePath.settings()
       : hasLoggedInBefore = true,
         playlistId = null;
-
-  bool get isAuthPage => !hasLoggedInBefore && playlistId == null;
 
   bool get isHomePage => playlistId == null;
 
@@ -146,14 +140,6 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
       return AppRoutePath.home();
     }
 
-    // handler '/auth'
-    if (uri.pathSegments.length == 1) {
-      var remaining = uri.pathSegments[0];
-      if (remaining == 'auth') {
-        return AppRoutePath.auth();
-      }
-    }
-
     // handler '/playlist/:id'
     if (uri.pathSegments.length == 2) {
       var remaining = uri.pathSegments[1];
@@ -166,9 +152,6 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
   RouteInformation restoreRouteInformation(AppRoutePath configuration) {
     if (configuration.isHomePage) {
       return RouteInformation(location: '/');
-    }
-    if (configuration.isAuthPage) {
-      return RouteInformation(location: '/auth');
     }
     if (configuration.isPlaylistPage) {
       return RouteInformation(location: '/playlist/${configuration.playlistId}');
@@ -209,7 +192,6 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
 
   AppRoutePath get currentConfiguration {
     if (_pages.isEmpty) return AppRoutePath.home();
-    if (_pages.last is AuthPage) return AppRoutePath.auth();
     if (_pages.last is HomePage) return AppRoutePath.home();
     if (_pages.last is PlaylistPage) return AppRoutePath.playlist(playlistId);
     if (_pages.last is SettingsPage) return AppRoutePath.settings();
