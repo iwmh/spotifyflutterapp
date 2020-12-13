@@ -12,6 +12,7 @@ class PlaylistPage extends Page {
         return Scaffold(
           appBar: AppBar(
             title: Text('playlist ${playlistId} page!'),
+            automaticallyImplyLeading: false,
           ),
           body: Container(),
         );

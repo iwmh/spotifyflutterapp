@@ -53,6 +53,7 @@ class HomePage extends Page {
         return Scaffold(
           appBar: AppBar(
             title: Text('home page!'),
+            automaticallyImplyLeading: false,
           ),
           body: FutureBuilder(
             future: _getPlaylist(context),

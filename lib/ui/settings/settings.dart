@@ -9,6 +9,7 @@ class SettingsPage extends Page {
         return Scaffold(
           appBar: AppBar(
             title: Text('settings page!'),
+            automaticallyImplyLeading: false,
           ),
           body: Center(
             child: GestureDetector(
