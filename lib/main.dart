@@ -9,6 +9,7 @@ import 'package:spotifyflutterapp/data/repositories/secure_storage_repository.da
 import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
 import 'package:spotifyflutterapp/data/statemodels/home_state_model.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
+import 'package:spotifyflutterapp/ui/auth/auth_page.dart';
 import 'package:spotifyflutterapp/util/util.dart';
 
 void main() async {
@@ -53,6 +54,7 @@ void main() async {
         ),
         // ChangeNotifierProxyProvider because ApiService depends on AppStateModel.
         ProxyProvider<AppStateModel, ApiService>(
+          lazy: false,
           create: (context) {
             final appState = Provider.of<AppStateModel>(context, listen: false);
 
@@ -83,12 +85,31 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final _appRouteInformationParser = AppRouteInformationParser();
+  final _appRouterDelegate = AppRouterDelegate();
+  var _routeInformationProvider = PlatformRouteInformationProvider(
+    initialRouteInformation: RouteInformation(location: '/'),
+  );
+  // var _routeInformationProvider = AppRouteInformationProvider();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routeInformationParser: AppRouteInformationParser(),
-      routerDelegate: AppRouterDelegate(),
-    );
+    var appState = Provider.of<AppStateModel>(context, listen: false);
+    if (appState.loggedInBefore) {
+      return MaterialApp.router(
+        routeInformationParser: _appRouteInformationParser,
+        routerDelegate: _appRouterDelegate,
+        routeInformationProvider: _routeInformationProvider,
+      );
+    } else {
+      return MaterialApp(
+        home: AuthPage(),
+      );
+    }
   }
 }

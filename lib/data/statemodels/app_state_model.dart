@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spotifyflutterapp/services/api_service.dart';
 import 'package:spotifyflutterapp/ui/auth/auth_page.dart';
 import 'package:spotifyflutterapp/ui/home/home_page.dart';
 import 'package:spotifyflutterapp/ui/playlist/playlist_page.dart';
@@ -112,6 +111,31 @@ class AppRoutePath {
   bool get isPlaylistPage => playlistId != null;
 }
 
+// TODO: Keep this class in case it is needed, not knowing exactly how it should be used....
+// class AppRouteInformationProvider extends RouteInformationProvider {
+//   AppRouteInformationProvider() : _value = RouteInformation(location: '/');
+//   RouteInformation _value;
+//   @override
+//   void addListener(void Function() listener) {
+//     // TODO: implement addListener
+//   }
+
+//   @override
+//   void removeListener(void Function() listener) {
+//     // TODO: implement removeListener
+//   }
+
+//   @override
+//   // TODO: implement value
+//   RouteInformation get value => _value;
+
+//   @override
+//   void routerReportsNewRouteInformation(RouteInformation routeInformation) {
+//     // TODO: implement routerReportsNewRouteInformation
+//     super.routerReportsNewRouteInformation(routeInformation);
+//   }
+// }
+
 class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
   @override
   Future<AppRoutePath> parseRouteInformation(RouteInformation routeInformation) async {
@@ -175,11 +199,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
 
   @override
   Future<void> setNewRoutePath(AppRoutePath configuration) {
-    if (configuration.hasLoggedInBefore) {
-      _pages = <Page>[HomePage()];
-    } else {
-      _pages = <Page>[AuthPage()];
-    }
+    _pages = <Page>[HomePage()];
 
     if (configuration.isPlaylistPage) {
       _pages.add(PlaylistPage());
@@ -188,6 +208,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
   }
 
   AppRoutePath get currentConfiguration {
+    if (_pages.isEmpty) return AppRoutePath.home();
     if (_pages.last is AuthPage) return AppRoutePath.auth();
     if (_pages.last is HomePage) return AppRoutePath.home();
     if (_pages.last is PlaylistPage) return AppRoutePath.playlist(playlistId);
@@ -221,8 +242,8 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
           onTap: (int index) {
             var page = AppStateModel.allDestinations[index].getPage();
             pages = List<Page>.from(pages..add(page));
-            // var appState = Provider.of<AppStateModel>(context, listen: false);
-            // appState.currentIndex = index;
+            var appState = Provider.of<AppStateModel>(context, listen: false);
+            appState.currentIndex = index;
           },
           items: AppStateModel.allDestinations.map((Destination destination) {
             return BottomNavigationBarItem(

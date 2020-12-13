@@ -2,57 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
 
-class AuthPage extends Page {
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text('auth page!'),
-  //     ),
-  //     body: Center(
-  //       child: GestureDetector(
-  //         child: Container(
-  //           color: Colors.grey,
-  //           child: Text(
-  //             "Login",
-  //             style: TextStyle(color: Colors.white, fontSize: 20),
-  //           ),
-  //           padding: EdgeInsets.all(20),
-  //         ),
-  //         onTap: () async {
-  //           await _auth(context);
-  //         },
-  //       ),
-  //     ),
-  //   );
-  // }
-
+class AuthPage extends StatelessWidget {
   @override
-  Route createRoute(BuildContext context) {
-    return PageRouteBuilder(
-      settings: this,
-      pageBuilder: (context, _, __) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('auth page!'),
-          ),
-          body: Center(
-            child: GestureDetector(
-              child: Container(
-                color: Colors.grey,
-                child: Text(
-                  "Login",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                ),
-                padding: EdgeInsets.all(20),
-              ),
-              onTap: () async {
-                await _auth(context);
-              },
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('auth page!'),
+      ),
+      body: Center(
+        child: GestureDetector(
+          child: Container(
+            color: Colors.grey,
+            child: Text(
+              "Login",
+              style: TextStyle(color: Colors.white, fontSize: 20),
             ),
+            padding: EdgeInsets.all(20),
           ),
-        );
-      },
+          onTap: () async {
+            await _auth(context);
+          },
+        ),
+      ),
     );
   }
 }
