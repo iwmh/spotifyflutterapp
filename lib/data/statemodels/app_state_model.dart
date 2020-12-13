@@ -86,16 +86,22 @@ class SettingsDestination extends Destination {
 
 class AppRoutePath {
   final String playlistId;
+  final bool isInHomeTab;
+  final bool isInSettingsTab;
 
-  AppRoutePath.home() : playlistId = null;
+  AppRoutePath.home({this.playlistId})
+      : isInHomeTab = true,
+        isInSettingsTab = false;
 
-  AppRoutePath.playlist(this.playlistId);
+  AppRoutePath.settings({this.playlistId})
+      : isInHomeTab = false,
+        isInSettingsTab = true;
 
-  AppRoutePath.settings() : playlistId = null;
+  AppRoutePath.playlist(this.playlistId, {this.isInHomeTab, this.isInSettingsTab});
 
-  bool get isHomePage => playlistId == null;
+  bool get isHomeTab => isInHomeTab;
 
-  bool get isSettingsPage => playlistId == null;
+  bool get isSettingsTab => isInSettingsTab;
 
   bool get isPlaylistPage => playlistId != null;
 }
@@ -135,6 +141,14 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
       return AppRoutePath.home();
     }
 
+    // handler '/settings/
+    if (uri.pathSegments.length == 1) {
+      var remaining = uri.pathSegments[0];
+      if (remaining == '/settings') {
+        return AppRoutePath.settings();
+      }
+    }
+
     // handler '/playlist/:id'
     if (uri.pathSegments.length == 2) {
       var remaining = uri.pathSegments[1];
@@ -145,8 +159,11 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
 
   @override
   RouteInformation restoreRouteInformation(AppRoutePath configuration) {
-    if (configuration.isHomePage) {
+    if (configuration.isHomeTab) {
       return RouteInformation(location: '/');
+    }
+    if (configuration.isInSettingsTab) {
+      return RouteInformation(location: '/settings');
     }
     if (configuration.isPlaylistPage) {
       return RouteInformation(location: '/playlist/${configuration.playlistId}');
