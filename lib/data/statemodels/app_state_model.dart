@@ -85,18 +85,13 @@ class SettingsDestination extends Destination {
 }
 
 class AppRoutePath {
-  final bool hasLoggedInBefore;
   final String playlistId;
 
-  AppRoutePath.home()
-      : hasLoggedInBefore = true,
-        playlistId = null;
+  AppRoutePath.home() : playlistId = null;
 
-  AppRoutePath.playlist(this.playlistId) : hasLoggedInBefore = true;
+  AppRoutePath.playlist(this.playlistId);
 
-  AppRoutePath.settings()
-      : hasLoggedInBefore = true,
-        playlistId = null;
+  AppRoutePath.settings() : playlistId = null;
 
   bool get isHomePage => playlistId == null;
 
