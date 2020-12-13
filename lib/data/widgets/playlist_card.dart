@@ -9,16 +9,14 @@ class PlaylistCard extends StatelessWidget {
   final String name;
   final String imageUrl;
   final String owner;
+  final ValueChanged<String> onTapped;
 
-  PlaylistCard({this.id, this.name, this.owner, this.imageUrl});
+  PlaylistCard({this.id, this.name, this.owner, this.imageUrl, @required this.onTapped});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        var appState = Provider.of<AppStateModel>(context, listen: false);
-        appState.selectedPlaylistId = id;
-      },
+      onTap: () => onTapped(id),
       onLongPress: () => {},
       child: Container(
           height: MediaQuery.of(context).size.height * 0.1,

@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PlaylistPage extends Page {
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text('tracks page!'),
-  //     ),
-  //     body: Container(),
-  //   );
-  // }
+  String playlistId;
+  PlaylistPage(this.playlistId);
 
   @override
   Route createRoute(BuildContext context) {
@@ -18,7 +11,7 @@ class PlaylistPage extends Page {
       pageBuilder: (context, _, __) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('tracks page!'),
+            title: Text('playlist ${playlistId} page!'),
           ),
           body: Container(),
         );

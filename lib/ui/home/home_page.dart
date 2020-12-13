@@ -5,6 +5,8 @@ import 'package:spotifyflutterapp/data/widgets/playlist_card.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
 
 class HomePage extends Page {
+  final ValueChanged<String> onTapped;
+  HomePage({@required this.onTapped});
   // @override
   // Widget build(BuildContext context) {
   //   return Scaffold(
@@ -73,6 +75,7 @@ class HomePage extends Page {
                             imageUrl: playlists[index].images[0].url,
                             name: playlists[index].name,
                             owner: playlists[index].owner.id,
+                            onTapped: onTapped,
                           );
                         });
                     break;

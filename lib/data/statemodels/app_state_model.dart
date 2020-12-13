@@ -65,21 +65,21 @@ abstract class Destination {
   final IconData icon;
   final MaterialColor color;
 
-  Page getPage() {}
+  Page getPage({ValueChanged<String> callback}) {}
 }
 
 class HomeDestination extends Destination {
   HomeDestination(int index, String title, IconData icon, MaterialColor color) : super(index, title, icon, color);
 
-  Page getPage() {
-    return HomePage();
+  Page getPage({ValueChanged<String> callback}) {
+    return HomePage(onTapped: callback);
   }
 }
 
 class SettingsDestination extends Destination {
   SettingsDestination(int index, String title, IconData icon, MaterialColor color) : super(index, title, icon, color);
 
-  Page getPage() {
+  Page getPage({ValueChanged<String> callback}) {
     return SettingsPage();
   }
 }
@@ -131,6 +131,7 @@ class AppRoutePath {
 //   }
 // }
 
+// TODO: In mobile app, this parser doesn't seem to be used, other than at thet startup.
 class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
   @override
   Future<AppRoutePath> parseRouteInformation(RouteInformation routeInformation) async {
@@ -159,10 +160,10 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
 
   @override
   RouteInformation restoreRouteInformation(AppRoutePath configuration) {
-    if (configuration.isHomeTab) {
+    if (configuration.isHomeTab != null && configuration.isHomeTab) {
       return RouteInformation(location: '/');
     }
-    if (configuration.isInSettingsTab) {
+    if (configuration.isInSettingsTab != null && configuration.isInSettingsTab) {
       return RouteInformation(location: '/settings');
     }
     if (configuration.isPlaylistPage) {
@@ -192,13 +193,21 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
     notifyListeners();
   }
 
+  void _handlePlaylistTapped(String id) {
+    // set playlsitId
+    playlistId = id;
+
+    var page = PlaylistPage(id);
+    pages = List<Page>.from(pages..add(page));
+  }
+
   @override
   Future<void> setNewRoutePath(AppRoutePath configuration) {
-    _pages = <Page>[HomePage()];
+    _pages = <Page>[HomePage(onTapped: _handlePlaylistTapped)];
 
-    if (configuration.isPlaylistPage) {
-      _pages.add(PlaylistPage());
-    }
+    // if (configuration.isPlaylistPage) {
+    //   _pages.add(PlaylistPage());
+    // }
     return SynchronousFuture<void>(null);
   }
 
@@ -218,7 +227,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
         body: Navigator(
           onGenerateRoute: (settings) {
             if (settings.name == '/') {
-              return HomePage().createRoute(context);
+              return HomePage(onTapped: _handlePlaylistTapped).createRoute(context);
             }
           },
           pages: _pages,
@@ -226,15 +235,23 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
             if (!route.didPop(result)) {
               return false;
             }
-            var state = Provider.of<AppStateModel>(context, listen: false);
-            state.selectedPlaylistId = null;
+
+            if (pages.last is PlaylistPage) {
+              pages.removeLast();
+            }
+
             return true;
           },
         ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: Provider.of<AppStateModel>(context, listen: false).currentIndex,
           onTap: (int index) {
-            var page = AppStateModel.allDestinations[index].getPage();
+            var page;
+            if (index == 0) {
+              page = AppStateModel.allDestinations[index].getPage(callback: _handlePlaylistTapped);
+            } else {
+              page = AppStateModel.allDestinations[index].getPage();
+            }
             pages = List<Page>.from(pages..add(page));
             var appState = Provider.of<AppStateModel>(context, listen: false);
             appState.currentIndex = index;
