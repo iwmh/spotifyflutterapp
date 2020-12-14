@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:spotifyflutterapp/data/models/paging.dart';
 import 'package:spotifyflutterapp/data/models/playlist.dart';
+import 'package:spotifyflutterapp/data/models/playlist_track.dart';
 import 'package:spotifyflutterapp/data/repositories/api_auth_repository.dart';
 import 'package:spotifyflutterapp/data/repositories/base_secure_storage_repository.dart';
 import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
@@ -132,6 +133,23 @@ class ApiService {
     await _apiAuthRepository.requestToGetPlaylists(_authHeader()).then((response) {
       Map pagingMap = jsonDecode(response.body);
       Paging paging = Paging<Playlist>.fromJson(pagingMap, (items) => Playlist.fromJson(items));
+      ret = paging.items;
+    }).catchError((err) {
+      // network related error.
+      return err;
+    });
+    return ret;
+  }
+
+  // get tracks in a specific playlist
+  Future<List<PlaylistTrack>> getTracksInPlaylist(String playlistId) async {
+    List<PlaylistTrack> ret;
+    // check token
+    await checkTokenValidity();
+    // call api.
+    await _apiAuthRepository.requestToGetTracksInPlaylist(_authHeader(), playlistId).then((response) {
+      Map pagingMap = jsonDecode(response.body);
+      Paging paging = Paging<PlaylistTrack>.fromJson(pagingMap, (items) => PlaylistTrack.fromJson(items));
       ret = paging.items;
     }).catchError((err) {
       // network related error.

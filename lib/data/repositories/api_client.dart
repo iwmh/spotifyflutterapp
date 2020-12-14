@@ -50,6 +50,17 @@ class ApiClient {
 
   // request to get current user's list of playlist
   Future<http.Response> requestToGetPlaylists(Map<String, String> authHeader) async {
-    return await http.get(Constants.current_users_playlists, headers: authHeader);
+    return await http.get(
+      Constants.current_users_playlists,
+      headers: authHeader,
+    );
+  }
+
+  // request to get tracks in a specific playlist
+  Future<http.Response> requestToGetTracksInPlaylist(Map<String, String> authHeader, String playlistId) async {
+    return await http.get(
+      Constants.tracks_in_playlist(playlistId),
+      headers: authHeader,
+    );
   }
 }

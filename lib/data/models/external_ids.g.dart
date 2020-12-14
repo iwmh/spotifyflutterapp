@@ -1,18 +1,18 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'external_urls.dart';
+part of 'external_ids.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ExternalUrls _$ExternalUrlsFromJson(Map<String, dynamic> json) {
-  return ExternalUrls(
-    json['spotify'] as String,
+ExternalIds _$ExternalIdsFromJson(Map<String, dynamic> json) {
+  return ExternalIds(
+    json['isrc'] as String,
   );
 }
 
-Map<String, dynamic> _$ExternalUrlsToJson(ExternalUrls instance) =>
+Map<String, dynamic> _$ExternalIdsToJson(ExternalIds instance) =>
     <String, dynamic>{
-      'spotify': instance.spotidy,
+      'isrc': instance.isrc,
     };

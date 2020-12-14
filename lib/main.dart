@@ -39,7 +39,7 @@ void main() async {
 
   // TODO: remove when not testing
   // for testing
-  // await apiService.deleteAllDataInStorage();
+  await apiService.deleteAllDataInStorage();
 
   runApp(
     MultiProvider(

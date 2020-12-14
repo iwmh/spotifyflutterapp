@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:spotifyflutterapp/data/models/playlist_track.dart';
+import 'package:spotifyflutterapp/data/widgets/playlist_card.dart';
+import 'package:spotifyflutterapp/services/api_service.dart';
 
 class PlaylistPage extends Page {
   String playlistId;
@@ -14,9 +18,37 @@ class PlaylistPage extends Page {
             title: Text('playlist ${playlistId} page!'),
             automaticallyImplyLeading: false,
           ),
-          body: Container(),
+          body: FutureBuilder(
+            future: _getPlaylistTracks(context, playlistId),
+            builder: (context, snapshot) {
+              Widget child = Container();
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                case ConnectionState.active:
+                case ConnectionState.waiting:
+                  child = CircularProgressIndicator();
+                  break;
+                case ConnectionState.done:
+                  if (snapshot.hasData) {
+                    List<PlaylistTrack> playlistTracks = snapshot.data;
+                    child = ListView.builder(
+                        itemCount: playlistTracks.length,
+                        itemBuilder: (context, index) {
+                          return Text(playlistTracks[index].track.name);
+                        });
+                    break;
+                  }
+              }
+              return child;
+            },
+          ),
         );
       },
     );
   }
+}
+
+Future<List<PlaylistTrack>> _getPlaylistTracks(BuildContext context, String playlistId) {
+  var apiService = Provider.of<ApiService>(context, listen: false);
+  return apiService.getTracksInPlaylist(playlistId);
 }

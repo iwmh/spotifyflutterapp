@@ -10,15 +10,24 @@ Playlist _$PlaylistFromJson(Map<String, dynamic> json) {
   return Playlist(
     json['collaborative'] as bool,
     json['description'] as String,
-    json['externalUrls'] == null ? null : ExternalUrls.fromJson(json['externalUrls'] as Map<String, dynamic>),
+    json['externalUrls'] == null
+        ? null
+        : ExternalUrls.fromJson(json['externalUrls'] as Map<String, dynamic>),
     json['href'] as String,
     json['id'] as String,
-    (json['images'] as List)?.map((e) => e == null ? null : Image.fromJson(e as Map<String, dynamic>))?.toList(),
+    (json['images'] as List)
+        ?.map(
+            (e) => e == null ? null : Image.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
     json['name'] as String,
-    json['owner'] == null ? null : Owner.fromJson(json['owner'] as Map<String, dynamic>),
+    json['owner'] == null
+        ? null
+        : Owner.fromJson(json['owner'] as Map<String, dynamic>),
     json['public'] as bool,
     json['snapshotId'] as String,
-    json['tracks'] == null ? null : Tracks.fromJson(json['tracks'] as Map<String, dynamic>),
+    json['tracks'] == null
+        ? null
+        : Tracks.fromJson(json['tracks'] as Map<String, dynamic>),
     json['type'] as String,
     json['uri'] as String,
   );

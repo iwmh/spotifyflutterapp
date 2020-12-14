@@ -34,4 +34,9 @@ class ApiAuthRepository {
   Future<http.Response> requestToGetPlaylists(Map<String, String> authHeader) async {
     return await _apiClient.requestToGetPlaylists(authHeader);
   }
+
+  // request to get the list of tracks in a specific playlist .
+  Future<http.Response> requestToGetTracksInPlaylist(Map<String, String> authHeader, String playlistId) async {
+    return await _apiClient.requestToGetTracksInPlaylist(authHeader, playlistId);
+  }
 }

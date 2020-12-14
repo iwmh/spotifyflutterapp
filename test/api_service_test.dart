@@ -5,6 +5,7 @@ import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:spotifyflutterapp/data/models/playlist.dart';
+import 'package:spotifyflutterapp/data/models/playlist_track.dart';
 import 'package:spotifyflutterapp/data/models/secrets.dart';
 import 'package:spotifyflutterapp/data/repositories/api_auth_repository.dart';
 import 'package:spotifyflutterapp/data/repositories/api_client.dart';
@@ -45,6 +46,11 @@ class MockApiClient extends Mock implements ApiClient {
   // request to get current user's list of playlist
   Future<http.Response> requestToGetPlaylists(Map<String, String> authHeader) async {
     return http.Response(Data.playlistsData, 200);
+  }
+
+  // request to get tracks in a specific playlist
+  Future<http.Response> requestToGetTracksInPlaylist(Map<String, String> authHeader, String playlistId) async {
+    return http.Response(Data.tracksInPlaylist, 200);
   }
 }
 
@@ -205,6 +211,23 @@ void main() async {
     expect(apiService.loggedInBefore, true);
 
     expect(playlists, isInstanceOf<List<Playlist>>());
+  });
+  test('get tracks in playlist successfully', () async {
+    final _storage = new FileStorage(option);
+    final accessToken = 'sakjlfaIkjf978kj';
+    final refreshToken = 'v,msdfkjlnrkjljk';
+    await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
+    await _storage.storeDataToStorage(Constants.key_refreshToken, refreshToken);
+
+    await apiService.init();
+
+    var playlistTracks = await apiService.getTracksInPlaylist('37i9dQZEVXcRTfRQrKqKRF');
+
+    expect(apiService.accessToken, accessToken);
+    expect(await apiService.refreshToken, refreshToken);
+    expect(apiService.loggedInBefore, true);
+
+    expect(playlistTracks, isInstanceOf<List<PlaylistTrack>>());
   });
 
   tearDown(() async {

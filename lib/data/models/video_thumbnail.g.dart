@@ -1,18 +1,18 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'external_urls.dart';
+part of 'video_thumbnail.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ExternalUrls _$ExternalUrlsFromJson(Map<String, dynamic> json) {
-  return ExternalUrls(
-    json['spotify'] as String,
+VideoThumbnail _$VideoThumbnailFromJson(Map<String, dynamic> json) {
+  return VideoThumbnail(
+    json['url'] as String,
   );
 }
 
-Map<String, dynamic> _$ExternalUrlsToJson(ExternalUrls instance) =>
+Map<String, dynamic> _$VideoThumbnailToJson(VideoThumbnail instance) =>
     <String, dynamic>{
-      'spotify': instance.spotidy,
+      'url': instance.addedAt,
     };
