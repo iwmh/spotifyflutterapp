@@ -236,9 +236,21 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
               return false;
             }
 
-            if (pages.last is PlaylistPage) {
-              pages.removeLast();
-            }
+            pages.removeLast();
+
+            // find the current tab to be shown.
+            // set the
+            var model = Provider.of<AppStateModel>(context, listen: false);
+            pages.reversed.forEach((element) {
+              if (element is HomePage) {
+                model.currentIndex = 0;
+                return;
+              }
+              if (element is SettingsPage) {
+                model.currentIndex = 1;
+                return;
+              }
+            });
 
             return true;
           },
