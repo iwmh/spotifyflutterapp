@@ -224,36 +224,40 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
     return MaterialApp(
       // if not logged in, show AuthPage.
       home: Scaffold(
-        body: Navigator(
-          onGenerateRoute: (settings) {
-            if (settings.name == '/') {
-              return HomePage(onTapped: _handlePlaylistTapped).createRoute(context);
-            }
-          },
-          pages: _pages,
-          onPopPage: (route, result) {
-            if (!route.didPop(result)) {
-              return false;
-            }
-
-            pages.removeLast();
-
-            // find the current tab to be shown.
-            // set the
-            var model = Provider.of<AppStateModel>(context, listen: false);
-            pages.reversed.forEach((element) {
-              if (element is HomePage) {
-                model.currentIndex = 0;
-                return;
+        // Enable the android back button to pop the page.
+        body: WillPopScope(
+          onWillPop: () async => !await navigatorKey.currentState.maybePop(),
+          child: Navigator(
+            key: navigatorKey,
+            onGenerateRoute: (settings) {
+              if (settings.name == '/') {
+                return HomePage(onTapped: _handlePlaylistTapped).createRoute(context);
               }
-              if (element is SettingsPage) {
-                model.currentIndex = 1;
-                return;
+            },
+            pages: _pages,
+            onPopPage: (route, result) {
+              if (!route.didPop(result)) {
+                return false;
               }
-            });
 
-            return true;
-          },
+              pages.removeLast();
+
+              // find the current tab to be shown.
+              var model = Provider.of<AppStateModel>(context, listen: false);
+              pages.reversed.forEach((element) {
+                if (element is HomePage) {
+                  model.currentIndex = 0;
+                  return;
+                }
+                if (element is SettingsPage) {
+                  model.currentIndex = 1;
+                  return;
+                }
+              });
+
+              return true;
+            },
+          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: Provider.of<AppStateModel>(context, listen: false).currentIndex,
