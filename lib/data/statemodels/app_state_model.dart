@@ -40,18 +40,6 @@ class AppStateModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  int _currentIndex = 0;
-  get currentIndex {
-    return _currentIndex;
-  }
-
-  set currentIndex(int newIndex) {
-    if (_currentIndex != newIndex) {
-      _currentIndex = newIndex;
-      notifyListeners();
-    }
-  }
-
   static List<Destination> allDestinations = <Destination>[
     HomeDestination(0, 'Home', Icons.home, Colors.cyan),
     SettingsDestination(1, 'Settings', Icons.settings, Colors.cyan),
@@ -193,6 +181,13 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
     notifyListeners();
   }
 
+  int _currentIndex = 0;
+  int get currentIndex => _currentIndex;
+  set currentIndex(int index) {
+    _currentIndex = index;
+    notifyListeners();
+  }
+
   void _handlePlaylistTapped(String id) {
     // set playlsitId
     playlistId = id;
@@ -243,24 +238,23 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
               pages.removeLast();
 
               // find the current tab to be shown.
-              var model = Provider.of<AppStateModel>(context, listen: false);
-              pages.reversed.forEach((element) {
-                if (element is HomePage) {
-                  model.currentIndex = 0;
-                  return;
+              for (var page in pages.reversed) {
+                if (page is HomePage) {
+                  currentIndex = 0;
+                  break;
                 }
-                if (element is SettingsPage) {
-                  model.currentIndex = 1;
-                  return;
+                if (page is SettingsPage) {
+                  currentIndex = 1;
+                  break;
                 }
-              });
+              }
 
               return true;
             },
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: Provider.of<AppStateModel>(context, listen: false).currentIndex,
+          currentIndex: currentIndex,
           onTap: (int index) {
             var page;
             if (index == 0) {
@@ -269,8 +263,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
               page = AppStateModel.allDestinations[index].getPage();
             }
             pages = List<Page>.from(pages..add(page));
-            var appState = Provider.of<AppStateModel>(context, listen: false);
-            appState.currentIndex = index;
+            currentIndex = index;
           },
           items: AppStateModel.allDestinations.map((Destination destination) {
             return BottomNavigationBarItem(
