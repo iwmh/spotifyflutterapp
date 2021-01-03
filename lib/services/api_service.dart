@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:spotifyflutterapp/data/models/paging.dart';
 import 'package:spotifyflutterapp/data/models/playlist.dart';
 import 'package:spotifyflutterapp/data/models/playlist_track.dart';
+import 'package:spotifyflutterapp/data/models/profile.dart';
 import 'package:spotifyflutterapp/data/repositories/api_auth_repository.dart';
 import 'package:spotifyflutterapp/data/repositories/base_secure_storage_repository.dart';
 import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
@@ -21,6 +22,7 @@ class ApiService {
   get accessToken => _appState.accessToken;
   get accessTokenExpirationDateTime => _appState.accessTokenExpirationDateTime;
   get loggedInBefore => _appState.loggedInBefore;
+  get displayName => _appState.displayName;
 
   get refreshToken async => await _secureStorage.readDataFromStorage(Constants.key_refreshToken);
 
@@ -56,6 +58,9 @@ class ApiService {
     if (accessTokenExpirationDateTime != null) {
       _appState.accessTokenExpirationDateTime = DateTime.parse(accessTokenExpirationDateTime);
     }
+    // ...also read display name
+    final displayName = await _secureStorage.readDataFromStorage(Constants.key_currentUsersProfileDisplayName);
+    _appState.displayName = displayName;
 
     // if either if them is missing, we regard the user as
     // having not been logged in before.
@@ -99,6 +104,11 @@ class ApiService {
         _appState.loggedInBefore = true;
       }
     }
+
+    // get current user's profile and save its display name.
+    final profile = await getCurrentUserProfile();
+    await _secureStorage.storeDataToStorage(Constants.key_currentUsersProfileDisplayName, profile.displayName);
+    _appState.displayName = profile.displayName;
   }
 
   /// refresh accesss token
@@ -151,6 +161,22 @@ class ApiService {
       Map pagingMap = jsonDecode(response.body);
       Paging paging = Paging<PlaylistTrack>.fromJson(pagingMap, (items) => PlaylistTrack.fromJson(items));
       ret = paging.items;
+    }).catchError((err) {
+      // network related error.
+      return err;
+    });
+    return ret;
+  }
+
+  // get current user's profile
+  Future<Profile> getCurrentUserProfile() async {
+    Profile ret;
+    // check token
+    await checkTokenValidity();
+    // call api.
+    await _apiAuthRepository.requestToGetCurrentUserProfile(_authHeader()).then((response) {
+      Map pagingMap = jsonDecode(response.body);
+      ret = Profile.fromJson(pagingMap);
     }).catchError((err) {
       // network related error.
       return err;

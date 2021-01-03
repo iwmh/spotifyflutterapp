@@ -39,4 +39,9 @@ class ApiAuthRepository {
   Future<http.Response> requestToGetTracksInPlaylist(Map<String, String> authHeader, String playlistId) async {
     return await _apiClient.requestToGetTracksInPlaylist(authHeader, playlistId);
   }
+
+  // request to get current user's profile.
+  Future<http.Response> requestToGetCurrentUserProfile(Map<String, String> authHeader) async {
+    return await _apiClient.requestToGetCurrentUserProfile(authHeader);
+  }
 }

@@ -67,7 +67,12 @@ class HomePage extends Page {
                   break;
                 case ConnectionState.done:
                   if (snapshot.hasData) {
-                    List<Playlist> playlists = snapshot.data;
+                    List<Playlist> unfilteredPlaylists = snapshot.data;
+                    // the playlist owner should be yourself.
+                    final service = Provider.of<ApiService>(context, listen: false);
+                    final playlists = unfilteredPlaylists
+                        .where((element) => element.owner.displayName == service.displayName)
+                        .toList();
                     child = ListView.builder(
                         itemCount: playlists.length,
                         itemBuilder: (context, index) {

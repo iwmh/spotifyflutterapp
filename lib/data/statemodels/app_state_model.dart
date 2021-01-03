@@ -12,6 +12,8 @@ class AppStateModel extends ChangeNotifier {
   DateTime accessTokenExpirationDateTime;
   // im-memory access token
   String accessToken;
+  // display name for the current user
+  String displayName;
 
   // Once logged in.
   bool _loggedInBefore = false;

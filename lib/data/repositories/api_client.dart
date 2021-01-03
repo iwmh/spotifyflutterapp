@@ -104,4 +104,12 @@ class ApiClient {
       headers: authHeader,
     );
   }
+
+  // request to get current user's profile
+  Future<http.Response> requestToGetCurrentUserProfile(Map<String, String> authHeader) async {
+    return await http.get(
+      Constants.current_users_profile,
+      headers: authHeader,
+    );
+  }
 }

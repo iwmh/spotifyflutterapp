@@ -8,10 +8,10 @@ part of 'owner.dart';
 
 Owner _$OwnerFromJson(Map<String, dynamic> json) {
   return Owner(
-    json['displayName'] as String,
-    json['externalUrls'] == null
+    json['display_name'] as String,
+    json['external_urls'] == null
         ? null
-        : ExternalUrls.fromJson(json['externalUrls'] as Map<String, dynamic>),
+        : ExternalUrls.fromJson(json['external_urls'] as Map<String, dynamic>),
     json['href'] as String,
     json['id'] as String,
     json['type'] as String,
@@ -20,8 +20,8 @@ Owner _$OwnerFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$OwnerToJson(Owner instance) => <String, dynamic>{
-      'displayName': instance.displayName,
-      'externalUrls': instance.externalUrls,
+      'display_name': instance.displayName,
+      'external_urls': instance.externalUrls,
       'href': instance.href,
       'id': instance.id,
       'type': instance.type,

@@ -14,7 +14,7 @@ class Playlist {
   @JsonKey(name: 'description')
   final String description;
 
-  @JsonKey(name: 'externalUrls')
+  @JsonKey(name: 'external_urls')
   final ExternalUrls externalUrls;
 
   @JsonKey(name: 'href')
@@ -35,7 +35,7 @@ class Playlist {
   @JsonKey(name: 'public')
   final bool public;
 
-  @JsonKey(name: 'snapshotId')
+  @JsonKey(name: 'snapshot_id')
   final String snapshotId;
 
   @JsonKey(name: 'tracks')

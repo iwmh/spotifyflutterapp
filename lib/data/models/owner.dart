@@ -5,10 +5,10 @@ part 'owner.g.dart';
 
 @JsonSerializable()
 class Owner {
-  @JsonKey(name: 'displayName')
+  @JsonKey(name: 'display_name')
   final String displayName;
 
-  @JsonKey(name: 'externalUrls')
+  @JsonKey(name: 'external_urls')
   final ExternalUrls externalUrls;
 
   @JsonKey(name: 'href')

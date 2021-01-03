@@ -42,6 +42,7 @@ class Album {
 
   @JsonKey(name: 'type')
   final String type;
+
   @JsonKey(name: 'uri')
   final String uri;
 
