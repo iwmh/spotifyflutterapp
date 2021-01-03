@@ -94,31 +94,6 @@ class AppRoutePath {
   bool get isPlaylistPage => playlistId != null;
 }
 
-// TODO: Keep this class in case it is needed, not knowing exactly how it should be used....
-// class AppRouteInformationProvider extends RouteInformationProvider {
-//   AppRouteInformationProvider() : _value = RouteInformation(location: '/');
-//   RouteInformation _value;
-//   @override
-//   void addListener(void Function() listener) {
-//     // TODO: implement addListener
-//   }
-
-//   @override
-//   void removeListener(void Function() listener) {
-//     // TODO: implement removeListener
-//   }
-
-//   @override
-//   // TODO: implement value
-//   RouteInformation get value => _value;
-
-//   @override
-//   void routerReportsNewRouteInformation(RouteInformation routeInformation) {
-//     // TODO: implement routerReportsNewRouteInformation
-//     super.routerReportsNewRouteInformation(routeInformation);
-//   }
-// }
-
 // TODO: In mobile app, this parser doesn't seem to be used, other than at thet startup.
 class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
   @override
@@ -171,6 +146,11 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
   List<Page> get pages => _pages;
   set pages(List<Page> pages) {
     _pages = pages;
+    notifyListeners();
+  }
+
+  removeLastPageAndNotify() {
+    _pages.removeLast();
     notifyListeners();
   }
 
@@ -235,7 +215,11 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
                 return false;
               }
 
-              pages.removeLast();
+              // TODO: I don't know why but these also work. Is modifying 'pages' list enough to make rebuild happen?
+              // pages.removeLast();
+              // _pages.removeLast();
+
+              removeLastPageAndNotify();
 
               // find the current tab to be shown.
               for (var page in pages.reversed) {
