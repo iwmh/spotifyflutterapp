@@ -7,7 +7,6 @@ import 'package:spotifyflutterapp/data/repositories/api_client.dart';
 import 'package:spotifyflutterapp/data/repositories/base_secure_storage_repository.dart';
 import 'package:spotifyflutterapp/data/repositories/secure_storage_repository.dart';
 import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
-import 'package:spotifyflutterapp/data/statemodels/home_state_model.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
 import 'package:spotifyflutterapp/ui/auth/auth_page.dart';
 import 'package:spotifyflutterapp/util/util.dart';
@@ -47,10 +46,6 @@ void main() async {
         // application level state
         ChangeNotifierProvider(
           create: (_) => AppStateModel(),
-        ),
-        // home page state
-        ChangeNotifierProvider(
-          create: (_) => HomeStateModel(),
         ),
         // ChangeNotifierProxyProvider because ApiService depends on AppStateModel.
         ProxyProvider<AppStateModel, ApiService>(
