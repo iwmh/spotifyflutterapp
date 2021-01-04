@@ -5,7 +5,7 @@ import 'package:spotifyflutterapp/services/api_service.dart';
 
 class PlaylistPage extends Page {
   final String playlistId;
-  PlaylistPage(this.playlistId);
+  const PlaylistPage(this.playlistId);
 
   @override
   Route createRoute(BuildContext context) {
@@ -14,7 +14,7 @@ class PlaylistPage extends Page {
       pageBuilder: (context, _, __) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('playlist ${playlistId} page!'),
+            title: Text('playlist $playlistId page!'),
             automaticallyImplyLeading: false,
           ),
           body: FutureBuilder(
@@ -25,7 +25,7 @@ class PlaylistPage extends Page {
                 case ConnectionState.none:
                 case ConnectionState.active:
                 case ConnectionState.waiting:
-                  child = CircularProgressIndicator();
+                  child = const CircularProgressIndicator();
                   break;
                 case ConnectionState.done:
                   if (snapshot.hasData) {

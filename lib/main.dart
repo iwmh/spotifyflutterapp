@@ -20,17 +20,17 @@ void main() async {
   var secrets = await getSecretsFromAssets();
 
   // appAuth
-  final appAuth = new FlutterAppAuth();
+  final appAuth = FlutterAppAuth();
 
   // client for api
-  final apiClient = new ApiClient(appAuth);
+  final apiClient = ApiClient(appAuth);
 
   // inittialize repositories
-  ApiAuthRepository apiAuthRepository = new ApiAuthRepository(apiClient, secrets.clientId, secrets.redirectUrl);
-  BaseSecureStorageRepository secureStorageRepository = new SecureStorageRepository();
+  ApiAuthRepository apiAuthRepository = ApiAuthRepository(apiClient, secrets.clientId, secrets.redirectUrl);
+  BaseSecureStorageRepository secureStorageRepository = SecureStorageRepository();
 
   // create service
-  final apiService = new ApiService(apiAuthRepository, secureStorageRepository);
+  final apiService = ApiService(apiAuthRepository, secureStorageRepository);
 
   // initialize with the state
   // (read token info from storage and set them to state.)
@@ -89,8 +89,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final _appRouteInformationParser = AppRouteInformationParser();
   final _appRouterDelegate = AppRouterDelegate();
-  var _routeInformationProvider = PlatformRouteInformationProvider(
-    initialRouteInformation: RouteInformation(location: '/'),
+  final _routeInformationProvider = PlatformRouteInformationProvider(
+    initialRouteInformation: const RouteInformation(location: '/'),
   );
   // var _routeInformationProvider = AppRouteInformationProvider();
   @override

@@ -41,7 +41,7 @@ class ApiService {
 
   // check token expiration and refresh token if token expired.
   checkTokenValidity() async {
-    var now = new DateTime.now();
+    var now = DateTime.now();
     var expirationDateTime = _appState.accessTokenExpirationDateTime;
     if (now.isAfter(expirationDateTime)) {
       await refreshAccessToken();

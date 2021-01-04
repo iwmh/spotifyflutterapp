@@ -7,7 +7,7 @@ import 'package:spotifyflutterapp/util/constants.dart';
 
 class ApiClient {
   // AppAuth for auth
-  FlutterAppAuth _appAuth;
+  final FlutterAppAuth _appAuth;
 
   ApiClient(this._appAuth);
 
@@ -76,13 +76,13 @@ class ApiClient {
     final response = await http.post('https://accounts.spotify.com/api/token', body: body, headers: header);
 
     final resString = response.body;
-    Map authMap = jsonDecode(resString);
+    Map authMap = await jsonDecode(resString);
     final auth = Auth.fromJson(authMap);
 
     return TokenResponse(
       auth.accessToken,
       auth.refreshToken,
-      DateTime.now().add(new Duration(seconds: auth.expiresIn)),
+      DateTime.now().add(Duration(seconds: auth.expiresIn)),
       null,
       null,
       null,

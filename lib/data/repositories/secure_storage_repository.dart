@@ -6,7 +6,7 @@ class SecureStorageRepository implements BaseSecureStorageRepository {
   FlutterSecureStorage _storage;
 
   SecureStorageRepository() {
-    _storage = new FlutterSecureStorage();
+    _storage = const FlutterSecureStorage();
   }
 
   @override
@@ -19,6 +19,7 @@ class SecureStorageRepository implements BaseSecureStorageRepository {
     await _storage.write(key: key, value: value);
   }
 
+  @override
   Future<void> deleteAllDataInStorage() async {
     await _storage.deleteAll();
   }

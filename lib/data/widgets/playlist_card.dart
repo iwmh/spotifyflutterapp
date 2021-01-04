@@ -1,8 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
 
 class PlaylistCard extends StatelessWidget {
   final String id;
@@ -11,7 +7,7 @@ class PlaylistCard extends StatelessWidget {
   final String owner;
   final ValueChanged<String> onTapped;
 
-  PlaylistCard({this.id, this.name, this.owner, this.imageUrl, @required this.onTapped});
+  const PlaylistCard({this.id, this.name, this.owner, this.imageUrl, @required this.onTapped});
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +20,13 @@ class PlaylistCard extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.all(3.0),
+                padding: const EdgeInsets.all(3.0),
                 height: MediaQuery.of(context).size.width * 0.2,
                 width: MediaQuery.of(context).size.width * 0.2,
                 child: Image.network(imageUrl),
               ),
               Container(
-                padding: EdgeInsets.all(3.0),
+                padding: const EdgeInsets.all(3.0),
                 height: MediaQuery.of(context).size.width * 0.8,
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: Column(children: [

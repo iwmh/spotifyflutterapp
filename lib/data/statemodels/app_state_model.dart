@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:spotifyflutterapp/ui/auth/auth_page.dart';
 import 'package:spotifyflutterapp/ui/home/home_page.dart';
 import 'package:spotifyflutterapp/ui/playlist/playlist_page.dart';
 import 'package:spotifyflutterapp/ui/settings/settings.dart';
@@ -61,6 +59,7 @@ abstract class Destination {
 class HomeDestination extends Destination {
   HomeDestination(int index, String title, IconData icon, MaterialColor color) : super(index, title, icon, color);
 
+  @override
   Page getPage({ValueChanged<String> callback}) {
     return HomePage(onTapped: callback);
   }
@@ -69,6 +68,7 @@ class HomeDestination extends Destination {
 class SettingsDestination extends Destination {
   SettingsDestination(int index, String title, IconData icon, MaterialColor color) : super(index, title, icon, color);
 
+  @override
   Page getPage({ValueChanged<String> callback}) {
     return SettingsPage();
   }
@@ -103,7 +103,7 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
     final uri = Uri.parse(routeInformation.location);
 
     // handler '/'
-    if (uri.pathSegments.length == 0) {
+    if (uri.pathSegments.isEmpty) {
       return AppRoutePath.home();
     }
 
@@ -126,10 +126,10 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
   @override
   RouteInformation restoreRouteInformation(AppRoutePath configuration) {
     if (configuration.isHomeTab != null && configuration.isHomeTab) {
-      return RouteInformation(location: '/');
+      return const RouteInformation(location: '/');
     }
     if (configuration.isInSettingsTab != null && configuration.isInSettingsTab) {
-      return RouteInformation(location: '/settings');
+      return const RouteInformation(location: '/settings');
     }
     if (configuration.isPlaylistPage) {
       return RouteInformation(location: '/playlist/${configuration.playlistId}');
@@ -140,6 +140,7 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
 
 class AppRouterDelegate extends RouterDelegate<AppRoutePath>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRoutePath> {
+  @override
   final GlobalKey<NavigatorState> navigatorKey;
 
   AppRouterDelegate() : navigatorKey = GlobalKey<NavigatorState>();
@@ -188,6 +189,7 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
     return SynchronousFuture<void>(null);
   }
 
+  @override
   AppRoutePath get currentConfiguration {
     if (_pages.isEmpty) return AppRoutePath.home();
     if (_pages.last is HomePage) return AppRoutePath.home();

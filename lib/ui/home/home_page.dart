@@ -6,7 +6,7 @@ import 'package:spotifyflutterapp/services/api_service.dart';
 
 class HomePage extends Page {
   final ValueChanged<String> onTapped;
-  HomePage({@required this.onTapped});
+  const HomePage({@required this.onTapped});
 
   @override
   Route createRoute(BuildContext context) {
@@ -15,7 +15,7 @@ class HomePage extends Page {
       pageBuilder: (context, _, __) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('home page!'),
+            title: const Text('home page!'),
             automaticallyImplyLeading: false,
           ),
           body: FutureBuilder(
@@ -26,7 +26,7 @@ class HomePage extends Page {
                 case ConnectionState.none:
                 case ConnectionState.active:
                 case ConnectionState.waiting:
-                  child = CircularProgressIndicator();
+                  child = const CircularProgressIndicator();
                   break;
                 case ConnectionState.done:
                   if (snapshot.hasData) {

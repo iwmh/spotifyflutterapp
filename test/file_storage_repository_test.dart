@@ -14,7 +14,7 @@ void main() {
     } else {
       option = 'test/';
     }
-    _storage = new FileStorage(option);
+    _storage = FileStorage(option);
   });
   test('save/read data to/from key_accessToken file.', () async {
     var data = 'access token';

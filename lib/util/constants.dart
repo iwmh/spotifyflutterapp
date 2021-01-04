@@ -7,7 +7,7 @@ class Constants {
 
   // URLs for API call.
   static const current_users_playlists = 'https://api.spotify.com/v1/me/playlists';
-  static tracks_in_playlist(String playlistId) => 'https://api.spotify.com/v1/playlists/${playlistId}/tracks';
+  static tracks_in_playlist(String playlistId) => 'https://api.spotify.com/v1/playlists/$playlistId/tracks';
   static const current_users_profile = 'https://api.spotify.com/v1/me';
 
   // when you run tests from console.

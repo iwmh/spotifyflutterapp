@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:fake_async/fake_async.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -24,31 +23,51 @@ class MockApiClient extends Mock implements ApiClient {
   static String refreshedRefreshToken = "RefreshedRefreshToken";
 
   // Receive the response which has an authorizationCode
+  @override
   Future<AuthorizationResponse> exchangeAuthorizationCode(String clientId, String redirectUrl) async {
-    return AuthorizationResponse("AuthorizationCode", "CodeVerifier", Map<String, String>());
+    return AuthorizationResponse("AuthorizationCode", "CodeVerifier", <String, String>{});
   }
 
   // Receive the response which has a pair of accessToken and refreshToken
   // in exchange of authorizationCode and codeVerifier
+  @override
   Future<TokenResponse> exchangeToken(
       String authorizationCode, String codeVerifier, String clientId, String redirectUrl) async {
-    return TokenResponse(exchangedAccessToken, exchangedRefreshToken, DateTime.now().add(new Duration(hours: 1)), "",
-        "", Map<String, String>());
+    return TokenResponse(
+      exchangedAccessToken,
+      exchangedRefreshToken,
+      DateTime.now().add(const Duration(hours: 1)),
+      "",
+      "",
+      <String, String>{},
+    );
   }
 
   // Receive the response which has a pair of accessToken and refreshToken
   // in exchange of refresh token
+  @override
   Future<TokenResponse> refreshToken(String refreshToken, String clientId, String redirectUrl) async {
-    return TokenResponse(refreshedAccessToken, refreshedRefreshToken, DateTime.now().add(new Duration(hours: 1)), "",
-        "", Map<String, String>());
+    return TokenResponse(
+      refreshedAccessToken,
+      refreshedRefreshToken,
+      DateTime.now().add(const Duration(hours: 1)),
+      "",
+      "",
+      <String, String>{},
+    );
   }
 
   // request to get current user's list of playlist
+  @override
   Future<http.Response> requestToGetPlaylists(Map<String, String> authHeader) async {
-    return http.Response(Data.playlistsData, 200);
+    return http.Response(
+      Data.playlistsData,
+      200,
+    );
   }
 
   // request to get tracks in a specific playlist
+  @override
   Future<http.Response> requestToGetTracksInPlaylist(Map<String, String> authHeader, String playlistId) async {
     return http.Response(Data.tracksInPlaylist, 200);
   }
@@ -59,7 +78,7 @@ void main() async {
   var option;
   // set up service for unit testing.
   setUp(() async {
-    var secrets = new Secrets('', '');
+    var secrets = Secrets('', '');
     if (Directory.current.path.endsWith('t')) {
       option = '../test/';
     } else {
@@ -67,16 +86,16 @@ void main() async {
     }
 
     // api client for testing
-    final apiClient = new MockApiClient();
+    final apiClient = MockApiClient();
 
     // inittialize repositories
-    ApiAuthRepository apiAuthRepository = new ApiAuthRepository(apiClient, secrets.clientId, secrets.redirectUrl);
-    BaseSecureStorageRepository secureStorageRepository = new FileStorage(option);
+    ApiAuthRepository apiAuthRepository = ApiAuthRepository(apiClient, secrets.clientId, secrets.redirectUrl);
+    BaseSecureStorageRepository secureStorageRepository = FileStorage(option);
 
     // create service
-    apiService = new ApiService(apiAuthRepository, secureStorageRepository);
+    apiService = ApiService(apiAuthRepository, secureStorageRepository);
 
-    final _storage = new FileStorage(option);
+    final _storage = FileStorage(option);
 
     await _storage.storeDataToStorage(Constants.key_accessToken, '');
     await _storage.storeDataToStorage(Constants.key_accessTokenExpirationDateTime, '');
@@ -91,8 +110,8 @@ void main() async {
   });
 
   test('init with token related info stored, therefore loggedInBefore.', () async {
-    final _storage = new FileStorage(option);
-    final accessToken = 'sakjlfaIkjf978kj';
+    final _storage = FileStorage(option);
+    const accessToken = 'sakjlfaIkjf978kj';
     final accessTokenExpirationDateTime = DateTime.parse('1992-05-02 20:18:00');
     await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
     await _storage.storeDataToStorage(
@@ -105,8 +124,8 @@ void main() async {
   });
 
   test('init with access token stored, but expirationdatetime missing, wherefore not loggedInBefore.', () async {
-    final _storage = new FileStorage(option);
-    final accessToken = 'sakjlfaIkjf978kj';
+    final _storage = FileStorage(option);
+    const accessToken = 'sakjlfaIkjf978kj';
     await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
 
     await apiService.init();
@@ -115,8 +134,8 @@ void main() async {
   });
 
   test('init with expirationdatetime stored, but accessToken missing, wherefore not loggedInBefore.', () async {
-    final _storage = new FileStorage(option);
-    final accessToken = 'sakjlfaIkjf978kj';
+    final _storage = FileStorage(option);
+    const accessToken = 'sakjlfaIkjf978kj';
     final accessTokenExpirationDateTime = DateTime.parse('1992-05-02 20:18:00');
     await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
     await _storage.storeDataToStorage(
@@ -156,9 +175,9 @@ void main() async {
   });
 
   test('access token expired, therefore reshresh token.', () async {
-    final _storage = new FileStorage(option);
-    final accessToken = 'sakjlfaIkjf978kj';
-    final accessTokenExpirationDateTime = new DateTime.now().add(Duration(seconds: -10));
+    final _storage = FileStorage(option);
+    const accessToken = 'sakjlfaIkjf978kj';
+    final accessTokenExpirationDateTime = DateTime.now().add(const Duration(seconds: -10));
     await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
     await _storage.storeDataToStorage(
         Constants.key_accessTokenExpirationDateTime, accessTokenExpirationDateTime.toString());
@@ -173,10 +192,10 @@ void main() async {
   });
 
   test('access token NOT expired, therefore NOT reshresh token.', () async {
-    final _storage = new FileStorage(option);
-    final accessToken = 'sakjlfaIkjf978kj';
-    final refreshToken = 'v,msdfkjlnrkjljk';
-    final accessTokenExpirationDateTime = new DateTime.now().add(Duration(hours: 1));
+    final _storage = FileStorage(option);
+    const accessToken = 'sakjlfaIkjf978kj';
+    const refreshToken = 'v,msdfkjlnrkjljk';
+    final accessTokenExpirationDateTime = DateTime.now().add(const Duration(hours: 1));
     await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
     await _storage.storeDataToStorage(Constants.key_refreshToken, refreshToken);
     await _storage.storeDataToStorage(
@@ -193,10 +212,10 @@ void main() async {
   });
 
   test('get playlists successfully, after refreshing token.', () async {
-    final _storage = new FileStorage(option);
-    final accessToken = 'sakjlfaIkjf978kj';
-    final refreshToken = 'v,msdfkjlnrkjljk';
-    final accessTokenExpirationDateTime = new DateTime.now().add(Duration(seconds: -10));
+    final _storage = FileStorage(option);
+    const accessToken = 'sakjlfaIkjf978kj';
+    const refreshToken = 'v,msdfkjlnrkjljk';
+    final accessTokenExpirationDateTime = DateTime.now().add(const Duration(seconds: -10));
     await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
     await _storage.storeDataToStorage(Constants.key_refreshToken, refreshToken);
     await _storage.storeDataToStorage(
@@ -213,9 +232,9 @@ void main() async {
     expect(playlists, isInstanceOf<List<Playlist>>());
   });
   test('get tracks in playlist successfully', () async {
-    final _storage = new FileStorage(option);
-    final accessToken = 'sakjlfaIkjf978kj';
-    final refreshToken = 'v,msdfkjlnrkjljk';
+    final _storage = FileStorage(option);
+    const accessToken = 'sakjlfaIkjf978kj';
+    const refreshToken = 'v,msdfkjlnrkjljk';
     await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
     await _storage.storeDataToStorage(Constants.key_refreshToken, refreshToken);
 
@@ -231,7 +250,7 @@ void main() async {
   });
 
   tearDown(() async {
-    final _storage = new FileStorage(option);
+    final _storage = FileStorage(option);
 
     await _storage.storeDataToStorage(Constants.key_accessToken, '');
     await _storage.storeDataToStorage(Constants.key_accessTokenExpirationDateTime, '');
