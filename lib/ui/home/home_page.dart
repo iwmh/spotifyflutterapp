@@ -7,43 +7,6 @@ import 'package:spotifyflutterapp/services/api_service.dart';
 class HomePage extends Page {
   final ValueChanged<String> onTapped;
   HomePage({@required this.onTapped});
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text('home page!'),
-  //     ),
-  //     body: FutureBuilder(
-  //       future: _getPlaylist(context),
-  //       builder: (context, snapshot) {
-  //         Widget child = Container();
-  //         switch (snapshot.connectionState) {
-  //           case ConnectionState.none:
-  //           case ConnectionState.active:
-  //           case ConnectionState.waiting:
-  //             child = CircularProgressIndicator();
-  //             break;
-  //           case ConnectionState.done:
-  //             if (snapshot.hasData) {
-  //               List<Playlist> playlists = snapshot.data;
-  //               child = ListView.builder(
-  //                   itemCount: playlists.length,
-  //                   itemBuilder: (context, index) {
-  //                     return PlaylistCard(
-  //                       id: playlists[index].id,
-  //                       imageUrl: playlists[index].images[0].url,
-  //                       name: playlists[index].name,
-  //                       owner: playlists[index].owner.id,
-  //                     );
-  //                   });
-  //               break;
-  //             }
-  //         }
-  //         return child;
-  //       },
-  //     ),
-  //   );
-  // }
 
   @override
   Route createRoute(BuildContext context) {
