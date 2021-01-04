@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spotifyflutterapp/data/models/playlist_track.dart';
-import 'package:spotifyflutterapp/data/widgets/playlist_card.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
 
 class PlaylistPage extends Page {
-  String playlistId;
+  final String playlistId;
   PlaylistPage(this.playlistId);
 
   @override
