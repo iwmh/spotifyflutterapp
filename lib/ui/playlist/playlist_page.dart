@@ -15,8 +15,3 @@ class PlaylistPage extends Page {
     );
   }
 }
-
-// Future<List<PlaylistTrack>> _getPlaylistTracks(BuildContext context, String playlistId) {
-//   var apiService = Provider.of<ApiService>(context, listen: false);
-//   return apiService.getTracksInPlaylist(playlistId);
-// }
