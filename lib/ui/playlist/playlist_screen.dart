@@ -37,7 +37,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
             case ConnectionState.none:
             case ConnectionState.active:
             case ConnectionState.waiting:
-              child = const CircularProgressIndicator();
+              child = const Center(child: CircularProgressIndicator());
               break;
             case ConnectionState.done:
               if (snapshot.hasData) {
