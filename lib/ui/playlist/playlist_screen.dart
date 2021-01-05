@@ -26,7 +26,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('playlist $widget.playlistId page!'),
+        title: Text('playlist ${widget.playlistId} page!'),
         automaticallyImplyLeading: false,
       ),
       body: FutureBuilder(
