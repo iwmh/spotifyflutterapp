@@ -10,7 +10,7 @@ class Constants {
   static tracks_in_playlist(String playlistId) => 'https://api.spotify.com/v1/playlists/$playlistId/tracks?';
 
   /// "fields" query for [tracks_in_playlist] URL.
-  static const albums = 'fields=items(added_at, track(album(artists, id, images, name, release_date)))';
+  static const albums = 'fields=items(added_at, track(album(artists, id, images, name, release_date))),next';
 
   static const current_users_profile = 'https://api.spotify.com/v1/me';
 

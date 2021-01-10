@@ -152,15 +152,15 @@ class ApiService {
   }
 
   // get tracks in a specific playlist
-  Future<List<PlaylistTrack>> getTracksInPlaylist(String playlistId) async {
-    List<PlaylistTrack> ret;
+  Future<Paging> getTracksInPlaylist(String url) async {
+    Paging ret;
     // check token
     await checkTokenValidity();
     // call api.
-    await _apiAuthRepository.requestToGetTracksInPlaylist(_authHeader(), playlistId).then((response) {
+    await _apiAuthRepository.requestToGetTracksInPlaylist(_authHeader(), url).then((response) {
       Map pagingMap = jsonDecode(response.body);
       Paging paging = Paging<PlaylistTrack>.fromJson(pagingMap, (items) => PlaylistTrack.fromJson(items));
-      ret = paging.items;
+      ret = paging;
     }).catchError((err) {
       // network related error.
       return err;

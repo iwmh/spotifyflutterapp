@@ -68,7 +68,10 @@ class MockApiClient extends Mock implements ApiClient {
 
   // request to get tracks in a specific playlist
   @override
-  Future<http.Response> requestToGetTracksInPlaylist(Map<String, String> authHeader, String playlistId) async {
+  Future<http.Response> requestToGetTracksInPlaylist(
+    Map<String, String> authHeader,
+    String url,
+  ) async {
     return http.Response(Data.tracksInPlaylist, 200);
   }
 }
