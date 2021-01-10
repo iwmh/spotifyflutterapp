@@ -100,7 +100,8 @@ class ApiClient {
   // request to get tracks in a specific playlist
   Future<http.Response> requestToGetTracksInPlaylist(Map<String, String> authHeader, String playlistId) async {
     return await http.get(
-      Constants.tracks_in_playlist(playlistId),
+      // get only album info
+      Constants.tracks_in_playlist(playlistId) + Constants.albums,
       headers: authHeader,
     );
   }

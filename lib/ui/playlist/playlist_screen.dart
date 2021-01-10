@@ -45,7 +45,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                 child = ListView.builder(
                     itemCount: playlistTracks.length,
                     itemBuilder: (context, index) {
-                      return Text(playlistTracks[index].track.name);
+                      return Text(playlistTracks[index].track.album.name);
                     });
                 break;
               }
