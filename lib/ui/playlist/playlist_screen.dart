@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spotifyflutterapp/data/models/artist.dart';
 import 'package:spotifyflutterapp/data/models/playlist_track.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
 import 'package:spotifyflutterapp/data/widgets/album_card.dart';
@@ -16,11 +15,14 @@ class PlaylistScreen extends StatefulWidget {
 }
 
 class _PlaylistScreenState extends State<PlaylistScreen> {
-  final _list = <PlaylistTrack>[];
+  final _albumList = <PlaylistTrack>[];
   ApiService _apiService;
   bool _isLoading = true;
   bool _hasMore = true;
   _ItemFetcher _itemFetcher;
+
+  // playlist name used for title.
+  String _playlistName = "";
 
   @override
   void initState() {
@@ -28,6 +30,14 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
 
     _itemFetcher = _ItemFetcher(widget.playlistId, _apiService);
 
+    // get playlist's name
+    _apiService.getPlaylistName(widget.playlistId).then((value) {
+      setState(() {
+        _playlistName = value.name;
+      });
+    });
+
+    // load playlist's items
     _loadData();
 
     super.initState();
@@ -44,7 +54,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
       } else {
         setState(() {
           _isLoading = false;
-          _list.addAll(fetchedList);
+          _albumList.addAll(fetchedList);
         });
       }
     });
@@ -54,13 +64,13 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('playlist ${widget.playlistId} page!'),
+        title: Text(_playlistName),
         automaticallyImplyLeading: false,
       ),
       body: ListView.builder(
-        itemCount: _hasMore ? _list.length + 1 : _list.length,
+        itemCount: _hasMore ? _albumList.length + 1 : _albumList.length,
         itemBuilder: (BuildContext context, int index) {
-          if (index >= _list.length) {
+          if (index >= _albumList.length) {
             if (!_isLoading) {
               _loadData();
             }
@@ -72,7 +82,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
               ),
             );
           }
-          final album = _list[index].track.album;
+          final album = _albumList[index].track.album;
           final artistsName = <String>[];
           album.artists.forEach((element) {
             artistsName.add(element.name);

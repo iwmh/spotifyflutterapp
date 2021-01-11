@@ -115,4 +115,12 @@ class ApiClient {
       headers: authHeader,
     );
   }
+
+  // request to get playlist name for a playlist id
+  Future<http.Response> requestToGetPlaylistName(Map<String, String> authHeader, String playlistId) async {
+    return await http.get(
+      Constants.playlist_name_for_a_playlist_id(playlistId),
+      headers: authHeader,
+    );
+  }
 }
