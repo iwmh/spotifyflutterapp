@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('home page!'),
+        title: const Text('Your playlists'),
         automaticallyImplyLeading: false,
       ),
       body: FutureBuilder(
