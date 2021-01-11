@@ -1,17 +1,9 @@
 # spotifyflutterapp
 
-A new Flutter project.
+A Flutter app that sorts the album orders in your playlists.
 
-## Getting Started
+## for dev 
 
-This project is a starting point for a Flutter application.
+- run the following to update the ".g.dart" class
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-# spotifyflutterapp
+flutter packages pub run build_runner build --delete-conflicting-outputs

@@ -14,13 +14,16 @@ class Artist {
   @JsonKey(name: 'id')
   final String id;
 
+  @JsonKey(name: 'name')
+  final String name;
+
   @JsonKey(name: 'type')
   final String type;
 
   @JsonKey(name: 'uri')
   final String uri;
 
-  Artist(this.externalUrls, this.href, this.id, this.type, this.uri);
+  Artist(this.externalUrls, this.href, this.id, this.name, this.type, this.uri);
 
   factory Artist.fromJson(Map<String, dynamic> json) => _$ArtistFromJson(json);
 

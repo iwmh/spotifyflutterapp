@@ -13,6 +13,7 @@ Artist _$ArtistFromJson(Map<String, dynamic> json) {
         : ExternalUrls.fromJson(json['external_urls'] as Map<String, dynamic>),
     json['href'] as String,
     json['id'] as String,
+    json['name'] as String,
     json['type'] as String,
     json['uri'] as String,
   );
@@ -22,6 +23,7 @@ Map<String, dynamic> _$ArtistToJson(Artist instance) => <String, dynamic>{
       'external_urls': instance.externalUrls,
       'href': instance.href,
       'id': instance.id,
+      'name': instance.name,
       'type': instance.type,
       'uri': instance.uri,
     };

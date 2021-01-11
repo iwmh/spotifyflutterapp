@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:spotifyflutterapp/data/models/artist.dart';
 import 'package:spotifyflutterapp/data/models/playlist_track.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
+import 'package:spotifyflutterapp/data/widgets/album_card.dart';
 import 'package:spotifyflutterapp/util/constants.dart';
 
 class PlaylistScreen extends StatefulWidget {
@@ -70,8 +72,17 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
               ),
             );
           }
-          return Text(
-            _list[index].track.album.name,
+          final album = _list[index].track.album;
+          final artistsName = <String>[];
+          album.artists.forEach((element) {
+            artistsName.add(element.name);
+          });
+          return AlbumCard(
+            id: album.id,
+            name: album.name,
+            artists: artistsName.join(', '),
+            imageUrl: album.images[0].url,
+            onTapped: (String value) {},
           );
         },
       ),
