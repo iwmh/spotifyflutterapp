@@ -5,9 +5,19 @@ class AlbumCard extends StatelessWidget {
   final String name;
   final String artists;
   final String imageUrl;
+  final int tracks;
+  final int totalTracks;
   final ValueChanged<String> onTapped;
 
-  const AlbumCard({this.id, this.name, this.artists, this.imageUrl, @required this.onTapped});
+  const AlbumCard({
+    this.id,
+    this.name,
+    this.artists,
+    this.imageUrl,
+    this.totalTracks,
+    this.tracks,
+    @required this.onTapped,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +48,15 @@ class AlbumCard extends StatelessWidget {
                     artists,
                     style: DefaultTextStyle.of(context).style.apply(color: Colors.grey[700]),
                   ),
+                  Text(
+                    tracks == null ? '...' : tracks.toString() + ' / ' + totalTracks.toString(),
+                    style: DefaultTextStyle.of(context).style.apply(
+                          color: Colors.grey[700],
+                          fontSizeFactor: 0.75,
+                        ),
+                  ),
                 ], crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center),
-              )
+              ),
             ],
           )),
     );
