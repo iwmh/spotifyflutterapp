@@ -174,7 +174,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
           final album = _albumList[index];
           return AlbumCard(
             album: album,
-            onTapped: (String value) {},
+            onFunction: (String value) {},
           );
         },
       ),
