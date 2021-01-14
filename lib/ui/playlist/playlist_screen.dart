@@ -87,12 +87,6 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
               // in between the tracks that need to be grouped as an album.
               if (albumIdToCompare == currentPlaylistTrack.track.album.id) {
                 numberOfTracks++;
-                // This means that it is on the way to the aggregation.
-                if (i == fetchedList.length - 1) {
-                  albums.last.numberOfTracks = numberOfTracks;
-                  albums.last.numberOfTracksOnAggregating = numberOfTracks;
-                }
-                continue;
               } else {
                 // Otherwise, rename albumIdToCompare and make that track as representative.
                 // ... and set the numberOfTracks to the previous album.
@@ -104,8 +98,14 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
 
                 // reset the number.
                 numberOfTracks = 1;
-                continue;
               }
+
+              // record the number of tracks in the middle of the aggregation.
+              if (i == fetchedList.length - 1) {
+                albums.last.numberOfTracks = numberOfTracks;
+                albums.last.numberOfTracksOnAggregating = numberOfTracks;
+              }
+              continue;
             }
           }
 
@@ -114,6 +114,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
           if (_albumList.isEmpty) {
             _albumList.addAll(albums);
           } else {
+            // Merge the tracks
             if (_albumList.last.id == albums.first.id) {
               final countToAdd = _albumList.last.numberOfTracksOnAggregating;
               _albumList.removeLast();
