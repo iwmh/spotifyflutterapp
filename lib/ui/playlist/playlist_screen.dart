@@ -172,17 +172,8 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
             );
           }
           final album = _albumList[index];
-          final artistsName = <String>[];
-          album.artists.forEach((element) {
-            artistsName.add(element.name);
-          });
           return AlbumCard(
-            id: album.id,
-            name: album.name,
-            artists: artistsName.join(', '),
-            imageUrl: album.images[0].url,
-            tracks: album.numberOfTracks,
-            totalTracks: album.totalTracks,
+            album: album,
             onTapped: (String value) {},
           );
         },
