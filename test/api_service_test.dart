@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:spotifyflutterapp/data/models/paging.dart';
 import 'package:spotifyflutterapp/data/models/playlist.dart';
 import 'package:spotifyflutterapp/data/models/playlist_track.dart';
 import 'package:spotifyflutterapp/data/models/secrets.dart';
@@ -238,6 +239,10 @@ void main() async {
     final _storage = FileStorage(option);
     const accessToken = 'sakjlfaIkjf978kj';
     const refreshToken = 'v,msdfkjlnrkjljk';
+    final accessTokenExpirationDateTime = DateTime.now().add(const Duration(hours: 1));
+
+    await _storage.storeDataToStorage(
+        Constants.key_accessTokenExpirationDateTime, accessTokenExpirationDateTime.toString());
     await _storage.storeDataToStorage(Constants.key_accessToken, accessToken);
     await _storage.storeDataToStorage(Constants.key_refreshToken, refreshToken);
 
@@ -249,7 +254,7 @@ void main() async {
     expect(await apiService.refreshToken, refreshToken);
     expect(apiService.loggedInBefore, true);
 
-    expect(playlistTracks, isInstanceOf<List<PlaylistTrack>>());
+    expect(playlistTracks, isInstanceOf<Paging<PlaylistTrack>>());
   });
 
   tearDown(() async {

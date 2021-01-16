@@ -104,7 +104,11 @@ class ApiService {
         _appState.loggedInBefore = true;
       }
     }
+  }
 
+  // make a request to get the current user's profile
+  // and save it to the storage.
+  getAndStoreCurrentUserProdile() async {
     // get current user's profile and save its display name.
     final profile = await getCurrentUserProfile();
     await _secureStorage.storeDataToStorage(Constants.key_currentUsersProfileDisplayName, profile.displayName);
