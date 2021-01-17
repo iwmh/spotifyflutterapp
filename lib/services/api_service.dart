@@ -203,4 +203,20 @@ class ApiService {
     });
     return ret;
   }
+
+  // get the playlist snapshot_id for a playlistId
+  Future<Playlist> getPlaylistSnapshotId(String playlistId) async {
+    Playlist ret;
+    // check token
+    await checkTokenValidity();
+    // call api.
+    await _apiAuthRepository.requestToGetPlaylistSnapshotId(_authHeader(), playlistId).then((response) {
+      Map pagingMap = jsonDecode(response.body);
+      ret = Playlist.fromJson(pagingMap);
+    }).catchError((err) {
+      // network related error.
+      return err;
+    });
+    return ret;
+  }
 }

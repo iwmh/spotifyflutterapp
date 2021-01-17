@@ -123,4 +123,12 @@ class ApiClient {
       headers: authHeader,
     );
   }
+
+  // request to get playlist snapshot_id for a playlist id
+  Future<http.Response> requestToGetPlaylistSnapshotId(Map<String, String> authHeader, String playlistId) async {
+    return await http.get(
+      Constants.playlist_snapshot_id_for_a_playlist_id(playlistId),
+      headers: authHeader,
+    );
+  }
 }

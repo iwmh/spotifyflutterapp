@@ -30,12 +30,22 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
   bool _hasMore = true;
   _ItemFetcher _itemFetcher;
 
+  // playlist's current snapshot id.
+  String _snapshotId = '';
+
   // playlist name used for title.
   String _playlistName = "";
 
   @override
   void initState() {
     _apiService = Provider.of<ApiService>(context, listen: false);
+
+    // get the snapshot_id of this playlist.
+    _apiService.getPlaylistSnapshotId(widget.playlistId).then((value) {
+      setState(() {
+        _snapshotId = value.snapshotId;
+      });
+    });
 
     _itemFetcher = _ItemFetcher(widget.playlistId, _apiService);
 
