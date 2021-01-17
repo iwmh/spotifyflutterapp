@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 
@@ -5,6 +6,7 @@ import 'package:spotifyflutterapp/data/models/paging.dart';
 import 'package:spotifyflutterapp/data/models/playlist.dart';
 import 'package:spotifyflutterapp/data/models/playlist_track.dart';
 import 'package:spotifyflutterapp/data/models/profile.dart';
+import 'package:spotifyflutterapp/data/models/snapshot_id.dart';
 import 'package:spotifyflutterapp/data/repositories/api_auth_repository.dart';
 import 'package:spotifyflutterapp/data/repositories/base_secure_storage_repository.dart';
 import 'package:spotifyflutterapp/data/statemodels/app_state_model.dart';
@@ -213,6 +215,22 @@ class ApiService {
     await _apiAuthRepository.requestToGetPlaylistSnapshotId(_authHeader(), playlistId).then((response) {
       Map pagingMap = jsonDecode(response.body);
       ret = Playlist.fromJson(pagingMap);
+    }).catchError((err) {
+      // network related error.
+      return err;
+    });
+    return ret;
+  }
+
+  // request to reorder or replace a playlists's items
+  Future<SnapshotId> requestToReorderReplacePlaylistItems(String playlistId, HashMap requestBody) async {
+    SnapshotId ret;
+    // check token
+    await checkTokenValidity();
+    // call api.
+    await _apiAuthRepository.requestToGetPlaylistSnapshotId(_authHeader(), playlistId).then((response) {
+      Map pagingMap = jsonDecode(response.body);
+      ret = SnapshotId.fromJson(pagingMap);
     }).catchError((err) {
       // network related error.
       return err;

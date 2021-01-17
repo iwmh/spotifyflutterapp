@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter_appauth/flutter_appauth.dart';
@@ -129,6 +130,16 @@ class ApiClient {
     return await http.get(
       Constants.playlist_snapshot_id_for_a_playlist_id(playlistId),
       headers: authHeader,
+    );
+  }
+
+  // request to reorder or replace a playlists's items
+  Future<http.Response> requestToReorderReplacePlaylistItems(
+      Map<String, String> authHeader, String playlistId, HashMap body) async {
+    return await http.put(
+      Constants.playlist_snapshot_id_for_a_playlist_id(playlistId),
+      headers: authHeader,
+      body: body,
     );
   }
 }
