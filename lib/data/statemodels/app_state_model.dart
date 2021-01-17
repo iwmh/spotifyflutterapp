@@ -262,6 +262,10 @@ class AppRouterDelegate extends RouterDelegate<AppRoutePath>
           }).toList(),
         ),
       ),
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        accentColor: Colors.greenAccent[400],
+      ),
     );
   }
 }

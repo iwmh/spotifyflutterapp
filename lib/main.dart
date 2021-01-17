@@ -105,6 +105,10 @@ class _MyAppState extends State<MyApp> {
     } else {
       return MaterialApp(
         home: AuthPage(),
+        theme: ThemeData(
+          brightness: Brightness.dark,
+          accentColor: Colors.greenAccent[400],
+        ),
       );
     }
   }

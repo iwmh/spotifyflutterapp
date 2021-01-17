@@ -31,54 +31,58 @@ class AlbumCard extends StatelessWidget {
                 padding: const EdgeInsets.all(3.0),
                 height: MediaQuery.of(context).size.width * 0.7,
                 width: MediaQuery.of(context).size.width * 0.7,
-                child: Column(children: [
-                  const Spacer(
-                    flex: 3,
-                  ),
-                  Text(
-                    album.name,
-                    style: DefaultTextStyle.of(context).style.apply(
-                          fontSizeFactor: 1.25,
-                          fontWeightDelta: 1,
-                        ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const Spacer(
-                    flex: 1,
-                  ),
-                  Text(
-                    album.artists.map((e) => e.name).join(', '),
-                    style: DefaultTextStyle.of(context).style.apply(
-                          color: Colors.grey[700],
-                        ),
-                  ),
-                  const Spacer(
-                    flex: 1,
-                  ),
-                  Text(
-                    album.releaseDate,
-                    style: DefaultTextStyle.of(context).style.apply(
-                          color: Colors.grey[700],
-                          fontSizeFactor: 0.75,
-                        ),
-                  ),
-                  const Spacer(
-                    flex: 1,
-                  ),
-                  Text(
-                    album.numberOfTracks == null
-                        ? '...'
-                        : album.numberOfTracks.toString() + ' / ' + album.totalTracks.toString(),
-                    style: DefaultTextStyle.of(context).style.apply(
-                          color: Colors.grey[700],
-                          fontSizeFactor: 0.75,
-                        ),
-                  ),
-                  const Spacer(
-                    flex: 3,
-                  ),
-                ], crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center),
+                child: Column(
+                  children: [
+                    const Spacer(
+                      flex: 3,
+                    ),
+                    Text(
+                      album.name,
+                      style: DefaultTextStyle.of(context).style.apply(
+                            fontSizeFactor: 1.25,
+                            fontWeightDelta: 1,
+                          ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const Spacer(
+                      flex: 1,
+                    ),
+                    Text(
+                      album.artists.map((e) => e.name).join(', '),
+                      style: DefaultTextStyle.of(context).style.apply(
+                            color: Colors.grey[400],
+                          ),
+                    ),
+                    const Spacer(
+                      flex: 1,
+                    ),
+                    Text(
+                      album.releaseDate,
+                      style: DefaultTextStyle.of(context).style.apply(
+                            color: Colors.grey[400],
+                            fontSizeFactor: 0.75,
+                          ),
+                    ),
+                    const Spacer(
+                      flex: 1,
+                    ),
+                    Text(
+                      album.numberOfTracks == null
+                          ? '...'
+                          : album.numberOfTracks.toString() + ' / ' + album.totalTracks.toString(),
+                      style: DefaultTextStyle.of(context).style.apply(
+                            color: Colors.grey[400],
+                            fontSizeFactor: 0.75,
+                          ),
+                    ),
+                    const Spacer(
+                      flex: 3,
+                    ),
+                  ],
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                ),
               ),
             ],
           )),

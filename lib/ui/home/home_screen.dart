@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Your playlists'),
         automaticallyImplyLeading: false,
+        centerTitle: true,
       ),
       body: FutureBuilder(
         future: future,

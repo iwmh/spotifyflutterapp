@@ -155,6 +155,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
       appBar: AppBar(
         title: Text(_playlistName),
         automaticallyImplyLeading: false,
+        centerTitle: true,
       ),
       body: ListView.builder(
         itemCount: _hasMore ? _albumList.length + 1 : _albumList.length,

@@ -7,7 +7,13 @@ class PlaylistCard extends StatelessWidget {
   final String owner;
   final ValueChanged<String> onTapped;
 
-  const PlaylistCard({this.id, this.name, this.owner, this.imageUrl, @required this.onTapped});
+  const PlaylistCard({
+    this.id,
+    this.name,
+    this.owner,
+    this.imageUrl,
+    @required this.onTapped,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +35,25 @@ class PlaylistCard extends StatelessWidget {
                 padding: const EdgeInsets.all(3.0),
                 height: MediaQuery.of(context).size.width * 0.8,
                 width: MediaQuery.of(context).size.width * 0.8,
-                child: Column(children: [
-                  Text(
-                    name,
-                    style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.25, fontWeightDelta: 1),
-                  ),
-                  Text(
-                    'owner: ' + owner,
-                    style: DefaultTextStyle.of(context).style.apply(color: Colors.grey[700]),
-                  ),
-                ], crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center),
+                child: Column(
+                  children: [
+                    Text(
+                      name,
+                      style: DefaultTextStyle.of(context).style.apply(
+                            fontSizeFactor: 1.25,
+                            fontWeightDelta: 1,
+                          ),
+                    ),
+                    Text(
+                      'owner: ' + owner,
+                      style: DefaultTextStyle.of(context).style.apply(
+                            color: Colors.grey[400],
+                          ),
+                    ),
+                  ],
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                ),
               )
             ],
           )),
