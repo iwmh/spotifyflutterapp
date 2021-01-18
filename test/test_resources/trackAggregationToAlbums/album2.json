@@ -1,0 +1,35 @@
+{
+    "artists": [
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/6cHtik72blrq0MgmnwTlpU"
+        },
+        "href": "https://api.spotify.com/v1/artists/6cHtik72blrq0MgmnwTlpU",
+        "id": "6cHtik72blrq0MgmnwTlpU",
+        "name": "Jeremy Cunningham",
+        "type": "artist",
+        "uri": "spotify:artist:6cHtik72blrq0MgmnwTlpU"
+      }
+    ],
+    "id": "7mNvvGyXZ9cIlJ85tD8qFf",
+    "images": [
+      {
+        "height": 640,
+        "url": "https://i.scdn.co/image/ab67616d0000b273b800d0fed46f5c43c4ec4058",
+        "width": 640
+      },
+      {
+        "height": 300,
+        "url": "https://i.scdn.co/image/ab67616d00001e02b800d0fed46f5c43c4ec4058",
+        "width": 300
+      },
+      {
+        "height": 64,
+        "url": "https://i.scdn.co/image/ab67616d00004851b800d0fed46f5c43c4ec4058",
+        "width": 64
+      }
+    ],
+    "name": "The Weather Up There",
+    "release_date": "2020-02-28",
+    "total_tracks": 10
+}

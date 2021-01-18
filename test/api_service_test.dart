@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:spotifyflutterapp/data/models/album.dart';
+import 'package:spotifyflutterapp/data/models/albumInPlaylistPage.dart';
 import 'package:spotifyflutterapp/data/models/paging.dart';
 import 'package:spotifyflutterapp/data/models/playlist.dart';
 import 'package:spotifyflutterapp/data/models/playlist_track.dart';
@@ -79,8 +82,15 @@ class MockApiClient extends Mock implements ApiClient {
 
 void main() async {
   ApiService apiService;
-  var option;
+  String option;
   // set up service for unit testing.
+
+  Future<Album> createAlbumFromJsonFile(String path) async {
+    final albumJson = File(path);
+    final albumMap = await jsonDecode(await albumJson.readAsString());
+    return Album.fromJson(albumMap);
+  }
+
   setUp(() async {
     var secrets = Secrets('', '');
     if (Directory.current.path.endsWith('t')) {
@@ -263,5 +273,30 @@ void main() async {
     await _storage.storeDataToStorage(Constants.key_accessToken, '');
     await _storage.storeDataToStorage(Constants.key_accessTokenExpirationDateTime, '');
     await _storage.storeDataToStorage(Constants.key_refreshToken, '');
+  });
+
+  test('receives a list of tracks and create a list of albums based on the track list.', () async {
+    // source track list
+    final file = File(option + 'test_resources/trackAggregationToAlbums/track_list.json');
+    // expected album list
+    var expectedAlbumList = <Album>[];
+    Album album1 = await createAlbumFromJsonFile(option + 'test_resources/trackAggregationToAlbums/album1.json');
+    Album album2 = await createAlbumFromJsonFile(option + 'test_resources/trackAggregationToAlbums/album2.json');
+    Album album3 = await createAlbumFromJsonFile(option + 'test_resources/trackAggregationToAlbums/album3.json');
+    Album album4 = await createAlbumFromJsonFile(option + 'test_resources/trackAggregationToAlbums/album4.json');
+    expectedAlbumList.add(apiService.convertAlbumToAlbumInPlaylistPage(album1));
+    expectedAlbumList.add(apiService.convertAlbumToAlbumInPlaylistPage(album2));
+    expectedAlbumList.add(apiService.convertAlbumToAlbumInPlaylistPage(album3));
+    expectedAlbumList.add(apiService.convertAlbumToAlbumInPlaylistPage(album4));
+
+    Map pagingMap = await jsonDecode(await file.readAsString());
+    Paging paging = Paging<PlaylistTrack>.fromJson(pagingMap, (items) => PlaylistTrack.fromJson(items));
+
+    List<AlbumInPlaylistPage> albumList = await apiService.aggregateTracksToAlbums(paging.items);
+
+    expect(albumList[0].id, expectedAlbumList[0].id);
+    expect(albumList[1].id, expectedAlbumList[1].id);
+    expect(albumList[2].id, expectedAlbumList[2].id);
+    expect(albumList[3].id, expectedAlbumList[3].id);
   });
 }

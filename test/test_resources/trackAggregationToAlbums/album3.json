@@ -1,0 +1,35 @@
+{
+    "artists": [
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/3t58jfUhoMLYVO14XaUFLA"
+        },
+        "href": "https://api.spotify.com/v1/artists/3t58jfUhoMLYVO14XaUFLA",
+        "id": "3t58jfUhoMLYVO14XaUFLA",
+        "name": "Pat Metheny",
+        "type": "artist",
+        "uri": "spotify:artist:3t58jfUhoMLYVO14XaUFLA"
+      }
+    ],
+    "id": "5PfjsKZLI9whAwPSfNgnES",
+    "images": [
+      {
+        "height": 640,
+        "url": "https://i.scdn.co/image/ab67616d0000b273185e3dec4cedf52e77414126",
+        "width": 640
+      },
+      {
+        "height": 300,
+        "url": "https://i.scdn.co/image/ab67616d00001e02185e3dec4cedf52e77414126",
+        "width": 300
+      },
+      {
+        "height": 64,
+        "url": "https://i.scdn.co/image/ab67616d00004851185e3dec4cedf52e77414126",
+        "width": 64
+      }
+    ],
+    "name": "From This Place",
+    "release_date": "2020-02-21",
+    "total_tracks": 10
+}
