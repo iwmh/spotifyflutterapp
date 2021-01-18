@@ -296,9 +296,16 @@ void main() async {
       paging.items,
     );
 
+    // check the album ids.
     expect(albumList[0].id, expectedAlbumList[0].id);
     expect(albumList[1].id, expectedAlbumList[1].id);
     expect(albumList[2].id, expectedAlbumList[2].id);
     expect(albumList[3].id, expectedAlbumList[3].id);
+
+    // check the number of tracks
+    expect(albumList[0].numberOfTracks, 1);
+    expect(albumList[1].numberOfTracks, 3);
+    expect(albumList[2].numberOfTracks, 4);
+    expect(albumList[3].numberOfTracks, 2);
   });
 }
