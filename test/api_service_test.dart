@@ -331,4 +331,29 @@ void main() async {
     expect(mergedAlbumList[3].id, albumList2[0].id);
     expect(mergedAlbumList[3].numberOfTracks, 4);
   });
+
+  test('in the case you just add album list at the end of the merged list.', () async {
+    // source track list
+    final file = File(option + 'test_resources/trackAggregationToAlbums/track_list.json');
+    Map pagingMap = await jsonDecode(await file.readAsString());
+    Paging paging = Paging<PlaylistTrack>.fromJson(pagingMap, (items) => PlaylistTrack.fromJson(items));
+    List<AlbumInPlaylistPage> albumList = await apiService.aggregateTracksToAlbums(
+      paging.items,
+    );
+
+    // merged track list
+    final file3 = File(option + 'test_resources/trackAggregationToAlbums/track_list3.json');
+    Map pagingMap3 = await jsonDecode(await file3.readAsString());
+    Paging paging3 = Paging<PlaylistTrack>.fromJson(pagingMap3, (items) => PlaylistTrack.fromJson(items));
+    List<AlbumInPlaylistPage> albumList3 = await apiService.aggregateTracksToAlbums(
+      paging3.items,
+    );
+
+    // merge two album lists.
+    List<AlbumInPlaylistPage> mergedAlbumList = apiService.mergeAlbumLists(merged: albumList, merge: albumList3);
+    expect(mergedAlbumList[4].id, albumList3[0].id);
+    expect(mergedAlbumList[3].numberOfTracks, 2);
+    expect(mergedAlbumList[4].numberOfTracks, 1);
+    expect(mergedAlbumList[5].numberOfTracks, 2);
+  });
 }
