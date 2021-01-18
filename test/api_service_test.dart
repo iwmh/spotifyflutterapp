@@ -292,7 +292,9 @@ void main() async {
     Map pagingMap = await jsonDecode(await file.readAsString());
     Paging paging = Paging<PlaylistTrack>.fromJson(pagingMap, (items) => PlaylistTrack.fromJson(items));
 
-    List<AlbumInPlaylistPage> albumList = await apiService.aggregateTracksToAlbums(paging.items);
+    List<AlbumInPlaylistPage> albumList = await apiService.aggregateTracksToAlbums(
+      paging.items,
+    );
 
     expect(albumList[0].id, expectedAlbumList[0].id);
     expect(albumList[1].id, expectedAlbumList[1].id);

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:spotifyflutterapp/data/models/album.dart';
 import 'package:spotifyflutterapp/data/models/albumInPlaylistPage.dart';
 import 'package:spotifyflutterapp/data/models/playlist_track.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
@@ -77,47 +76,8 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
           // keep the tracks as you got.
           _trackList.addAll(fetchedList);
 
-          // (1) First, create the list of albums.
-          String albumIdToCompare;
-          final albums = <AlbumInPlaylistPage>[];
-          var numberOfTracks = 1;
-          for (var i = 0; i < fetchedList.length; i++) {
-            // First, you group the tracks which have the same album id.
-            PlaylistTrack currentPlaylistTrack = fetchedList[i];
-            // in the first iteration you just set albumId and regard it as representative
-            // because you have no track to compare its albumId.
-            if (i == 0) {
-              albumIdToCompare = currentPlaylistTrack.track.album.id;
-              final convertedAlbum = _convertAlbumToAlbumInPlaylistPage(currentPlaylistTrack.track.album);
-              albums.add(convertedAlbum);
-              continue;
-            } else {
-              // Compare the albumId you kept with the current tracks albumId.
-              // If you have the same albumId's track, then it means you are still
-              // in between the tracks that need to be grouped as an album.
-              if (albumIdToCompare == currentPlaylistTrack.track.album.id) {
-                numberOfTracks++;
-              } else {
-                // Otherwise, rename albumIdToCompare and make that track as representative.
-                // ... and set the numberOfTracks to the previous album.
-                albums.last.numberOfTracks = numberOfTracks;
-
-                albumIdToCompare = currentPlaylistTrack.track.album.id;
-                final convertedAlbum = _convertAlbumToAlbumInPlaylistPage(currentPlaylistTrack.track.album);
-                albums.add(convertedAlbum);
-
-                // reset the number.
-                numberOfTracks = 1;
-              }
-
-              // record the number of tracks in the middle of the aggregation.
-              if (i == fetchedList.length - 1) {
-                albums.last.numberOfTracks = numberOfTracks;
-                albums.last.numberOfTracksOnAggregating = numberOfTracks;
-              }
-              continue;
-            }
-          }
+          // (1) First, create the list of albums based on the fetched track list.
+          final albums = _apiService.aggregateTracksToAlbums(fetchedList);
 
           // (2) Add obtained album list to the aggregate list.
           // Merge albums list with _albumList.
@@ -139,24 +99,6 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
         });
       }
     });
-  }
-
-  _convertAlbumToAlbumInPlaylistPage(Album album) {
-    return AlbumInPlaylistPage(
-      albumType: album.albumType,
-      artists: album.artists,
-      availableMarkets: album.availableMarkets,
-      externalUrls: album.externalUrls,
-      href: album.href,
-      id: album.id,
-      images: album.images,
-      name: album.name,
-      releaseDate: album.releaseDate,
-      releaseDatePrecision: album.releaseDatePrecision,
-      totalTracks: album.totalTracks,
-      type: album.type,
-      uri: album.uri,
-    );
   }
 
   @override
