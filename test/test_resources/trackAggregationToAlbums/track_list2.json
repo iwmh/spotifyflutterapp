@@ -1,0 +1,165 @@
+{
+  "items": [
+   {
+      "added_at": "2021-01-17T14:02:55Z",
+      "track": {
+        "album": {
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/24jNRyMv4IEPuL1qwmZuNW"
+              },
+              "href": "https://api.spotify.com/v1/artists/24jNRyMv4IEPuL1qwmZuNW",
+              "id": "24jNRyMv4IEPuL1qwmZuNW",
+              "name": "Gregoire Maret",
+              "type": "artist",
+              "uri": "spotify:artist:24jNRyMv4IEPuL1qwmZuNW"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/3TLGhZ93eWc4caAzMiMWJV"
+              },
+              "href": "https://api.spotify.com/v1/artists/3TLGhZ93eWc4caAzMiMWJV",
+              "id": "3TLGhZ93eWc4caAzMiMWJV",
+              "name": "Romain Collin",
+              "type": "artist",
+              "uri": "spotify:artist:3TLGhZ93eWc4caAzMiMWJV"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/3SONlwqLIP2GtaMh9pLYe5"
+              },
+              "href": "https://api.spotify.com/v1/artists/3SONlwqLIP2GtaMh9pLYe5",
+              "id": "3SONlwqLIP2GtaMh9pLYe5",
+              "name": "Bill Frisell",
+              "type": "artist",
+              "uri": "spotify:artist:3SONlwqLIP2GtaMh9pLYe5"
+            }
+          ],
+          "id": "2lfX30k8kJIaTbPBgKy4dX",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273a386bc3e27706a9577cb6ac8",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02a386bc3e27706a9577cb6ac8",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851a386bc3e27706a9577cb6ac8",
+              "width": 64
+            }
+          ],
+          "name": "Americana",
+          "release_date": "2020-04-24",
+          "total_tracks": 10
+        }
+      }
+    },
+    {
+      "added_at": "2021-01-17T14:02:55Z",
+      "track": {
+        "album": {
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/24jNRyMv4IEPuL1qwmZuNW"
+              },
+              "href": "https://api.spotify.com/v1/artists/24jNRyMv4IEPuL1qwmZuNW",
+              "id": "24jNRyMv4IEPuL1qwmZuNW",
+              "name": "Gregoire Maret",
+              "type": "artist",
+              "uri": "spotify:artist:24jNRyMv4IEPuL1qwmZuNW"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/3TLGhZ93eWc4caAzMiMWJV"
+              },
+              "href": "https://api.spotify.com/v1/artists/3TLGhZ93eWc4caAzMiMWJV",
+              "id": "3TLGhZ93eWc4caAzMiMWJV",
+              "name": "Romain Collin",
+              "type": "artist",
+              "uri": "spotify:artist:3TLGhZ93eWc4caAzMiMWJV"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/3SONlwqLIP2GtaMh9pLYe5"
+              },
+              "href": "https://api.spotify.com/v1/artists/3SONlwqLIP2GtaMh9pLYe5",
+              "id": "3SONlwqLIP2GtaMh9pLYe5",
+              "name": "Bill Frisell",
+              "type": "artist",
+              "uri": "spotify:artist:3SONlwqLIP2GtaMh9pLYe5"
+            }
+          ],
+          "id": "2lfX30k8kJIaTbPBgKy4dX",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b273a386bc3e27706a9577cb6ac8",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e02a386bc3e27706a9577cb6ac8",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d00004851a386bc3e27706a9577cb6ac8",
+              "width": 64
+            }
+          ],
+          "name": "Americana",
+          "release_date": "2020-04-24",
+          "total_tracks": 10
+        }
+      }
+    },
+        {
+      "added_at": "2021-01-17T14:02:55Z",
+      "track": {
+        "album": {
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/5z1VAFwT35EVvCp1XlZZuL"
+              },
+              "href": "https://api.spotify.com/v1/artists/5z1VAFwT35EVvCp1XlZZuL",
+              "id": "5z1VAFwT35EVvCp1XlZZuL",
+              "name": "Diana Krall",
+              "type": "artist",
+              "uri": "spotify:artist:5z1VAFwT35EVvCp1XlZZuL"
+            }
+          ],
+          "id": "2axVAnC2sE98xigU2BV1TY",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://i.scdn.co/image/ab67616d0000b27310f987392d74f528ddbd75d4",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://i.scdn.co/image/ab67616d00001e0210f987392d74f528ddbd75d4",
+              "width": 300
+            },
+            {
+              "height": 64,
+              "url": "https://i.scdn.co/image/ab67616d0000485110f987392d74f528ddbd75d4",
+              "width": 64
+            }
+          ],
+          "name": "This Dream Of You",
+          "release_date": "2020-09-25",
+          "total_tracks": 12
+        }
+      }
+    }
+  ],
+  "next": null
+}

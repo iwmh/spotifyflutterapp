@@ -302,4 +302,27 @@ class ApiService {
       uri: album.uri,
     );
   }
+
+  List<AlbumInPlaylistPage> mergeAlbumLists({
+    List<AlbumInPlaylistPage> merged,
+    List<AlbumInPlaylistPage> merge,
+  }) {
+    final mergedAlbumList = <AlbumInPlaylistPage>[];
+    mergedAlbumList.addAll(merged);
+    if (mergedAlbumList.isEmpty) {
+      mergedAlbumList.addAll(merge);
+    } else {
+      // Merge the tracks
+      if (mergedAlbumList.last.id == merge.first.id) {
+        final countToAdd = mergedAlbumList.last.numberOfTracksOnAggregating;
+        mergedAlbumList.removeLast();
+        merge.first.numberOfTracks += countToAdd;
+        mergedAlbumList.addAll(merge);
+      } else {
+        mergedAlbumList.last.numberOfTracks = mergedAlbumList.last.numberOfTracksOnAggregating;
+        mergedAlbumList.addAll(merge);
+      }
+    }
+    return mergedAlbumList;
+  }
 }

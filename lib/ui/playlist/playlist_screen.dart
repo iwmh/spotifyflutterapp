@@ -22,7 +22,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
   // The list of "albums".
   // This "album" includes as its member those tracks
   // which are adjacent with each other in the fetched list of tracks.
-  final _albumList = <AlbumInPlaylistPage>[];
+  var _albumList = <AlbumInPlaylistPage>[];
 
   ApiService _apiService;
   bool _isLoading = true;
@@ -81,20 +81,16 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
 
           // (2) Add obtained album list to the aggregate list.
           // Merge albums list with _albumList.
-          if (_albumList.isEmpty) {
-            _albumList.addAll(albums);
-          } else {
-            // Merge the tracks
-            if (_albumList.last.id == albums.first.id) {
-              final countToAdd = _albumList.last.numberOfTracksOnAggregating;
-              _albumList.removeLast();
-              albums.first.numberOfTracks += countToAdd;
-              _albumList.addAll(albums);
-            } else {
-              _albumList.last.numberOfTracks = _albumList.last.numberOfTracksOnAggregating;
-              _albumList.addAll(albums);
-            }
-          }
+          final mergedAlbumList = _apiService.mergeAlbumLists(
+            merged: _albumList,
+            merge: albums,
+          );
+
+          // (3) update the _albumList.
+          setState(() {
+            _albumList = mergedAlbumList;
+          });
+
           print('object');
         });
       }
