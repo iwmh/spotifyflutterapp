@@ -35,8 +35,20 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
   // playlist name used for title.
   String _playlistName = "";
 
+  ScrollController _scrollController;
+
   @override
   void initState() {
+    // scroll controller for the list
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      final maxScrollExtend = _scrollController.position.maxScrollExtent;
+      final currentPosition = _scrollController.position.pixels;
+      if (_hasMore && !_isLoading && maxScrollExtend > 0 && (maxScrollExtend / 4 * 3) <= currentPosition) {
+        _loadData();
+      }
+    });
+
     _apiService = Provider.of<ApiService>(context, listen: false);
 
     // get the snapshot_id of this playlist.
@@ -105,27 +117,21 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),
-      body: ListView.builder(
-        itemCount: _hasMore ? _albumList.length + 1 : _albumList.length,
-        itemBuilder: (BuildContext context, int index) {
-          if (index >= _albumList.length) {
-            if (!_isLoading) {
-              _loadData();
-            }
-            return const Center(
-              child: SizedBox(
-                child: CircularProgressIndicator(),
-                height: 24,
-                width: 24,
-              ),
-            );
-          }
-          final album = _albumList[index];
-          return AlbumCard(
-            album: album,
-            onFunction: (String value) {},
-          );
+      body: ReorderableListView(
+        scrollController: _scrollController,
+        onReorder: (oldIndex, newIndex) {
+          print(oldIndex.toString() + ' : ' + newIndex.toString());
         },
+        // TODO: Use ListTile To Make Drag Happen.
+        children: _albumList
+            .map(
+              (e) => AlbumCard(
+                key: ValueKey(e),
+                album: e,
+                onFunction: (String value) {},
+              ),
+            )
+            .toList(),
       ),
     );
   }

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:spotifyflutterapp/data/models/albumInPlaylistPage.dart';
 
 class AlbumCard extends StatelessWidget {
+  final ValueKey key;
   final AlbumInPlaylistPage album;
   final ValueChanged<String> onFunction;
 
   const AlbumCard({
+    this.key,
     this.album,
     @required this.onFunction,
   });
