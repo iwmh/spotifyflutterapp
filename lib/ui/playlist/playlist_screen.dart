@@ -122,7 +122,6 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
         onReorder: (oldIndex, newIndex) {
           print(oldIndex.toString() + ' : ' + newIndex.toString());
         },
-        // TODO: Use ListTile To Make Drag Happen.
         children: _albumList
             .map(
               (e) => AlbumCard(
