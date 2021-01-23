@@ -69,9 +69,7 @@ class AlbumCard extends StatelessWidget {
                   flex: 1,
                 ),
                 Text(
-                  album.numberOfTracks == null
-                      ? '...'
-                      : album.numberOfTracks.toString() + ' / ' + album.totalTracks.toString(),
+                  album.numberOfTracks.toString() + ' / ' + album.totalTracks.toString(),
                   style: DefaultTextStyle.of(context).style.apply(
                         color: Colors.grey[400],
                         fontSizeFactor: 0.75,
