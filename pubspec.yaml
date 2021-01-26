@@ -58,6 +58,10 @@ dependencies:
   # analizer for Dart
   analyzer: ^0.40.6
 
+  # reorderable
+  reorderables:
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

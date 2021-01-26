@@ -12,6 +12,7 @@ class Constants {
       'https://api.spotify.com/v1/playlists/$playlistId?fields=name';
   static playlist_snapshot_id_for_a_playlist_id(String playlistId) =>
       'https://api.spotify.com/v1/playlists/$playlistId?fields=snapshot_id';
+  static reorder_items_in_playlist(String playlistId) => 'https://api.spotify.com/v1/playlists/$playlistId/tracks';
 
   /// "fields" query for playlist-related GET request.
   static const albums =

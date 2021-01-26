@@ -325,4 +325,56 @@ class ApiService {
     }
     return mergedAlbumList;
   }
+
+  int determineStartingIndexToReorder(List<AlbumInPlaylistPage> albumList, int oldIndex) {
+    var targetIndex = 0;
+    for (int i = 0; i < oldIndex; i++) {
+      final currentAlbum = albumList[i];
+      targetIndex += currentAlbum.numberOfTracks;
+    }
+    return targetIndex;
+  }
+
+  Future<SnapshotId> reorderItemsInPlaylist(
+    String playlistId,
+    dynamic reqBody,
+  ) async {
+    SnapshotId ret;
+    // check token
+    await checkTokenValidity();
+    // call api.
+    await _apiAuthRepository.requestToReorderItemsInPlaylist(_authHeader(), playlistId, reqBody).then((response) {
+      if (response.statusCode != HttpStatus.ok) {
+        throw Exception(response);
+      }
+      Map pagingMap = jsonDecode(response.body);
+      ret = SnapshotId.fromJson(pagingMap);
+    }).catchError((err) {
+      // network related error.
+      return err;
+    });
+    return ret;
+  }
+
+  List<AlbumInPlaylistPage> reorderList({
+    List<AlbumInPlaylistPage> albumList,
+    int oldIndex,
+    int newIndex,
+  }) {
+    if (oldIndex == newIndex) {
+      throw Exception('Invalid parameters');
+    }
+
+    // copy the original list.
+    List<AlbumInPlaylistPage> currentList = [...albumList];
+
+    // extract the album to put between albums.
+    final albumToAdd = albumList[oldIndex];
+
+    // remove the album at the old index;
+    currentList.removeAt(oldIndex);
+
+    currentList.insert(newIndex, albumToAdd);
+    return currentList;
+  }
 }

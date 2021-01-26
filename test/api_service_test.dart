@@ -356,4 +356,98 @@ void main() async {
     expect(mergedAlbumList[4].numberOfTracks, 1);
     expect(mergedAlbumList[5].numberOfTracks, 2);
   });
+
+  test('determine the starting index to reorder the album list (1)', () async {
+    // source track list
+    final file = File(option + 'test_resources/trackAggregationToAlbums/track_list.json');
+    Map pagingMap = await jsonDecode(await file.readAsString());
+    Paging paging = Paging<PlaylistTrack>.fromJson(pagingMap, (items) => PlaylistTrack.fromJson(items));
+    List<AlbumInPlaylistPage> albumList = await apiService.aggregateTracksToAlbums(
+      paging.items,
+    );
+
+    // check the number of tracks
+    expect(albumList[0].numberOfTracks, 1);
+    expect(albumList[1].numberOfTracks, 3);
+    expect(albumList[2].numberOfTracks, 4);
+    expect(albumList[3].numberOfTracks, 2);
+
+    // Assume that you reorder the 4th album to 1st.
+    const oldIndex = 3;
+
+    int targetIndex = apiService.determineStartingIndexToReorder(albumList, oldIndex);
+    expect(targetIndex, 1 + 3 + 4);
+  });
+
+  test('determine the starting index to reorder the album list (2)', () async {
+    // source track list
+    final file = File(option + 'test_resources/trackAggregationToAlbums/track_list.json');
+    Map pagingMap = await jsonDecode(await file.readAsString());
+    Paging paging = Paging<PlaylistTrack>.fromJson(pagingMap, (items) => PlaylistTrack.fromJson(items));
+    List<AlbumInPlaylistPage> albumList = await apiService.aggregateTracksToAlbums(
+      paging.items,
+    );
+
+    // check the number of tracks
+    expect(albumList[0].numberOfTracks, 1);
+    expect(albumList[1].numberOfTracks, 3);
+    expect(albumList[2].numberOfTracks, 4);
+    expect(albumList[3].numberOfTracks, 2);
+
+    // Assume that you reorder the 4th album to 1st.
+    const oldIndex = 2;
+
+    int targetIndex = apiService.determineStartingIndexToReorder(albumList, oldIndex);
+    expect(targetIndex, 1 + 3);
+  });
+
+  test('reorders the items in the managed state. oldIndex:3 , newIndex:1', () async {
+    // source track list
+    final file = File(option + 'test_resources/trackAggregationToAlbums/track_list.json');
+    Map pagingMap = await jsonDecode(await file.readAsString());
+    Paging paging = Paging<PlaylistTrack>.fromJson(pagingMap, (items) => PlaylistTrack.fromJson(items));
+    List<AlbumInPlaylistPage> albumList = await apiService.aggregateTracksToAlbums(
+      paging.items,
+    );
+
+    const oldIndex = 3;
+    const newIndex = 1;
+
+    List<AlbumInPlaylistPage> reorderedList = apiService.reorderList(
+      albumList: albumList,
+      oldIndex: oldIndex,
+      newIndex: newIndex,
+    );
+
+    expect(albumList.length, reorderedList.length);
+    expect(reorderedList[0].id, albumList[0].id);
+    expect(reorderedList[1].id, albumList[3].id);
+    expect(reorderedList[2].id, albumList[1].id);
+    expect(reorderedList[3].id, albumList[2].id);
+  });
+
+  test('reorders the items in the managed state. oldIndex:1 , newIndex:2', () async {
+    // source track list
+    final file = File(option + 'test_resources/trackAggregationToAlbums/track_list.json');
+    Map pagingMap = await jsonDecode(await file.readAsString());
+    Paging paging = Paging<PlaylistTrack>.fromJson(pagingMap, (items) => PlaylistTrack.fromJson(items));
+    List<AlbumInPlaylistPage> albumList = await apiService.aggregateTracksToAlbums(
+      paging.items,
+    );
+
+    const oldIndex = 0;
+    const newIndex = 2;
+
+    List<AlbumInPlaylistPage> reorderedList = apiService.reorderList(
+      albumList: albumList,
+      oldIndex: oldIndex,
+      newIndex: newIndex,
+    );
+
+    expect(albumList.length, reorderedList.length);
+    expect(reorderedList[0].id, albumList[1].id);
+    expect(reorderedList[1].id, albumList[2].id);
+    expect(reorderedList[2].id, albumList[0].id);
+    expect(reorderedList[3].id, albumList[3].id);
+  });
 }

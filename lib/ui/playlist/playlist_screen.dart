@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:reorderables/reorderables.dart';
 import 'package:spotifyflutterapp/data/models/albumInPlaylistPage.dart';
 import 'package:spotifyflutterapp/data/models/playlist_track.dart';
+import 'package:spotifyflutterapp/data/models/reorder_items.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
 import 'package:spotifyflutterapp/data/widgets/album_card.dart';
 import 'package:spotifyflutterapp/util/constants.dart';
@@ -35,6 +39,10 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
   // playlist name used for title.
   String _playlistName = "";
 
+  // reordering...
+  bool _reordering = false;
+
+  // scroll controller for controlling scrolling detection
   ScrollController _scrollController;
 
   @override
@@ -49,6 +57,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
       }
     });
 
+    // obtain the ApiService
     _apiService = Provider.of<ApiService>(context, listen: false);
 
     // get the snapshot_id of this playlist.
@@ -102,8 +111,6 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
           setState(() {
             _albumList = mergedAlbumList;
           });
-
-          print('object');
         });
       }
     });
@@ -111,26 +118,74 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
 
   @override
   Widget build(BuildContext context) {
+    void _onReorder(int oldIndex, int newIndex) async {
+      // start reordering
+      setState(() {
+        _reordering = true;
+      });
+      // walkaround..
+      final originalNewIndex = newIndex;
+      if (oldIndex < newIndex) newIndex++;
+      // walkaround..
+      final range_start = _apiService.determineStartingIndexToReorder(_albumList, oldIndex);
+      final insert_before = _apiService.determineStartingIndexToReorder(_albumList, newIndex);
+      final range_length = _albumList[oldIndex].numberOfTracks;
+      final reqBody = ReorderItems(
+        range_start: range_start,
+        insert_before: insert_before,
+        range_length: range_length,
+        snapshot_id: _snapshotId,
+      ).toJson();
+      final result = await _apiService.reorderItemsInPlaylist(widget.playlistId, jsonEncode(reqBody));
+      // when updating at the server side succeeded,
+      setState(() {
+        // update snapshot id when successfully reordered the items.
+        _snapshotId = result.snapshotId;
+        // And also reorder the items in the managed state in this screen.
+        final reorderdList = _apiService.reorderList(
+          albumList: _albumList,
+          oldIndex: oldIndex,
+          newIndex: originalNewIndex,
+        );
+        _albumList = reorderdList;
+      });
+      setState(() {
+        _reordering = false;
+      });
+      // end reordering
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_playlistName),
         automaticallyImplyLeading: false,
         centerTitle: true,
+        bottom: PreferredSize(
+          preferredSize: null,
+          child: Visibility(
+            child: const LinearProgressIndicator(),
+            visible: _reordering,
+          ),
+        ),
       ),
-      body: ReorderableListView(
-        scrollController: _scrollController,
-        onReorder: (oldIndex, newIndex) {
-          print(oldIndex.toString() + ' : ' + newIndex.toString());
-        },
-        children: _albumList
-            .map(
-              (e) => AlbumCard(
-                key: ValueKey(e),
-                album: e,
-                onFunction: (String value) {},
-              ),
-            )
-            .toList(),
+      body: AbsorbPointer(
+        absorbing: _reordering,
+        child: SingleChildScrollView(
+          child: ReorderableColumn(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            scrollController: _scrollController,
+            onReorder: _onReorder,
+            children: _albumList
+                .map(
+                  (e) => AlbumCard(
+                    key: ValueKey(e),
+                    album: e,
+                    onFunction: (String value) {},
+                  ),
+                )
+                .toList(),
+          ),
+        ),
       ),
     );
   }

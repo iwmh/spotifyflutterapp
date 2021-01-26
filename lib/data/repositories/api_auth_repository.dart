@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:http/http.dart' as http;
 import 'package:spotifyflutterapp/data/repositories/api_client.dart';
@@ -82,13 +80,15 @@ class ApiAuthRepository {
     );
   }
 
-  // request to reorder or replace a playlists's items
-  Future<http.Response> requestToReorderReplacePlaylistItems(
-      Map<String, String> authHeader, String playlistId, HashMap body) async {
-    return await _apiClient.requestToReorderReplacePlaylistItems(
+  Future<http.Response> requestToReorderItemsInPlaylist(
+    Map<String, String> authHeader,
+    String playlistId,
+    dynamic reqBody,
+  ) async {
+    return await _apiClient.requestToReorderItemsInPlaylist(
       authHeader,
       playlistId,
-      body,
+      reqBody,
     );
   }
 }
