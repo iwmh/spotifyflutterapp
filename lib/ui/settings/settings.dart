@@ -8,8 +8,9 @@ class SettingsPage extends Page {
       pageBuilder: (context, _, __) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('settings page!'),
+            title: const Text('settings page'),
             automaticallyImplyLeading: false,
+            centerTitle: true,
           ),
           body: Center(
             child: GestureDetector(
