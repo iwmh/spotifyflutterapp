@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:spotifyflutterapp/ui/home/home_page.dart';
 import 'package:spotifyflutterapp/ui/playlist/playlist_page.dart';
-import 'package:spotifyflutterapp/ui/settings/settings.dart';
+import 'package:spotifyflutterapp/ui/settings/settings_page.dart';
 
 class AppStateModel extends ChangeNotifier {
   // in-memory expiration date
