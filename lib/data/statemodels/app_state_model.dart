@@ -57,7 +57,12 @@ abstract class Destination {
 }
 
 class HomeDestination extends Destination {
-  HomeDestination(int index, String title, IconData icon, MaterialColor color) : super(index, title, icon, color);
+  HomeDestination(
+    int index,
+    String title,
+    IconData icon,
+    MaterialColor color,
+  ) : super(index, title, icon, color);
 
   @override
   Page getPage({ValueChanged<String> callback}) {
@@ -66,7 +71,12 @@ class HomeDestination extends Destination {
 }
 
 class SettingsDestination extends Destination {
-  SettingsDestination(int index, String title, IconData icon, MaterialColor color) : super(index, title, icon, color);
+  SettingsDestination(
+    int index,
+    String title,
+    IconData icon,
+    MaterialColor color,
+  ) : super(index, title, icon, color);
 
   @override
   Page getPage({ValueChanged<String> callback}) {

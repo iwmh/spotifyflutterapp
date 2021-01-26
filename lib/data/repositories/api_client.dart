@@ -35,7 +35,11 @@ class ApiClient {
   // Receive the response which has a pair of accessToken and refreshToken
   // in exchange of authorizationCode and codeVerifier
   Future<TokenResponse> exchangeToken(
-      String authorizationCode, String codeVerifier, String clientId, String redirectUrl) async {
+    String authorizationCode,
+    String codeVerifier,
+    String clientId,
+    String redirectUrl,
+  ) async {
     return await _appAuth.token(
       TokenRequest(
         clientId,
@@ -73,7 +77,11 @@ class ApiClient {
 
     final header = {'Content-Type': 'application/x-www-form-urlencoded'};
 
-    final response = await http.post('https://accounts.spotify.com/api/token', body: body, headers: header);
+    final response = await http.post(
+      'https://accounts.spotify.com/api/token',
+      body: body,
+      headers: header,
+    );
 
     final resString = response.body;
     Map authMap = await jsonDecode(resString);
@@ -117,7 +125,10 @@ class ApiClient {
   }
 
   // request to get playlist name for a playlist id
-  Future<http.Response> requestToGetPlaylistName(Map<String, String> authHeader, String playlistId) async {
+  Future<http.Response> requestToGetPlaylistName(
+    Map<String, String> authHeader,
+    String playlistId,
+  ) async {
     return await http.get(
       Constants.playlist_name_for_a_playlist_id(playlistId),
       headers: authHeader,
@@ -125,7 +136,10 @@ class ApiClient {
   }
 
   // request to get playlist snapshot_id for a playlist id
-  Future<http.Response> requestToGetPlaylistSnapshotId(Map<String, String> authHeader, String playlistId) async {
+  Future<http.Response> requestToGetPlaylistSnapshotId(
+    Map<String, String> authHeader,
+    String playlistId,
+  ) async {
     return await http.get(
       Constants.playlist_snapshot_id_for_a_playlist_id(playlistId),
       headers: authHeader,

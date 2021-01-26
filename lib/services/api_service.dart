@@ -31,7 +31,10 @@ class ApiService {
   get refreshToken async => await _secureStorage.readDataFromStorage(Constants.key_refreshToken);
 
   // constructor
-  ApiService(this._apiAuthRepository, this._secureStorage);
+  ApiService(
+    this._apiAuthRepository,
+    this._secureStorage,
+  );
 
   // setter for appState
   set appState(AppStateModel appState) {
@@ -55,15 +58,22 @@ class ApiService {
   // some things to do when initialized
   Future<void> init() async {
     // read token info from storage and set them to the app-level state.
-    var accessToken = await _secureStorage.readDataFromStorage(Constants.key_accessToken);
-    var accessTokenExpirationDateTime =
-        await _secureStorage.readDataFromStorage(Constants.key_accessTokenExpirationDateTime);
+    var accessToken = await _secureStorage.readDataFromStorage(
+      Constants.key_accessToken,
+    );
+    var accessTokenExpirationDateTime = await _secureStorage.readDataFromStorage(
+      Constants.key_accessTokenExpirationDateTime,
+    );
     _appState.accessToken = accessToken;
     if (accessTokenExpirationDateTime != null) {
-      _appState.accessTokenExpirationDateTime = DateTime.parse(accessTokenExpirationDateTime);
+      _appState.accessTokenExpirationDateTime = DateTime.parse(
+        accessTokenExpirationDateTime,
+      );
     }
     // ...also read display name
-    final displayName = await _secureStorage.readDataFromStorage(Constants.key_currentUsersProfileDisplayName);
+    final displayName = await _secureStorage.readDataFromStorage(
+      Constants.key_currentUsersProfileDisplayName,
+    );
     _appState.displayName = displayName;
 
     // if either if them is missing, we regard the user as
@@ -90,18 +100,28 @@ class ApiService {
     final authCodeResult = await _apiAuthRepository.exchangeAuthorizationCode();
     if (authCodeResult != null && authCodeResult.authorizationCode != null) {
       // receive a result with access token
-      final accessTokenResult =
-          await _apiAuthRepository.exchangeToken(authCodeResult.authorizationCode, authCodeResult.codeVerifier);
+      final accessTokenResult = await _apiAuthRepository.exchangeToken(
+        authCodeResult.authorizationCode,
+        authCodeResult.codeVerifier,
+      );
       if (accessTokenResult != null && accessTokenResult.accessToken != null) {
         /// 1) store all the info about the result.
         ///   access token
         ///   refresh token
         ///   access token expiration datetime
         /// 2) put access token and expiration datetime in-memory.
-        await _secureStorage.storeDataToStorage(Constants.key_accessToken, accessTokenResult.accessToken);
-        await _secureStorage.storeDataToStorage(Constants.key_refreshToken, accessTokenResult.refreshToken);
         await _secureStorage.storeDataToStorage(
-            Constants.key_accessTokenExpirationDateTime, accessTokenResult.accessTokenExpirationDateTime.toString());
+          Constants.key_accessToken,
+          accessTokenResult.accessToken,
+        );
+        await _secureStorage.storeDataToStorage(
+          Constants.key_refreshToken,
+          accessTokenResult.refreshToken,
+        );
+        await _secureStorage.storeDataToStorage(
+          Constants.key_accessTokenExpirationDateTime,
+          accessTokenResult.accessTokenExpirationDateTime.toString(),
+        );
         _appState.accessToken = accessTokenResult.accessToken;
         _appState.accessTokenExpirationDateTime = accessTokenResult.accessTokenExpirationDateTime;
 
@@ -115,20 +135,33 @@ class ApiService {
   getAndStoreCurrentUserProdile() async {
     // get current user's profile and save its display name.
     final profile = await getCurrentUserProfile();
-    await _secureStorage.storeDataToStorage(Constants.key_currentUsersProfileDisplayName, profile.displayName);
+    await _secureStorage.storeDataToStorage(
+      Constants.key_currentUsersProfileDisplayName,
+      profile.displayName,
+    );
     _appState.displayName = profile.displayName;
   }
 
   /// refresh accesss token
   refreshAccessToken() async {
     // get refresh token from storage
-    final refreshToken = await _secureStorage.readDataFromStorage(Constants.key_refreshToken);
+    final refreshToken = await _secureStorage.readDataFromStorage(
+      Constants.key_refreshToken,
+    );
     final accessTokenResult = await _apiAuthRepository.refreshToken(refreshToken);
     if (accessTokenResult != null && accessTokenResult.accessToken != null) {
-      await _secureStorage.storeDataToStorage(Constants.key_accessToken, accessTokenResult.accessToken);
-      await _secureStorage.storeDataToStorage(Constants.key_refreshToken, accessTokenResult.refreshToken);
       await _secureStorage.storeDataToStorage(
-          Constants.key_accessTokenExpirationDateTime, accessTokenResult.accessTokenExpirationDateTime.toString());
+        Constants.key_accessToken,
+        accessTokenResult.accessToken,
+      );
+      await _secureStorage.storeDataToStorage(
+        Constants.key_refreshToken,
+        accessTokenResult.refreshToken,
+      );
+      await _secureStorage.storeDataToStorage(
+        Constants.key_accessTokenExpirationDateTime,
+        accessTokenResult.accessTokenExpirationDateTime.toString(),
+      );
       _appState.accessToken = accessTokenResult.accessToken;
       _appState.accessTokenExpirationDateTime = accessTokenResult.accessTokenExpirationDateTime;
     }
