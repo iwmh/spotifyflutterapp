@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 import 'package:spotifyflutterapp/data/repositories/api_auth_repository.dart';
 import 'package:spotifyflutterapp/data/repositories/api_client.dart';
@@ -41,47 +42,54 @@ void main() async {
   // await apiService.deleteAllDataInStorage();
 
   runApp(
-    MultiProvider(
-      providers: [
-        // application level state
-        ChangeNotifierProvider(
-          create: (_) => AppStateModel(),
-        ),
-        // ChangeNotifierProxyProvider because ApiService depends on AppStateModel.
-        ProxyProvider<AppStateModel, ApiService>(
-          lazy: false,
-          create: (context) {
-            final appState = Provider.of<AppStateModel>(context, listen: false);
+    Phoenix(
+      child: MultiProvider(
+        providers: [
+          // application level state
+          ChangeNotifierProvider(
+            create: (_) => AppStateModel(),
+          ),
+          // ChangeNotifierProxyProvider because ApiService depends on AppStateModel.
+          ProxyProvider<AppStateModel, ApiService>(
+            lazy: false,
+            create: (context) {
+              final appState = Provider.of<AppStateModel>(context, listen: false);
 
-            // set state values when you init() to the descendent state.
-            appState.accessToken = apiService.accessToken;
-            appState.accessTokenExpirationDateTime = apiService.accessTokenExpirationDateTime;
-            appState.displayName = apiService.displayName;
-            // not to notify for it's while building.
-            appState.loggedInBeforeWithoutNotifying = apiService.loggedInBefore;
+              // set state values when you init() to the descendent state.
+              appState.accessToken = apiService.accessToken;
+              appState.accessTokenExpirationDateTime = apiService.accessTokenExpirationDateTime;
+              appState.displayName = apiService.displayName;
+              // not to notify for it's while building.
+              appState.loggedInBeforeWithoutNotifying = apiService.loggedInBefore;
 
-            apiService.appState = appState;
-            return apiService;
-          },
-          update: (_, appState, apiService) {
-            // prevent clearing the state.
-            if (appState.accessToken != null) {
               apiService.appState = appState;
-            }
-            return apiService;
+              return apiService;
+            },
+            update: (_, appState, apiService) {
+              // prevent clearing the state.
+              if (appState.accessToken != null) {
+                apiService.appState = appState;
+              }
+              return apiService;
+            },
+          ),
+        ],
+        child: Consumer<AppStateModel>(
+          builder: (context, value, child) {
+            return MyApp();
           },
         ),
-      ],
-      child: Consumer<AppStateModel>(
-        builder: (context, value, child) {
-          return MyApp();
-        },
       ),
     ),
   );
 }
 
 class MyApp extends StatefulWidget {
+  // restart the app after log out
+  static void restartApp(BuildContext context) {
+    context.findAncestorStateOfType<_MyAppState>().restartApp();
+  }
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -93,6 +101,14 @@ class _MyAppState extends State<MyApp> {
     initialRouteInformation: const RouteInformation(location: '/'),
   );
   // var _routeInformationProvider = AppRouteInformationProvider();
+
+  Key key = UniqueKey();
+  void restartApp() {
+    setState(() {
+      key = UniqueKey();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var appState = Provider.of<AppStateModel>(context, listen: false);

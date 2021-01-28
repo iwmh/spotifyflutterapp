@@ -120,16 +120,17 @@ class AppRouteInformationParser extends RouteInformationParser<AppRoutePath> {
     // handler '/settings/
     if (uri.pathSegments.length == 1) {
       var remaining = uri.pathSegments[0];
-      if (remaining == '/settings') {
+      if (remaining == 'settings') {
         return AppRoutePath.settings();
       }
     }
 
-    // handler '/playlist/:id'
-    if (uri.pathSegments.length == 2) {
-      var remaining = uri.pathSegments[1];
-      return AppRoutePath.playlist(remaining);
-    }
+    // // handler '/playlist/:id'
+    // if (uri.pathSegments.length == 2) {
+    //   var remaining = uri.pathSegments[1];
+    //   return AppRoutePath.playlist(remaining);
+    // }
+
     throw '404 ?';
   }
 

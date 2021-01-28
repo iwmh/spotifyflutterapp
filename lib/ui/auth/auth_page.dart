@@ -8,6 +8,7 @@ class AuthPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('auth page!'),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: GestureDetector(
