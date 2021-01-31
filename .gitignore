@@ -47,3 +47,5 @@ coverage/lcov.info
 # test/file_storage/key_accessToken.txt
 # test/file_storage/key_accessTokenExpirationDateTime.txt
 # test/file_storage/key_refreshToken.txt
+
+other/
