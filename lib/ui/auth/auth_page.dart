@@ -7,22 +7,44 @@ class AuthPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('auth page!'),
+        title: const Text('Login'),
         automaticallyImplyLeading: false,
+        centerTitle: true,
       ),
       body: Center(
-        child: GestureDetector(
-          child: Container(
-            color: Colors.grey,
-            child: const Text(
-              "Login",
-              style: TextStyle(color: Colors.white, fontSize: 20),
+        child: Column(
+          children: [
+            const Image(
+              image: AssetImage('assets/logo_no_background.png'),
             ),
-            padding: const EdgeInsets.all(20),
-          ),
-          onTap: () async {
-            await _auth(context);
-          },
+            Container(
+              margin: const EdgeInsets.only(left: 40, right: 40),
+              child: RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(text: 'In this app, those tracks in your playlists that\n'),
+                    TextSpan(text: '・adjacent with each other, and that\n'),
+                    TextSpan(text: '・belong to the same album,\n'),
+                    TextSpan(text: 'are seen as "albums."\n\n'),
+                    TextSpan(text: 'And you can sort those "albums" as you want in you playlists."\n'),
+                  ],
+                ),
+              ),
+            ),
+            GestureDetector(
+              child: Container(
+                color: Colors.grey,
+                child: const Text(
+                  "Login with Spotify",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                padding: const EdgeInsets.all(20),
+              ),
+              onTap: () async {
+                await _auth(context);
+              },
+            ),
+          ],
         ),
       ),
     );
