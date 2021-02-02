@@ -49,3 +49,5 @@ coverage/lcov.info
 # test/file_storage/key_refreshToken.txt
 
 other/
+bundletool-all-1.4.0.jar
+how_to_generate_apks.txt
