@@ -26,7 +26,7 @@ class AuthPage extends StatelessWidget {
                     TextSpan(text: '・are adjacent with each other, and that\n'),
                     TextSpan(text: '・belong to the same album,\n'),
                     TextSpan(text: 'are seen as "albums".\n\n'),
-                    TextSpan(text: 'And you can sort those "albums" as you want in you playlists."\n'),
+                    TextSpan(text: 'And you can sort those "albums" as you want in your playlists."\n'),
                   ],
                 ),
               ),
