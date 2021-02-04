@@ -17,7 +17,7 @@ class PlaylistCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () => onTapped(id),
       onLongPress: () => {},
       child: Container(
