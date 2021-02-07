@@ -10,6 +10,7 @@ import 'package:spotifyflutterapp/data/models/reorder_items.dart';
 import 'package:spotifyflutterapp/services/api_service.dart';
 import 'package:spotifyflutterapp/data/widgets/album_card.dart';
 import 'package:spotifyflutterapp/util/constants.dart';
+import 'package:after_layout/after_layout.dart';
 
 class PlaylistScreen extends StatefulWidget {
   final String playlistId;
@@ -19,7 +20,7 @@ class PlaylistScreen extends StatefulWidget {
   _PlaylistScreenState createState() => _PlaylistScreenState();
 }
 
-class _PlaylistScreenState extends State<PlaylistScreen> {
+class _PlaylistScreenState extends State<PlaylistScreen> with AfterLayoutMixin<PlaylistScreen> {
   // unfiltered list of tracks in this playlist.
   final _trackList = <PlaylistTrack>[];
 
@@ -76,44 +77,53 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
       });
     });
 
-    // load playlist's items
-    _loadData();
-
     super.initState();
   }
 
-  void _loadData() {
+  Future<void> _loadData() async {
     _isLoading = true;
-    _itemFetcher.fetch().then((fetchedList) {
-      if (fetchedList.isEmpty) {
+    final fetchedList = await _itemFetcher.fetch();
+    if (fetchedList.isEmpty) {
+      setState(() {
+        _isLoading = false;
+        _hasMore = false;
+      });
+    } else {
+      setState(() {
+        _isLoading = false;
+
+        // keep the tracks as you got.
+        _trackList.addAll(fetchedList);
+
+        // (1) First, create the list of albums based on the fetched track list.
+        final albums = _apiService.aggregateTracksToAlbums(fetchedList);
+
+        // (2) Add obtained album list to the aggregate list.
+        // Merge albums list with _albumList.
+        final mergedAlbumList = _apiService.mergeAlbumLists(
+          merged: _albumList,
+          merge: albums,
+        );
+
+        // (3) update the _albumList.
         setState(() {
-          _isLoading = false;
-          _hasMore = false;
+          _albumList = mergedAlbumList;
         });
-      } else {
-        setState(() {
-          _isLoading = false;
+      });
+    }
+  }
 
-          // keep the tracks as you got.
-          _trackList.addAll(fetchedList);
-
-          // (1) First, create the list of albums based on the fetched track list.
-          final albums = _apiService.aggregateTracksToAlbums(fetchedList);
-
-          // (2) Add obtained album list to the aggregate list.
-          // Merge albums list with _albumList.
-          final mergedAlbumList = _apiService.mergeAlbumLists(
-            merged: _albumList,
-            merge: albums,
-          );
-
-          // (3) update the _albumList.
-          setState(() {
-            _albumList = mergedAlbumList;
-          });
-        });
+  @override
+  void afterFirstLayout(BuildContext context) async {
+    await _loadData();
+    // not smart, but this is a walkaround to avoid stop loading data
+    // because you didn't get enough data to enable scrolling.
+    double height = MediaQuery.of(context).size.height;
+    while (_scrollController.position.maxScrollExtent < height) {
+      if (_hasMore && !_isLoading) {
+        await _loadData();
       }
-    });
+    }
   }
 
   @override

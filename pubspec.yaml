@@ -64,6 +64,9 @@ dependencies:
   # for restarting the app
   flutter_phoenix: "^0.1.0"
 
+  # to run some codes after the build method.
+  after_layout: ^1.0.7+2
+
 
 dev_dependencies:
   flutter_test:
