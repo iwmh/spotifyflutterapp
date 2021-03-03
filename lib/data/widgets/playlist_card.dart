@@ -29,7 +29,7 @@ class PlaylistCard extends StatelessWidget {
                 padding: const EdgeInsets.all(3.0),
                 height: MediaQuery.of(context).size.width * 0.2,
                 width: MediaQuery.of(context).size.width * 0.2,
-                child: Image.network(imageUrl),
+                child: imageUrl == '' ? const Image(image: AssetImage('assets/NoImage.png')) : Image.network(imageUrl),
               ),
               Container(
                 padding: const EdgeInsets.all(3.0),

@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       return PlaylistCard(
                         id: playlists[index].id,
-                        imageUrl: playlists[index].images[0].url,
+                        imageUrl: playlists[index].images.isEmpty ? '' : playlists[index].images[0].url,
                         name: playlists[index].name,
                         owner: playlists[index].owner.id,
                         onTapped: widget.onTapped,

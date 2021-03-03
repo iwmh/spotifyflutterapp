@@ -119,10 +119,8 @@ class _PlaylistScreenState extends State<PlaylistScreen> with AfterLayoutMixin<P
     // not smart, but this is a quick fix to avoid stopped loading issue after the first load
     // because you didn't get enough data to enable scrolling.
     double height = MediaQuery.of(context).size.height;
-    while (_scrollController.position.maxScrollExtent < height) {
-      if (_hasMore && !_isLoading) {
-        await _loadData();
-      }
+    while (_scrollController.position.maxScrollExtent < height && _hasMore && !_isLoading) {
+      await _loadData();
     }
   }
 
